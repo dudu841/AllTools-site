@@ -1,0 +1,77 @@
+{
+  "home": {
+    "title": "Ferramentas Online Grátis – Rápido e Sem Cadastro",
+    "subtitle": "Use ferramentas diretamente no navegador. Sem instalar nada.",
+    "categories": {
+      "pdf": "PDF",
+      "image": "Imagem",
+      "finance": "Finanças",
+      "social": "Redes Sociais",
+      "utilities": "Utilidades"
+    }
+  },
+  "tools": {
+    "pdf-to-word": { "title": "PDF para Word", "desc": "Converta documentos PDF para o formato Word." },
+    "word-to-pdf": { "title": "Word para PDF", "desc": "Converta documentos Word para o formato PDF." },
+    "compress-pdf": { "title": "Compactar PDF", "desc": "Reduza o tamanho do seu arquivo PDF." },
+    "merge-pdf": { "title": "Unir PDF", "desc": "Combine vários PDFs em um só.", "instruction": "Selecione 2 ou mais PDFs para unir", "selected": "Arquivos Selecionados", "success": "PDFs unidos com sucesso!" },
+    "split-pdf": { "title": "Dividir PDF", "desc": "Extraia páginas do seu PDF.", "instruction": "Selecione um PDF para dividir", "success": "PDF dividido com sucesso!", "select-range": "Selecionar Intervalo de Páginas", "from-page": "Da Página", "to-page": "Até a Página", "pages": "páginas", "extracted": "Páginas {{start}} a {{end}}" },
+    "compress-image": { "title": "Compressor de Imagem", "desc": "Comprima JPG, PNG, SVG e GIFs.", "level": "Nível de Compressão", "original-size": "Tamanho Original", "compressed-size": "Tamanho Compactado", "saved": "Economia" },
+    "resize-image": { "title": "Redimensionar Imagem", "desc": "Altere as dimensões das suas imagens.", "predefined-sizes": "Formatos Rápidos", "width": "Largura (px)", "height": "Altura (px)", "maintain-ratio": "Manter proporção", "custom": "Personalizado" },
+    "convert-image": { "title": "Converter JPG/PNG", "desc": "Converta imagens entre formatos.", "format": "Converter para o formato" },
+    "remove-background": { "title": "Removedor de Fundo", "desc": "Remova o fundo de qualquer imagem.", "bg-color": "Cor de Fundo", "mode-ai": "Remoção Automática com IA", "mode-color": "Remover Cor Específica", "color-to-remove": "Cor para Remover", "tolerance": "Tolerância" },
+    "adjust-image": { "title": "Ajustar Imagem", "desc": "Ajuste brilho, contraste, saturação e desfoque.", "brightness": "Brilho", "contrast": "Contraste", "saturation": "Saturação", "blur": "Desfoque", "hue": "Matiz", "sepia": "Sépia", "invert": "Inverter" },
+    "compound-interest": { "title": "Calculadora de Juros Compostos", "desc": "Calcule o crescimento do seu investimento ao longo do tempo." },
+    "loan-simulator": { "title": "Simulador de Empréstimo", "desc": "Simule pagamentos de empréstimos e juros." },
+    "percentage-calculator": { "title": "Calculadora de Porcentagem", "desc": "Calcule porcentagens facilmente." },
+    "bio-generator": { "title": "Gerador de Bio", "desc": "Crie a bio perfeita para suas redes sociais." },
+    "hashtag-generator": { "title": "Gerador de Hashtags", "desc": "Gere hashtags relevantes para suas postagens." },
+    "character-counter": { "title": "Contador de Caracteres", "desc": "Conte caracteres, palavras e linhas." },
+    "qr-generator": { "title": "Gerador de QR Code", "desc": "Crie QR codes personalizados instantaneamente." },
+    "password-generator": { "title": "Gerador de Senha", "desc": "Gere senhas fortes e seguras." },
+    "age-calculator": { "title": "Calculadora de Idade", "desc": "Calcule sua idade exata em anos, meses e dias." },
+    "unit-converter": { "title": "Conversor de Medidas", "desc": "Converta entre diferentes unidades de medida." }
+  },
+  "footer": {
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Uso",
+    "cookies": "Política de Cookies",
+    "contact": "Contato",
+    "rights": "Todos os direitos reservados."
+  },
+  "common": {
+    "language": "Idioma",
+    "calculate": "Calcular",
+    "generate": "Gerar",
+    "convert": "Converter",
+    "compress": "Compactar",
+    "upload": "Enviar Arquivo",
+    "download": "Baixar",
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "clear": "Limpar",
+    "result": "Resultado",
+    "processing": "Processando...",
+    "reset": "Redefinir",
+    "supported-images": "JPG, PNG, WebP até 10MB",
+    "supported-pdfs": "PDF até 50MB"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Política de Privacidade",
+      "text": "Na AllTools, acessível a partir do nosso site, uma de nossas principais prioridades é a privacidade dos nossos visitantes. Este documento de Política de Privacidade contém tipos de informações que são coletadas e registradas pela AllTools e como as usamos.\n\nSe você tiver dúvidas adicionais ou precisar de mais informações sobre nossa Política de Privacidade, não hesite em nos contatar.\n\nEsta Política de Privacidade aplica-se apenas às nossas atividades online e é válida para os visitantes do nosso site no que diz respeito às informações que eles compartilharam e/ou coletaram na AllTools. Esta política não é aplicável a quaisquer informações coletadas offline ou através de canais que não sejam este site."
+    },
+    "terms": {
+      "title": "Termos de Uso",
+      "text": "Bem-vindo à AllTools!\n\nEstes termos e condições descrevem as regras e regulamentos para o uso do site da AllTools.\n\nAo acessar este site, assumimos que você aceita estes termos e condições. Não continue a usar a AllTools se você não concordar em aceitar todos os termos e condições declarados nesta página.\n\nA terminologia a seguir aplica-se a estes Termos e Condições, Declaração de Privacidade e Aviso de Isenção de Responsabilidade e a todos os Acordos: \"Cliente\", \"Você\" e \"Seu\" refere-se a você, a pessoa que faz login neste site e está em conformidade com os termos e condições da Empresa."
+    },
+    "cookies": {
+      "title": "Política de Cookies",
+      "text": "Esta é a Política de Cookies da AllTools.\n\nO que são cookies\nComo é prática comum em quase todos os sites profissionais, este site usa cookies, que são pequenos arquivos baixados no seu computador, para melhorar sua experiência. Esta página descreve quais informações eles coletam, como as usamos e por que às vezes precisamos armazenar esses cookies. Também compartilharemos como você pode evitar que esses cookies sejam armazenados, no entanto, isso pode degradar ou 'quebrar' certos elementos da funcionalidade do site.\n\nComo usamos os cookies\nUsamos cookies por vários motivos detalhados abaixo. Infelizmente, na maioria dos casos, não há opções padrão do setor para desativar os cookies sem desativar completamente a funcionalidade e os recursos que eles adicionam a este site."
+    },
+    "contact": {
+      "title": "Contato",
+      "text": "Se você tiver alguma dúvida sobre nossas ferramentas, política de privacidade ou termos de uso, sinta-se à vontade para nos contatar.\n\nE-mail: support@alltools.com\n\nNosso objetivo é responder a todas as perguntas em até 48 horas."
+    }
+  }
+}

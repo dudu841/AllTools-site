@@ -1,0 +1,77 @@
+{
+  "home": {
+    "title": "Free Online Tools – Fast & No Registration",
+    "subtitle": "Use powerful tools directly in your browser. No installation required.",
+    "categories": {
+      "pdf": "PDF",
+      "image": "Image",
+      "finance": "Finance",
+      "social": "Social Media",
+      "utilities": "Utilities"
+    }
+  },
+  "tools": {
+    "pdf-to-word": { "title": "PDF to Word", "desc": "Convert PDF documents to Word format." },
+    "word-to-pdf": { "title": "Word to PDF", "desc": "Convert Word documents to PDF format." },
+    "compress-pdf": { "title": "Compress PDF", "desc": "Reduce the file size of your PDF." },
+    "merge-pdf": { "title": "Merge PDF", "desc": "Combine multiple PDFs into one.", "instruction": "Select 2 or more PDFs to merge", "selected": "Selected Files", "success": "PDFs Merged Successfully!" },
+    "split-pdf": { "title": "Split PDF", "desc": "Extract pages from your PDF.", "instruction": "Select a PDF to split", "success": "PDF Split Successfully!", "select-range": "Select Page Range", "from-page": "From Page", "to-page": "To Page", "pages": "pages", "extracted": "Pages {{start}} to {{end}}" },
+    "compress-image": { "title": "Image Compressor", "desc": "Compress JPG, PNG, SVG, and GIFs.", "level": "Compression Level", "original-size": "Original Size", "compressed-size": "Compressed Size", "saved": "Saved" },
+    "resize-image": { "title": "Resize Image", "desc": "Change the dimensions of your images.", "predefined-sizes": "Quick Formats", "width": "Width (px)", "height": "Height (px)", "maintain-ratio": "Maintain aspect ratio", "custom": "Custom" },
+    "convert-image": { "title": "Convert JPG/PNG", "desc": "Convert images between formats.", "format": "Convert to Format" },
+    "remove-background": { "title": "Background Remover", "desc": "Remove the background from any image.", "bg-color": "Background Color", "mode-ai": "AI Auto Removal", "mode-color": "Remove Specific Color", "color-to-remove": "Color to Remove", "tolerance": "Tolerance" },
+    "adjust-image": { "title": "Adjust Image", "desc": "Adjust brightness, contrast, saturation, and blur.", "brightness": "Brightness", "contrast": "Contrast", "saturation": "Saturation", "blur": "Blur", "hue": "Hue", "sepia": "Sepia", "invert": "Invert" },
+    "compound-interest": { "title": "Compound Interest Calculator", "desc": "Calculate your investment growth over time." },
+    "loan-simulator": { "title": "Loan Simulator", "desc": "Simulate loan payments and interest." },
+    "percentage-calculator": { "title": "Percentage Calculator", "desc": "Calculate percentages easily." },
+    "bio-generator": { "title": "Bio Generator", "desc": "Create the perfect bio for your social media." },
+    "hashtag-generator": { "title": "Hashtag Generator", "desc": "Generate relevant hashtags for your posts." },
+    "character-counter": { "title": "Character Counter", "desc": "Count characters, words, and lines." },
+    "qr-generator": { "title": "QR Code Generator", "desc": "Create custom QR codes instantly." },
+    "password-generator": { "title": "Password Generator", "desc": "Generate strong and secure passwords." },
+    "age-calculator": { "title": "Age Calculator", "desc": "Calculate your exact age in years, months, and days." },
+    "unit-converter": { "title": "Unit Converter", "desc": "Convert between different units of measurement." }
+  },
+  "footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "cookies": "Cookie Policy",
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "language": "Language",
+    "calculate": "Calculate",
+    "generate": "Generate",
+    "convert": "Convert",
+    "compress": "Compress",
+    "upload": "Upload File",
+    "download": "Download",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "clear": "Clear",
+    "result": "Result",
+    "processing": "Processing...",
+    "reset": "Reset",
+    "supported-images": "JPG, PNG, WebP up to 10MB",
+    "supported-pdfs": "PDF up to 50MB"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "text": "At AllTools, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by AllTools and how we use it.\n\nIf you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.\n\nThis Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in AllTools. This policy is not applicable to any information collected offline or via channels other than this website."
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "text": "Welcome to AllTools!\n\nThese terms and conditions outline the rules and regulations for the use of AllTools's Website.\n\nBy accessing this website we assume you accept these terms and conditions. Do not continue to use AllTools if you do not agree to take all of the terms and conditions stated on this page.\n\nThe following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: \"Client\", \"You\" and \"Your\" refers to you, the person log on this website and compliant to the Company's terms and conditions."
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "text": "This is the Cookie Policy for AllTools.\n\nWhat Are Cookies\nAs is common practice with almost all professional websites this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the sites functionality.\n\nHow We Use Cookies\nWe use cookies for a variety of reasons detailed below. Unfortunately in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "text": "If you have any questions about our tools, privacy policy, or terms of use, please feel free to contact us.\n\nEmail: support@alltools.com\n\nWe aim to respond to all inquiries within 48 hours."
+    }
+  }
+}
