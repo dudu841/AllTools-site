@@ -19,6 +19,8 @@ const common: Record<Lang, Record<string, string>> = {
     result: "Resultado",
     modes: "Modos",
     optionalUpload: "Upload de arquivo (opcional)",
+    uploadTitle: "Enviar arquivo",
+    uploadHint: "Selecione ou arraste seu arquivo para começar.",
     detailedGuide: "Passo a passo desta ferramenta",
     interpretation: "Veja a interpretação do IMC",
     bmi: "Seu IMC",
@@ -44,6 +46,8 @@ const common: Record<Lang, Record<string, string>> = {
     result: "Result",
     modes: "Modes",
     optionalUpload: "File upload (optional)",
+    uploadTitle: "Upload file",
+    uploadHint: "Select or drag your file to start.",
     detailedGuide: "Step-by-step for this tool",
     interpretation: "See BMI interpretation",
     bmi: "Your BMI",
@@ -69,6 +73,8 @@ const common: Record<Lang, Record<string, string>> = {
     result: "Resultado",
     modes: "Modos",
     optionalUpload: "Subir archivo (opcional)",
+    uploadTitle: "Subir archivo",
+    uploadHint: "Selecciona o arrastra tu archivo para comenzar.",
     detailedGuide: "Paso a paso de esta herramienta",
     interpretation: "Vea la interpretación del IMC",
     bmi: "Tu IMC",
@@ -178,6 +184,16 @@ const modeOptions = [
   "sqft-sqm",
 ];
 
+const uploadOnlyTools = new Set<ToolId>([
+  "pdf-to-word",
+  "word-to-pdf",
+  "compress-pdf",
+  "social-resizer",
+  "meme-generator",
+  "banner-thumbnail-creator",
+]);
+
+
 const toolUi: Partial<Record<ToolId, Record<Lang, Localized>>> = {
   "bmi-calculator": {
     pt: {
@@ -210,6 +226,37 @@ const toolUi: Partial<Record<ToolId, Record<Lang, Localized>>> = {
         "Usa la tabla para interpretar tu clasificación.",
       ],
     },
+  },
+
+  "pdf-to-word": {
+    pt: { labels: {}, placeholders: {}, steps: ["Clique em Enviar arquivo e selecione o PDF.", "Aguarde o processamento para conversão em Word.", "Revise o arquivo convertido e baixe o resultado."] },
+    en: { labels: {}, placeholders: {}, steps: ["Click Upload file and choose your PDF.", "Wait for processing to convert to Word.", "Review and download the converted file."] },
+    es: { labels: {}, placeholders: {}, steps: ["Haz clic en Subir archivo y elige tu PDF.", "Espera el procesamiento para convertir a Word.", "Revisa y descarga el archivo convertido."] },
+  },
+  "word-to-pdf": {
+    pt: { labels: {}, placeholders: {}, steps: ["Clique em Enviar arquivo e selecione o documento Word.", "Aguarde a conversão para PDF.", "Baixe o PDF final pronto para compartilhar."] },
+    en: { labels: {}, placeholders: {}, steps: ["Click Upload file and choose your Word document.", "Wait for the PDF conversion.", "Download the final PDF ready to share."] },
+    es: { labels: {}, placeholders: {}, steps: ["Haz clic en Subir archivo y selecciona el documento Word.", "Espera la conversión a PDF.", "Descarga el PDF final listo para compartir."] },
+  },
+  "compress-pdf": {
+    pt: { labels: {}, placeholders: {}, steps: ["Clique em Enviar arquivo para selecionar o PDF.", "A ferramenta compacta automaticamente mantendo a qualidade possível.", "Baixe o PDF compactado no final do processo."] },
+    en: { labels: {}, placeholders: {}, steps: ["Click Upload file to select your PDF.", "The tool compresses automatically while preserving quality.", "Download the compressed PDF after processing."] },
+    es: { labels: {}, placeholders: {}, steps: ["Haz clic en Subir archivo para seleccionar tu PDF.", "La herramienta comprime automáticamente manteniendo calidad.", "Descarga el PDF comprimido al finalizar."] },
+  },
+  "social-resizer": {
+    pt: { labels: {}, placeholders: {}, steps: ["Envie sua imagem na área de upload.", "Escolha o formato de rede social desejado (Instagram, TikTok etc.).", "Baixe a versão redimensionada com proporção correta."] },
+    en: { labels: {}, placeholders: {}, steps: ["Upload your image in the upload area.", "Choose the target social format (Instagram, TikTok, etc.).", "Download the resized version with correct ratio."] },
+    es: { labels: {}, placeholders: {}, steps: ["Sube tu imagen en el área de carga.", "Elige el formato de red social (Instagram, TikTok, etc.).", "Descarga la versión redimensionada con proporción correcta."] },
+  },
+  "meme-generator": {
+    pt: { labels: {}, placeholders: {}, steps: ["Envie a imagem base do meme.", "Adicione os textos superior e inferior no editor da ferramenta.", "Gere e baixe o meme final para compartilhar."] },
+    en: { labels: {}, placeholders: {}, steps: ["Upload your meme base image.", "Add top and bottom text in the tool editor.", "Generate and download the final meme."] },
+    es: { labels: {}, placeholders: {}, steps: ["Sube la imagen base del meme.", "Agrega texto superior e inferior en el editor.", "Genera y descarga el meme final."] },
+  },
+  "banner-thumbnail-creator": {
+    pt: { labels: {}, placeholders: {}, steps: ["Envie imagem ou arte base.", "Escolha tamanho/layout de banner ou miniatura.", "Exporte o arquivo final otimizado para publicação."] },
+    en: { labels: {}, placeholders: {}, steps: ["Upload your base image/artwork.", "Choose banner or thumbnail size/layout.", "Export the final optimized file."] },
+    es: { labels: {}, placeholders: {}, steps: ["Sube tu imagen o diseño base.", "Elige tamaño y diseño de banner o miniatura.", "Exporta el archivo final optimizado."] },
   },
   "calorie-calculator": {
     pt: {
@@ -276,6 +323,7 @@ export default function PlaceholderTool({ toolId }: Props) {
   const lang = ((i18n.language || "pt").split("-")[0] as Lang) || "pt";
   const l = common[lang] ?? common.pt;
   const currentUi = toolId ? toolUi[toolId]?.[lang] ?? defaultUi[lang] : defaultUi[lang];
+  const isUploadOnly = toolId ? uploadOnlyTools.has(toolId) : false;
 
   const [a, setA] = useState("");
   const [b, setB] = useState("");
@@ -431,35 +479,45 @@ export default function PlaceholderTool({ toolId }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {renderField("a", a, setA)}
-        {renderField("b", b, setB)}
-        {renderField("c", c, setC)}
-        {renderField("text", text, setText)}
-      </div>
-
-      <div className="rounded-xl border border-gray-200 p-4">
-        <p className="mb-2 text-sm font-semibold text-gray-700">{l.modes}</p>
-        <p className="mb-3 text-xs text-gray-500">{l.selectMode}</p>
-        <div className="flex flex-wrap gap-2">
-          {modeOptions.map((value) => (
-            <button key={value} type="button" onClick={() => setMode(value)} className={`rounded-lg border px-3 py-1 ${mode === value ? "bg-emerald-600 text-white" : "bg-white"}`}>
-              {modeLabels[lang][value]}
-            </button>
-          ))}
+      {isUploadOnly ? (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+          <p className="text-sm font-semibold text-gray-800">{l.uploadTitle}</p>
+          <p className="mt-1 text-sm text-gray-600">{l.uploadHint}</p>
+          <input type="file" className="mt-4 w-full rounded-lg border border-gray-300 bg-white p-2" />
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {renderField("a", a, setA)}
+            {renderField("b", b, setB)}
+            {renderField("c", c, setC)}
+            {renderField("text", text, setText)}
+          </div>
 
-      <div className="flex flex-wrap gap-3">
-        <button type="button" onClick={calculate} className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">{l.calculate}</button>
-        <button type="button" onClick={clear} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{l.clear}</button>
-      </div>
+          <div className="rounded-xl border border-gray-200 p-4">
+            <p className="mb-2 text-sm font-semibold text-gray-700">{l.modes}</p>
+            <p className="mb-3 text-xs text-gray-500">{l.selectMode}</p>
+            <div className="flex flex-wrap gap-2">
+              {modeOptions.map((value) => (
+                <button key={value} type="button" onClick={() => setMode(value)} className={`rounded-lg border px-3 py-1 ${mode === value ? "bg-emerald-600 text-white" : "bg-white"}`}>
+                  {modeLabels[lang][value]}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900">
-        <p className="font-semibold">{l.result}</p>
-        <p className="mt-1 break-words">{result}</p>
-        {toolId === "bmi-calculator" && result !== "-" && <p className="mt-2 text-sm font-medium">{l.bmi}: {result} ({bmiClassification})</p>}
-      </div>
+          <div className="flex flex-wrap gap-3">
+            <button type="button" onClick={calculate} className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">{l.calculate}</button>
+            <button type="button" onClick={clear} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{l.clear}</button>
+          </div>
+
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900">
+            <p className="font-semibold">{l.result}</p>
+            <p className="mt-1 break-words">{result}</p>
+            {toolId === "bmi-calculator" && result !== "-" && <p className="mt-2 text-sm font-medium">{l.bmi}: {result} ({bmiClassification})</p>}
+          </div>
+        </>
+      )}
 
       {toolId === "bmi-calculator" && (
         <div className="overflow-hidden rounded-xl border border-blue-200">
@@ -491,12 +549,14 @@ export default function PlaceholderTool({ toolId }: Props) {
         </ol>
       </div>
 
-      <div className="rounded-xl border border-gray-200 p-4">
-        <button onClick={() => setShowUpload((state) => !state)} className="text-sm font-medium text-emerald-700 underline" type="button">
-          {l.optionalUpload}
-        </button>
-        {showUpload && <input type="file" className="mt-3 w-full" />}
-      </div>
+      {!isUploadOnly && (
+        <div className="rounded-xl border border-gray-200 p-4">
+          <button onClick={() => setShowUpload((state) => !state)} className="text-sm font-medium text-emerald-700 underline" type="button">
+            {l.optionalUpload}
+          </button>
+          {showUpload && <input type="file" className="mt-3 w-full" />}
+        </div>
+      )}
     </div>
   );
 }
