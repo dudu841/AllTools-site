@@ -149,7 +149,14 @@
     "reset": "Redefinir",
     "supported-images": "JPG, PNG, WebP até 10MB",
     "supported-pdfs": "PDF até 50MB",
-    "inDevelopment": "Esta ferramenta está em desenvolvimento no momento. Volte em breve para novidades."
+    "objectiveTitle": "Objetivo da ferramenta",
+    "howToUseTitle": "Como usar (passo a passo)",
+    "guide": {
+      "step1": "Preencha os campos necessários ou envie o arquivo solicitado.",
+      "step2": "Ajuste as opções conforme a sua necessidade.",
+      "step3": "Clique em \"{{action}}\" para executar a ferramenta.",
+      "step4": "Confira o resultado e, se disponível, baixe ou copie o conteúdo."
+    }
   },
   "legal": {
     "privacy": {

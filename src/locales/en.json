@@ -149,7 +149,14 @@
     "reset": "Reset",
     "supported-images": "JPG, PNG, WebP up to 10MB",
     "supported-pdfs": "PDF up to 50MB",
-    "inDevelopment": "This tool is currently in development. Please check back later for updates."
+    "objectiveTitle": "Tool objective",
+    "howToUseTitle": "How to use (step by step)",
+    "guide": {
+      "step1": "Fill in the required fields or upload the requested file.",
+      "step2": "Adjust the options according to your needs.",
+      "step3": "Click \"{{action}}\" to run the tool.",
+      "step4": "Review the result and, when available, download or copy the content."
+    }
   },
   "legal": {
     "privacy": {

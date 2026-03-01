@@ -49,9 +49,25 @@ const toolComponents: Record<ToolId, React.FC> = {
   "unit-converter": UnitConverter,
 };
 
+function getPrimaryActionKey(toolId: ToolId): "common.convert" | "common.compress" | "common.calculate" | "common.generate" {
+  if (["pdf-to-word", "word-to-pdf", "convert-image", "unit-converter"].includes(toolId)) {
+    return "common.convert";
+  }
+
+  if (["compress-pdf", "compress-image"].includes(toolId)) {
+    return "common.compress";
+  }
+
+  if (["compound-interest", "loan-simulator", "percentage-calculator", "age-calculator"].includes(toolId)) {
+    return "common.calculate";
+  }
+
+  return "common.generate";
+}
+
 export default function ToolWrapper() {
   const { lang, toolPath } = useParams<{ lang: string; toolPath: string }>();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Find the tool ID based on the path and language
   let currentToolId: ToolId | null = null;
@@ -67,6 +83,7 @@ export default function ToolWrapper() {
   }
 
   const ToolComponent = toolComponents[currentToolId];
+  const primaryAction = t(getPrimaryActionKey(currentToolId));
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8">
@@ -89,6 +106,19 @@ export default function ToolWrapper() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
         <ToolComponent />
       </div>
+
+      <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-gray-900">{t("common.objectiveTitle")}</h2>
+        <p className="mt-3 text-gray-700">{t(`tools.${currentToolId}.desc`)}</p>
+
+        <h3 className="mt-6 text-xl font-semibold text-gray-900">{t("common.howToUseTitle")}</h3>
+        <ol className="mt-3 list-decimal space-y-2 pl-5 text-gray-700">
+          <li>{t("common.guide.step1")}</li>
+          <li>{t("common.guide.step2")}</li>
+          <li>{t("common.guide.step3", { action: primaryAction })}</li>
+          <li>{t("common.guide.step4")}</li>
+        </ol>
+      </section>
 
       <AdBanner slotId="tool-bottom" className="mt-8" />
     </div>

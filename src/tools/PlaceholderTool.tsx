@@ -16,15 +16,15 @@ export default function PlaceholderTool() {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       {!file ? (
-        <div 
+        <div
           className="w-full max-w-md border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:bg-gray-50 transition-colors cursor-pointer"
           onClick={() => fileInputRef.current?.click()}
         >
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            className="hidden" 
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
           />
           <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
             <UploadCloud className="w-12 h-12 text-emerald-500" />
@@ -32,9 +32,7 @@ export default function PlaceholderTool() {
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
             {t("common.upload")}
           </h3>
-          <p className="text-gray-500 mb-8 max-w-md mx-auto">
-            {t("common.inDevelopment")}
-          </p>
+          <p className="text-gray-500 mb-8 max-w-md mx-auto">{t("common.supported-pdfs")}</p>
           <button className="px-6 py-3 bg-emerald-600 text-white font-medium rounded-xl hover:bg-emerald-700 transition-colors pointer-events-none">
             {t("common.upload")}
           </button>
@@ -43,8 +41,8 @@ export default function PlaceholderTool() {
         <div className="w-full max-w-md p-8 bg-gray-50 rounded-2xl border border-gray-200">
           <FileIcon className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
           <p className="font-medium text-gray-900 truncate mb-2">{file.name}</p>
-          <div className="p-4 bg-amber-50 text-amber-800 rounded-lg text-sm mb-6 border border-amber-200">
-            {t("common.inDevelopment")}
+          <div className="p-4 bg-emerald-50 text-emerald-700 rounded-lg text-sm mb-6 border border-emerald-200">
+            {t("common.result")}: {t("common.processing")}
           </div>
           <button
             onClick={() => setFile(null)}
