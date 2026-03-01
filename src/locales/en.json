@@ -148,7 +148,8 @@
     "processing": "Processing...",
     "reset": "Reset",
     "supported-images": "JPG, PNG, WebP up to 10MB",
-    "supported-pdfs": "PDF up to 50MB"
+    "supported-pdfs": "PDF up to 50MB",
+    "inDevelopment": "This tool is currently in development. Please check back later for updates."
   },
   "legal": {
     "privacy": {
