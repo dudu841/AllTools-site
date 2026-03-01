@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async"
 
-interface SEOProps {
+type SEOProps = {
   title: string
   description: string
 }
