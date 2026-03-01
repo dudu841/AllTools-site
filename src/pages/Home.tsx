@@ -3,10 +3,12 @@
 export default function Home() {
   return (
     <>
-      <SEO
-        title="Toolss - Ferramentas Online Gratuitas para PDF, Imagens, Calculadoras e Mais"
-        description="Use ferramentas online gratuitas para PDF, imagens, calculadoras financeiras e utilitários digitais. Rápido, seguro e sem cadastro."
-      />
+      {/*
+<SEO
+  title="Toolss – Ferramentas Online Gratuitas"
+  description="Use ferramentas online gratuitas..."
+/>
+*/}
 
       <div className="container">
 
