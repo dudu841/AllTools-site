@@ -8,6 +8,26 @@
       "finance": "Finance",
       "social": "Social Media",
       "utilities": "Utilities"
+    },
+    "seoTitle": "Toolss – Free Online Tools for PDF, Images, Finance and More",
+    "seoDesc": "Use Toolss tools to convert PDF files, edit images, create QR codes, calculate interest and more. 100% online, no installation, no signup.",
+    "marketing": {
+      "eyebrow": "Complete and practical platform",
+      "aboutTitle": "What is Toolss and what is the website goal?",
+      "aboutText": "Toolss is an online tools platform designed to solve everyday tasks with speed, simplicity, and reliability. Our goal is to save your time with direct solutions for PDF, image, finance, social, and utility workflows.",
+      "benefitsTitle": "Why use Toolss?",
+      "benefit1Title": "Everything in one place",
+      "benefit1Text": "Access multiple tools in a single website without installing software.",
+      "benefit2Title": "Simple and fast workflow",
+      "benefit2Text": "The interface is clear: choose your tool, provide your data, and get results in just a few steps.",
+      "benefit3Title": "Works on any device",
+      "benefit3Text": "Use it on mobile, tablet, or desktop with the same practical experience.",
+      "howTitle": "How to use Toolss tools (step by step)",
+      "how1": "Choose a category and click the tool you want.",
+      "how2": "Read the tool objective and usage instructions.",
+      "how3": "Fill in the fields or upload your file securely.",
+      "how4": "Click run (convert, compress, calculate, or generate).",
+      "how5": "Review the result and download/copy when available."
     }
   },
   "tools": {

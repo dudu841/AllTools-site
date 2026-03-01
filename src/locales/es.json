@@ -8,6 +8,26 @@
       "finance": "Finanzas",
       "social": "Redes Sociales",
       "utilities": "Utilidades"
+    },
+    "seoTitle": "Toolss – Herramientas Online Gratis para PDF, Imagen, Finanzas y Más",
+    "seoDesc": "Usa las herramientas de Toolss para convertir PDF, editar imágenes, crear códigos QR, calcular intereses y más. 100% online, sin instalación y sin registro.",
+    "marketing": {
+      "eyebrow": "Plataforma completa y práctica",
+      "aboutTitle": "¿Qué es Toolss y cuál es el objetivo del sitio?",
+      "aboutText": "Toolss es una plataforma de herramientas online creada para resolver tareas diarias con rapidez, simplicidad y seguridad. Nuestro objetivo es ahorrarte tiempo con soluciones directas para PDF, imagen, finanzas, redes sociales y utilidades.",
+      "benefitsTitle": "¿Por qué usar Toolss?",
+      "benefit1Title": "Todo en un solo lugar",
+      "benefit1Text": "Accede a varias herramientas en un único sitio, sin instalar programas.",
+      "benefit2Title": "Uso simple y rápido",
+      "benefit2Text": "La interfaz es clara: elige la herramienta, envía los datos y obtén resultados en pocos pasos.",
+      "benefit3Title": "Funciona en cualquier dispositivo",
+      "benefit3Text": "Úsalo en móvil, tablet o computadora con la misma practicidad.",
+      "howTitle": "Cómo usar las herramientas de Toolss (paso a paso)",
+      "how1": "Elige una categoría y haz clic en la herramienta deseada.",
+      "how2": "Lee el objetivo de la herramienta y sus instrucciones de uso.",
+      "how3": "Completa los campos o sube tu archivo de forma segura.",
+      "how4": "Haz clic en ejecutar (convertir, comprimir, calcular o generar).",
+      "how5": "Revisa el resultado y descarga/copia cuando esté disponible."
     }
   },
   "tools": {
