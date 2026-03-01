@@ -1,95 +1,76 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import { FileText, Image, DollarSign, Share2, Wrench } from "lucide-react";
-import { categories, toolPaths } from "../config/tools";
-import AdBanner from "../components/AdBanner";
-
-const iconMap: Record<string, React.ReactNode> = {
-  FileText: <FileText className="w-6 h-6" />,
-  Image: <Image className="w-6 h-6" />,
-  DollarSign: <DollarSign className="w-6 h-6" />,
-  Share2: <Share2 className="w-6 h-6" />,
-  Wrench: <Wrench className="w-6 h-6" />,
-};
+import SEO from "../components/SEO";
 
 export default function Home() {
-  const { t, i18n } = useTranslation();
-  const currentLang = i18n.language.split("-")[0] || "en";
-
   return (
-    <div className="flex flex-col items-center">
-      <Helmet>
-        <title>{t("home.title")} | AllTools</title>
-        <meta name="description" content={t("home.subtitle")} />
-        <link
-          rel="alternate"
-          hrefLang="en"
-          href={`${window.location.origin}/en`}
-        />
-        <link
-          rel="alternate"
-          hrefLang="pt"
-          href={`${window.location.origin}/pt`}
-        />
-        <link
-          rel="alternate"
-          hrefLang="es"
-          href={`${window.location.origin}/es`}
-        />
-      </Helmet>
+    <>
+      <SEO
+        title="Toolss - Ferramentas Online Gratuitas para PDF, Imagens, Calculadoras e Mais"
+        description="Use ferramentas online gratuitas para PDF, imagens, calculadoras financeiras e utilitários digitais. Rápido, seguro e sem cadastro."
+      />
 
-      <section className="w-full py-12 md:py-24 lg:py-32 text-center flex flex-col items-center justify-center">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-6 max-w-4xl">
-          {t("home.title")}
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mb-10">
-          {t("home.subtitle")}
+      <div className="container">
+
+        <h1>Toolss - Sua Caixa de Ferramentas Online Gratuita</h1>
+
+        <p>
+          A Toolss é uma plataforma completa de ferramentas online gratuitas
+          desenvolvidas para facilitar sua vida digital. Aqui você pode
+          converter PDF, compactar arquivos, editar imagens, utilizar
+          calculadoras financeiras e muito mais — tudo direto no navegador,
+          sem instalação e sem cadastro.
         </p>
-      </section>
 
-      <AdBanner slotId="top-banner" className="mb-16" />
+        <h2>Ferramentas para PDF</h2>
+        <ul>
+          <li><a href="/pt/converter-pdf-para-word">Converter PDF para Word</a></li>
+          <li><a href="/pt/compactar-pdf">Compactar PDF</a></li>
+          <li><a href="/pt/unir-pdf">Unir PDF</a></li>
+          <li><a href="/pt/dividir-pdf">Dividir PDF</a></li>
+        </ul>
 
-      <div className="w-full space-y-16">
-        {categories.map((category) => (
-          <section key={category.id} className="w-full">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
-                {iconMap[category.icon]}
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                {t(`home.categories.${category.id}`)}
-              </h2>
-            </div>
+        <h2>Ferramentas para Imagem</h2>
+        <ul>
+          <li><a href="/pt/compressor-de-imagem">Compressor de Imagem</a></li>
+          <li><a href="/pt/redimensionar-imagem">Redimensionar Imagem</a></li>
+          <li><a href="/pt/converter-jpg-png">Converter JPG para PNG</a></li>
+          <li><a href="/pt/removedor-de-fundo">Removedor de Fundo</a></li>
+        </ul>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {category.tools.map((toolId) => {
-                const path =
-                  toolPaths[toolId as keyof typeof toolPaths][
-                    currentLang as "en" | "pt" | "es"
-                  ];
-                return (
-                  <Link
-                    key={toolId}
-                    to={`/${currentLang}/${path}`}
-                    className="group flex flex-col p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-500 transition-all duration-200"
-                  >
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-emerald-600 mb-2">
-                      {t(`tools.${toolId}.title`)}
-                    </h3>
-                    <p className="text-sm text-gray-500 line-clamp-2">
-                      {t(`tools.${toolId}.desc`)}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        ))}
+        <h2>Calculadoras Online</h2>
+        <ul>
+          <li><a href="/pt/calculadora-de-juros-compostos">Calculadora de Juros Compostos</a></li>
+          <li><a href="/pt/simulador-de-emprestimo">Simulador de Empréstimo</a></li>
+          <li><a href="/pt/calculadora-de-porcentagem">Calculadora de Porcentagem</a></li>
+        </ul>
+
+        <h2>Por que escolher a Toolss?</h2>
+        <ul>
+          <li>Ferramentas 100% online</li>
+          <li>Sem necessidade de cadastro</li>
+          <li>Compatível com celular, tablet e computador</li>
+          <li>Processamento rápido</li>
+          <li>Privacidade e segurança dos arquivos</li>
+        </ul>
+
+        <h2>Segurança e Privacidade</h2>
+        <p>
+          Na Toolss, levamos sua privacidade a sério. Os arquivos enviados
+          são processados de forma segura e não são armazenados permanentemente.
+          Nosso objetivo é oferecer uma experiência simples, rápida e confiável.
+        </p>
+
+        <h2>Perguntas Frequentes</h2>
+
+        <h3>As ferramentas da Toolss são gratuitas?</h3>
+        <p>Sim, todas as ferramentas disponíveis são gratuitas para uso online.</p>
+
+        <h3>Preciso criar uma conta?</h3>
+        <p>Não. Você pode usar as ferramentas sem cadastro.</p>
+
+        <h3>Funciona no celular?</h3>
+        <p>Sim, a Toolss é totalmente responsiva e funciona em qualquer dispositivo.</p>
+
       </div>
-
-      <AdBanner slotId="bottom-banner" className="mt-16" />
-    </div>
+    </>
   );
 }
