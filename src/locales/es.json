@@ -90,7 +90,11 @@
       "mode-ai": "Eliminación Automática con IA",
       "mode-color": "Eliminar Color Específico",
       "color-to-remove": "Color a Eliminar",
-      "tolerance": "Tolerancia"
+      "tolerance": "Tolerancia",
+      "previewAlt": "Vista previa",
+      "processedAlt": "Imagen procesada",
+      "transparent": "Transparente",
+      "customColor": "Color personalizado"
     },
     "adjust-image": {
       "title": "Ajustar Imagen",
@@ -105,15 +109,36 @@
     },
     "compound-interest": {
       "title": "Calculadora de Interés Compuesto",
-      "desc": "Calcula el crecimiento de tu inversión a lo largo del tiempo."
+      "desc": "Calcula el crecimiento de tu inversión a lo largo del tiempo.",
+      "fields": {
+        "initialInvestment": "Inversión inicial",
+        "annualRate": "Tasa de interés anual (%)",
+        "years": "Años de crecimiento"
+      },
+      "totalInterest": "Interés total ganado"
     },
     "loan-simulator": {
       "title": "Simulador de Préstamo",
-      "desc": "Simula pagos de préstamos e intereses."
+      "desc": "Simula pagos de préstamos e intereses.",
+      "fields": {
+        "amount": "Monto del préstamo",
+        "annualRate": "Tasa de interés anual (%)",
+        "termMonths": "Plazo (meses)"
+      },
+      "results": {
+        "monthlyPayment": "Cuota mensual",
+        "totalInterest": "Interés total",
+        "totalPayment": "Pago total"
+      }
     },
     "percentage-calculator": {
       "title": "Calculadora de Porcentajes",
-      "desc": "Calcula porcentajes fácilmente."
+      "desc": "Calcula porcentajes fácilmente.",
+      "fields": {
+        "whatIs": "Cuánto es",
+        "of": "de",
+        "number": "Número"
+      }
     },
     "bio-generator": {
       "title": "Generador de Bio",
@@ -163,15 +188,58 @@
     },
     "password-generator": {
       "title": "Generador de Contraseñas",
-      "desc": "Genera contraseñas fuertes y seguras."
+      "desc": "Genera contraseñas fuertes y seguras.",
+      "strength": "Fortaleza de la contraseña:",
+      "length": "Longitud de la contraseña",
+      "regenerate": "Regenerar",
+      "levels": {
+        "strong": "Fuerte",
+        "medium": "Media",
+        "weak": "Débil"
+      },
+      "options": {
+        "uppercase": "Mayúsculas (A-Z)",
+        "lowercase": "Minúsculas (a-z)",
+        "numbers": "Números (0-9)",
+        "symbols": "Símbolos (!@#$)"
+      }
     },
     "age-calculator": {
       "title": "Calculadora de Edad",
-      "desc": "Calcula tu edad exacta en años, meses y días."
+      "desc": "Calcula tu edad exacta en años, meses y días.",
+      "dateOfBirth": "Fecha de nacimiento",
+      "labels": {
+        "years": "Años",
+        "months": "Meses",
+        "days": "Días"
+      }
     },
     "unit-converter": {
       "title": "Conversor de Unidades",
-      "desc": "Convierte entre diferentes unidades de medida."
+      "desc": "Convierte entre diferentes unidades de medida.",
+      "categories": {
+        "length": "Longitud",
+        "weight": "Peso",
+        "temperature": "Temperatura"
+      },
+      "units": {
+        "meters": "metros",
+        "kilometers": "kilómetros",
+        "centimeters": "centímetros",
+        "millimeters": "milímetros",
+        "miles": "millas",
+        "yards": "yardas",
+        "feet": "pies",
+        "inches": "pulgadas",
+        "kilograms": "kilogramos",
+        "grams": "gramos",
+        "milligrams": "miligramos",
+        "pounds": "libras",
+        "ounces": "onzas",
+        "celsius": "celsius",
+        "fahrenheit": "fahrenheit",
+        "kelvin": "kelvin"
+      }
     }
   },
   "footer": {

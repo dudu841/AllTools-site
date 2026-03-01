@@ -90,7 +90,11 @@
       "mode-ai": "AI Auto Removal",
       "mode-color": "Remove Specific Color",
       "color-to-remove": "Color to Remove",
-      "tolerance": "Tolerance"
+      "tolerance": "Tolerance",
+      "previewAlt": "Preview",
+      "processedAlt": "Processed image",
+      "transparent": "Transparent",
+      "customColor": "Custom Color"
     },
     "adjust-image": {
       "title": "Adjust Image",
@@ -105,15 +109,36 @@
     },
     "compound-interest": {
       "title": "Compound Interest Calculator",
-      "desc": "Calculate your investment growth over time."
+      "desc": "Calculate your investment growth over time.",
+      "fields": {
+        "initialInvestment": "Initial Investment",
+        "annualRate": "Annual Interest Rate (%)",
+        "years": "Years to Grow"
+      },
+      "totalInterest": "Total interest earned"
     },
     "loan-simulator": {
       "title": "Loan Simulator",
-      "desc": "Simulate loan payments and interest."
+      "desc": "Simulate loan payments and interest.",
+      "fields": {
+        "amount": "Loan Amount",
+        "annualRate": "Annual Interest Rate (%)",
+        "termMonths": "Loan Term (Months)"
+      },
+      "results": {
+        "monthlyPayment": "Monthly Payment",
+        "totalInterest": "Total Interest",
+        "totalPayment": "Total Payment"
+      }
     },
     "percentage-calculator": {
       "title": "Percentage Calculator",
-      "desc": "Calculate percentages easily."
+      "desc": "Calculate percentages easily.",
+      "fields": {
+        "whatIs": "What is",
+        "of": "of",
+        "number": "Number"
+      }
     },
     "bio-generator": {
       "title": "Bio Generator",
@@ -163,15 +188,58 @@
     },
     "password-generator": {
       "title": "Password Generator",
-      "desc": "Generate strong and secure passwords."
+      "desc": "Generate strong and secure passwords.",
+      "strength": "Password Strength:",
+      "length": "Password Length",
+      "regenerate": "Regenerate",
+      "levels": {
+        "strong": "Strong",
+        "medium": "Medium",
+        "weak": "Weak"
+      },
+      "options": {
+        "uppercase": "Uppercase (A-Z)",
+        "lowercase": "Lowercase (a-z)",
+        "numbers": "Numbers (0-9)",
+        "symbols": "Symbols (!@#$)"
+      }
     },
     "age-calculator": {
       "title": "Age Calculator",
-      "desc": "Calculate your exact age in years, months, and days."
+      "desc": "Calculate your exact age in years, months, and days.",
+      "dateOfBirth": "Date of Birth",
+      "labels": {
+        "years": "Years",
+        "months": "Months",
+        "days": "Days"
+      }
     },
     "unit-converter": {
       "title": "Unit Converter",
-      "desc": "Convert between different units of measurement."
+      "desc": "Convert between different units of measurement.",
+      "categories": {
+        "length": "Length",
+        "weight": "Weight",
+        "temperature": "Temperature"
+      },
+      "units": {
+        "meters": "meters",
+        "kilometers": "kilometers",
+        "centimeters": "centimeters",
+        "millimeters": "millimeters",
+        "miles": "miles",
+        "yards": "yards",
+        "feet": "feet",
+        "inches": "inches",
+        "kilograms": "kilograms",
+        "grams": "grams",
+        "milligrams": "milligrams",
+        "pounds": "pounds",
+        "ounces": "ounces",
+        "celsius": "celsius",
+        "fahrenheit": "fahrenheit",
+        "kelvin": "kelvin"
+      }
     }
   },
   "footer": {

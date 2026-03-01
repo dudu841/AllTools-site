@@ -90,7 +90,11 @@
       "mode-ai": "Remoção Automática com IA",
       "mode-color": "Remover Cor Específica",
       "color-to-remove": "Cor para Remover",
-      "tolerance": "Tolerância"
+      "tolerance": "Tolerância",
+      "previewAlt": "Pré-visualização",
+      "processedAlt": "Imagem processada",
+      "transparent": "Transparente",
+      "customColor": "Cor personalizada"
     },
     "adjust-image": {
       "title": "Ajustar Imagem",
@@ -105,15 +109,36 @@
     },
     "compound-interest": {
       "title": "Calculadora de Juros Compostos",
-      "desc": "Calcule projeções de investimento com juros compostos para entender evolução de capital e retorno no longo prazo."
+      "desc": "Calcule projeções de investimento com juros compostos para entender evolução de capital e retorno no longo prazo.",
+      "fields": {
+        "initialInvestment": "Investimento inicial",
+        "annualRate": "Taxa de juros anual (%)",
+        "years": "Período (anos)"
+      },
+      "totalInterest": "Total de juros ganhos"
     },
     "loan-simulator": {
       "title": "Simulador de Empréstimo",
-      "desc": "Simule parcelas, juros e custo total de empréstimos para comparar cenários e tomar decisões financeiras melhores."
+      "desc": "Simule parcelas, juros e custo total de empréstimos para comparar cenários e tomar decisões financeiras melhores.",
+      "fields": {
+        "amount": "Valor do empréstimo",
+        "annualRate": "Taxa de juros anual (%)",
+        "termMonths": "Prazo (meses)"
+      },
+      "results": {
+        "monthlyPayment": "Parcela mensal",
+        "totalInterest": "Total de juros",
+        "totalPayment": "Pagamento total"
+      }
     },
     "percentage-calculator": {
       "title": "Calculadora de Porcentagem",
-      "desc": "Resolva cálculos de porcentagem de forma prática para descontos, acréscimos, margens e comparações do dia a dia."
+      "desc": "Resolva cálculos de porcentagem de forma prática para descontos, acréscimos, margens e comparações do dia a dia.",
+      "fields": {
+        "whatIs": "Quanto é",
+        "of": "de",
+        "number": "Número"
+      }
     },
     "bio-generator": {
       "title": "Gerador de Bio",
@@ -163,15 +188,58 @@
     },
     "password-generator": {
       "title": "Gerador de Senha",
-      "desc": "Gere senhas fortes e seguras para proteger suas contas com combinações mais difíceis de adivinhar."
+      "desc": "Gere senhas fortes e seguras para proteger suas contas com combinações mais difíceis de adivinhar.",
+      "strength": "Força da senha:",
+      "length": "Tamanho da senha",
+      "regenerate": "Gerar novamente",
+      "levels": {
+        "strong": "Forte",
+        "medium": "Média",
+        "weak": "Fraca"
+      },
+      "options": {
+        "uppercase": "Letras maiúsculas (A-Z)",
+        "lowercase": "Letras minúsculas (a-z)",
+        "numbers": "Números (0-9)",
+        "symbols": "Símbolos (!@#$)"
+      }
     },
     "age-calculator": {
       "title": "Calculadora de Idade",
-      "desc": "Calcule idade exata em anos, meses e dias com rapidez para uso pessoal, escolar, profissional ou documental."
+      "desc": "Calcule idade exata em anos, meses e dias com rapidez para uso pessoal, escolar, profissional ou documental.",
+      "dateOfBirth": "Data de nascimento",
+      "labels": {
+        "years": "Anos",
+        "months": "Meses",
+        "days": "Dias"
+      }
     },
     "unit-converter": {
       "title": "Conversor de Medidas",
-      "desc": "Converta unidades de medida entre diferentes sistemas para facilitar estudos, cálculos técnicos e tarefas cotidianas."
+      "desc": "Converta unidades de medida entre diferentes sistemas para facilitar estudos, cálculos técnicos e tarefas cotidianas.",
+      "categories": {
+        "length": "Comprimento",
+        "weight": "Peso",
+        "temperature": "Temperatura"
+      },
+      "units": {
+        "meters": "metros",
+        "kilometers": "quilômetros",
+        "centimeters": "centímetros",
+        "millimeters": "milímetros",
+        "miles": "milhas",
+        "yards": "jardas",
+        "feet": "pés",
+        "inches": "polegadas",
+        "kilograms": "quilogramas",
+        "grams": "gramas",
+        "milligrams": "miligramas",
+        "pounds": "libras",
+        "ounces": "onças",
+        "celsius": "celsius",
+        "fahrenheit": "fahrenheit",
+        "kelvin": "kelvin"
+      }
     }
   },
   "footer": {

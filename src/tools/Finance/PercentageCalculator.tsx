@@ -15,9 +15,7 @@ export default function PercentageCalculator() {
     <div className="space-y-6 max-w-md mx-auto">
       <div className="flex items-center gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            What is
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.percentage-calculator.fields.whatIs")}</label>
           <div className="relative">
             <input
               type="number"
@@ -28,11 +26,9 @@ export default function PercentageCalculator() {
             <span className="absolute right-3 top-2.5 text-gray-500">%</span>
           </div>
         </div>
-        <div className="flex-none pt-7 font-medium text-gray-500">of</div>
+        <div className="flex-none pt-7 font-medium text-gray-500">{t("tools.percentage-calculator.fields.of")}</div>
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Number
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.percentage-calculator.fields.number")}</label>
           <input
             type="number"
             value={number}
@@ -51,9 +47,7 @@ export default function PercentageCalculator() {
 
       {result !== null && (
         <div className="mt-8 p-6 bg-emerald-50 rounded-xl text-center">
-          <h3 className="text-lg font-medium text-emerald-800 mb-2">
-            {t("common.result")}
-          </h3>
+          <h3 className="text-lg font-medium text-emerald-800 mb-2">{t("common.result")}</h3>
           <p className="text-4xl font-bold text-emerald-600">{result}</p>
         </div>
       )}

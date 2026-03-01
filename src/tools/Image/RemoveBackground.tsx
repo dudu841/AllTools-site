@@ -146,14 +146,14 @@ export default function RemoveBackground() {
           />
           <Upload className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">{t('common.upload')}</h3>
-          <p className="text-gray-500">{t("common.supported-images", "JPG, PNG, WebP up to 10MB")}</p>
+          <p className="text-gray-500">{t("common.supported-images")}</p>
         </div>
       ) : (
         <div className="space-y-6">
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-white rounded-lg border border-gray-200 flex items-center justify-center overflow-hidden">
-                <img src={preview!} alt="Preview" className="w-full h-full object-cover" />
+                <img src={preview!} alt={t("tools.remove-background.previewAlt")} className="w-full h-full object-cover" />
               </div>
               <div>
                 <p className="font-medium text-gray-900 truncate max-w-[200px] sm:max-w-xs">{file.name}</p>
@@ -258,7 +258,7 @@ export default function RemoveBackground() {
                       bgColor === color ? 'border-emerald-500 scale-110' : 'border-gray-200'
                     } ${color === 'transparent' ? "bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYNgvwMDwn4GBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYEBABaMAQG7y1+eAAAAAElFTkSuQmCC')]" : ""}`}
                     style={color !== 'transparent' ? { backgroundColor: color } : {}}
-                    title={color === 'transparent' ? 'Transparent' : color}
+                    title={color === 'transparent' ? t("tools.remove-background.transparent") : color}
                   />
                 ))}
                 <div className="relative w-10 h-10 rounded-full border-2 border-gray-200 overflow-hidden cursor-pointer">
@@ -267,14 +267,14 @@ export default function RemoveBackground() {
                     value={bgColor === 'transparent' ? '#ffffff' : bgColor}
                     onChange={(e) => setBgColor(e.target.value)}
                     className="absolute inset-[-10px] w-[60px] h-[60px] cursor-pointer"
-                    title="Custom Color"
+                    title={t("tools.remove-background.customColor")}
                   />
                 </div>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4 flex justify-center overflow-hidden border border-gray-200">
                 <div className={`relative w-full max-w-md mx-auto aspect-square rounded-lg overflow-hidden ${bgColor === 'transparent' ? "bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYNgvwMDwn4GBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYEBABaMAQG7y1+eAAAAAElFTkSuQmCC')]" : ""}`} style={bgColor !== 'transparent' ? { backgroundColor: bgColor } : {}}>
-                  <img src={processedImage} alt="Processed" className="w-full h-full object-contain" />
+                  <img src={processedImage} alt={t("tools.remove-background.processedAlt")} className="w-full h-full object-contain" />
                 </div>
               </div>
               
