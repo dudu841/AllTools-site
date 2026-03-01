@@ -12,13 +12,12 @@ export default function BioGenerator() {
 
   const generateBio = () => {
     const templates = {
-      professional: `Helping businesses grow through ${profession}. Passionate about ${hobbies}. Let's connect! 🚀`,
-      creative: `✨ ${profession} by day, ${hobbies} enthusiast by night. Creating magic every day. ✨`,
-      funny: `Professional ${profession}. I run on coffee and ${hobbies}. Probably thinking about food right now. 🍕`,
+      professional: t("tools.bio-generator.templates.professional", { profession, hobbies }),
+      creative: t("tools.bio-generator.templates.creative", { profession, hobbies }),
+      funny: t("tools.bio-generator.templates.funny", { profession, hobbies }),
     };
 
-    const bio =
-      templates[vibe as keyof typeof templates] || templates.professional;
+    const bio = templates[vibe as keyof typeof templates] || templates.professional;
     setGeneratedBio(bio);
     setCopied(false);
   };
@@ -33,24 +32,20 @@ export default function BioGenerator() {
     <div className="space-y-6 max-w-xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Profession / Role
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.bio-generator.profession")}</label>
           <input
             type="text"
-            placeholder="e.g. Software Engineer"
+            placeholder={t("tools.bio-generator.professionPlaceholder")}
             value={profession}
             onChange={(e) => setProfession(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Hobbies / Interests
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.bio-generator.hobbies")}</label>
           <input
             type="text"
-            placeholder="e.g. photography, coffee"
+            placeholder={t("tools.bio-generator.hobbiesPlaceholder")}
             value={hobbies}
             onChange={(e) => setHobbies(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
@@ -59,11 +54,9 @@ export default function BioGenerator() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Vibe
-        </label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.bio-generator.vibe")}</label>
         <div className="flex gap-4">
-          {["professional", "creative", "funny"].map((v) => (
+          {(["professional", "creative", "funny"] as const).map((v) => (
             <label key={v} className="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
@@ -73,7 +66,7 @@ export default function BioGenerator() {
                 onChange={(e) => setVibe(e.target.value)}
                 className="text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="capitalize text-gray-700">{v}</span>
+              <span className="capitalize text-gray-700">{t(`tools.bio-generator.vibeOptions.${v}`)}</span>
             </label>
           ))}
         </div>
@@ -88,19 +81,13 @@ export default function BioGenerator() {
 
       {generatedBio && (
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-xl relative group">
-          <p className="text-gray-800 text-lg pr-12 whitespace-pre-wrap">
-            {generatedBio}
-          </p>
+          <p className="text-gray-800 text-lg pr-12 whitespace-pre-wrap">{generatedBio}</p>
           <button
             onClick={copyToClipboard}
             className="absolute top-4 right-4 p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
             title={t("common.copy")}
           >
-            {copied ? (
-              <Check className="w-5 h-5 text-emerald-600" />
-            ) : (
-              <Copy className="w-5 h-5" />
-            )}
+            {copied ? <Check className="w-5 h-5 text-emerald-600" /> : <Copy className="w-5 h-5" />}
           </button>
         </div>
       )}

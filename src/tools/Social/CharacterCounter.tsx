@@ -17,10 +17,7 @@ export default function CharacterCounter() {
     const charsNoSpaces = text.replace(/\s/g, "").length;
     const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
     const lines = text === "" ? 0 : text.split("\n").length;
-    const paragraphs =
-      text === ""
-        ? 0
-        : text.split(/\n\s*\n/).filter((p) => p.trim() !== "").length;
+    const paragraphs = text === "" ? 0 : text.split(/\n\s*\n/).filter((p) => p.trim() !== "").length;
 
     setStats({ chars, charsNoSpaces, words, lines, paragraphs });
   }, [text]);
@@ -31,22 +28,15 @@ export default function CharacterCounter() {
     <div className="space-y-6 max-w-3xl mx-auto">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         {[
-          { label: "Characters", value: stats.chars },
-          { label: "Words", value: stats.words },
-          { label: "Lines", value: stats.lines },
-          { label: "Paragraphs", value: stats.paragraphs },
-          { label: "No Spaces", value: stats.charsNoSpaces },
+          { label: t("tools.character-counter.labels.characters"), value: stats.chars },
+          { label: t("tools.character-counter.labels.words"), value: stats.words },
+          { label: t("tools.character-counter.labels.lines"), value: stats.lines },
+          { label: t("tools.character-counter.labels.paragraphs"), value: stats.paragraphs },
+          { label: t("tools.character-counter.labels.noSpaces"), value: stats.charsNoSpaces },
         ].map((stat, i) => (
-          <div
-            key={i}
-            className="bg-emerald-50 rounded-xl p-4 text-center border border-emerald-100"
-          >
-            <p className="text-3xl font-bold text-emerald-600 mb-1">
-              {stat.value}
-            </p>
-            <p className="text-xs font-medium text-emerald-800 uppercase tracking-wider">
-              {stat.label}
-            </p>
+          <div key={i} className="bg-emerald-50 rounded-xl p-4 text-center border border-emerald-100">
+            <p className="text-3xl font-bold text-emerald-600 mb-1">{stat.value}</p>
+            <p className="text-xs font-medium text-emerald-800 uppercase tracking-wider">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -55,7 +45,7 @@ export default function CharacterCounter() {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Type or paste your text here..."
+          placeholder={t("tools.character-counter.placeholder")}
           className="w-full h-64 p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-y font-sans text-gray-800"
         />
         {text && (

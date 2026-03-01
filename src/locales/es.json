@@ -117,19 +117,49 @@
     },
     "bio-generator": {
       "title": "Generador de Bio",
-      "desc": "Crea la bio perfecta para tus redes sociales."
+      "desc": "Crea la bio perfecta para tus redes sociales.",
+      "profession": "Profesión / Rol",
+      "professionPlaceholder": "ej.: Ingeniero de Software",
+      "hobbies": "Hobbies / Intereses",
+      "hobbiesPlaceholder": "ej.: fotografía, café",
+      "vibe": "Estilo",
+      "vibeOptions": {
+        "professional": "Profesional",
+        "creative": "Creativo",
+        "funny": "Divertido"
+      },
+      "templates": {
+        "professional": "Ayudo a empresas a crecer mediante {{profession}}. Apasionado(a) por {{hobbies}}. ¡Conectemos! 🚀",
+        "creative": "✨ {{profession}} de día y fan de {{hobbies}} de noche. Creando magia todos los días. ✨",
+        "funny": "{{profession}} profesional. Funciono con café y {{hobbies}}. Probablemente pensando en comida ahora. 🍕"
+      }
     },
     "hashtag-generator": {
       "title": "Generador de Hashtags",
-      "desc": "Genera hashtags relevantes para tus publicaciones."
+      "desc": "Genera hashtags relevantes para tus publicaciones.",
+      "keyword": "Ingresa una palabra clave o tema",
+      "keywordPlaceholder": "ej.: viajes, fitness, programación"
     },
     "character-counter": {
       "title": "Contador de Caracteres",
-      "desc": "Cuenta caracteres, palabras y líneas."
+      "desc": "Cuenta caracteres, palabras y líneas.",
+      "placeholder": "Escribe o pega tu texto aquí...",
+      "labels": {
+        "characters": "Caracteres",
+        "words": "Palabras",
+        "lines": "Líneas",
+        "paragraphs": "Párrafos",
+        "noSpaces": "Sin espacios"
+      }
     },
     "qr-generator": {
       "title": "Generador de Código QR",
-      "desc": "Crea códigos QR personalizados al instante."
+      "desc": "Crea códigos QR personalizados al instante.",
+      "urlOrText": "URL o Texto",
+      "urlPlaceholder": "Ingresa URL o texto aquí...",
+      "size": "Tamaño (px)",
+      "foreground": "Color principal",
+      "background": "Color de fondo"
     },
     "password-generator": {
       "title": "Generador de Contraseñas",
@@ -176,7 +206,9 @@
       "step2": "Ajusta las opciones según tu necesidad.",
       "step3": "Haz clic en \"{{action}}\" para ejecutar la herramienta.",
       "step4": "Revisa el resultado y, si está disponible, descarga o copia el contenido."
-    }
+    },
+    "adSpace": "Espacio publicitario",
+    "slot": "Espacio"
   },
   "legal": {
     "privacy": {

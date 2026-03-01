@@ -117,19 +117,49 @@
     },
     "bio-generator": {
       "title": "Bio Generator",
-      "desc": "Create the perfect bio for your social media."
+      "desc": "Create the perfect bio for your social media.",
+      "profession": "Profession / Role",
+      "professionPlaceholder": "e.g. Software Engineer",
+      "hobbies": "Hobbies / Interests",
+      "hobbiesPlaceholder": "e.g. photography, coffee",
+      "vibe": "Vibe",
+      "vibeOptions": {
+        "professional": "Professional",
+        "creative": "Creative",
+        "funny": "Funny"
+      },
+      "templates": {
+        "professional": "Helping businesses grow through {{profession}}. Passionate about {{hobbies}}. Let's connect! 🚀",
+        "creative": "✨ {{profession}} by day, {{hobbies}} enthusiast by night. Creating magic every day. ✨",
+        "funny": "Professional {{profession}}. I run on coffee and {{hobbies}}. Probably thinking about food right now. 🍕"
+      }
     },
     "hashtag-generator": {
       "title": "Hashtag Generator",
-      "desc": "Generate relevant hashtags for your posts."
+      "desc": "Generate relevant hashtags for your posts.",
+      "keyword": "Enter a keyword or topic",
+      "keywordPlaceholder": "e.g. travel, fitness, coding"
     },
     "character-counter": {
       "title": "Character Counter",
-      "desc": "Count characters, words, and lines."
+      "desc": "Count characters, words, and lines.",
+      "placeholder": "Type or paste your text here...",
+      "labels": {
+        "characters": "Characters",
+        "words": "Words",
+        "lines": "Lines",
+        "paragraphs": "Paragraphs",
+        "noSpaces": "No spaces"
+      }
     },
     "qr-generator": {
       "title": "QR Code Generator",
-      "desc": "Create custom QR codes instantly."
+      "desc": "Create custom QR codes instantly.",
+      "urlOrText": "URL or Text",
+      "urlPlaceholder": "Enter URL or text here...",
+      "size": "Size (px)",
+      "foreground": "Foreground",
+      "background": "Background"
     },
     "password-generator": {
       "title": "Password Generator",
@@ -176,7 +206,9 @@
       "step2": "Adjust the options according to your needs.",
       "step3": "Click \"{{action}}\" to run the tool.",
       "step4": "Review the result and, when available, download or copy the content."
-    }
+    },
+    "adSpace": "Advertisement Space",
+    "slot": "Slot"
   },
   "legal": {
     "privacy": {
