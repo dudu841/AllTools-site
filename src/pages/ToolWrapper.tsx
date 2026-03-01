@@ -71,7 +71,7 @@ export default function ToolWrapper() {
   return (
     <div className="w-full max-w-4xl mx-auto py-8">
       <Helmet>
-        <title>{t(`tools.${currentToolId}.title`)} | AllTools</title>
+        <title>{t(`tools.${currentToolId}.title`)} | Toolss</title>
         <meta name="description" content={t(`tools.${currentToolId}.desc`)} />
       </Helmet>
 

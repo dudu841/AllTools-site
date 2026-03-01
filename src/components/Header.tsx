@@ -35,9 +35,9 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8">
         <Link to={`/${currentLang}`} className="flex items-center gap-2 min-w-0">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white font-bold text-xl">
-            A
+            T
           </div>
-          <span className="truncate text-lg font-bold text-gray-900 sm:text-xl">AllTools</span>
+          <span className="truncate text-lg font-bold text-gray-900 sm:text-xl">Toolss</span>
         </Link>
 
         {/* Desktop Navigation */}

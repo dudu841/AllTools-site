@@ -16,9 +16,9 @@ export default function Footer() {
               className="flex items-center gap-2 mb-4"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white font-bold text-xl">
-                A
+                T
               </div>
-              <span className="text-xl font-bold text-gray-900">AllTools</span>
+              <span className="text-xl font-bold text-gray-900">Toolss</span>
             </Link>
             <p className="text-sm text-gray-500 max-w-xs">
               {t("home.subtitle")}
@@ -76,7 +76,7 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} AllTools. {t("footer.rights")}
+            &copy; {new Date().getFullYear()} Toolss. {t("footer.rights")}
           </p>
         </div>
       </div>
