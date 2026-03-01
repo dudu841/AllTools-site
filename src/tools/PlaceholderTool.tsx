@@ -17,7 +17,6 @@ const common: Record<Lang, Record<string, string>> = {
     calculate: "Calcular",
     clear: "Limpar",
     result: "Resultado",
-    modes: "Modos",
     optionalUpload: "Upload de arquivo (opcional)",
     uploadTitle: "Enviar arquivo",
     uploadHint: "Selecione ou arraste seu arquivo para começar.",
@@ -38,13 +37,11 @@ const common: Record<Lang, Record<string, string>> = {
     words: "Palavras",
     strength: "Força",
     quickAnalysis: "Análise rápida para",
-    selectMode: "Selecione o modo correspondente ao que você quer calcular.",
   },
   en: {
     calculate: "Calculate",
     clear: "Clear",
     result: "Result",
-    modes: "Modes",
     optionalUpload: "File upload (optional)",
     uploadTitle: "Upload file",
     uploadHint: "Select or drag your file to start.",
@@ -65,13 +62,11 @@ const common: Record<Lang, Record<string, string>> = {
     words: "Words",
     strength: "Strength",
     quickAnalysis: "Quick analysis for",
-    selectMode: "Choose the mode that matches what you want to calculate.",
   },
   es: {
     calculate: "Calcular",
     clear: "Limpiar",
     result: "Resultado",
-    modes: "Modos",
     optionalUpload: "Subir archivo (opcional)",
     uploadTitle: "Subir archivo",
     uploadHint: "Selecciona o arrastra tu archivo para comenzar.",
@@ -92,97 +87,10 @@ const common: Record<Lang, Record<string, string>> = {
     words: "Palabras",
     strength: "Fuerza",
     quickAnalysis: "Análisis rápido para",
-    selectMode: "Seleccione el modo según lo que desea calcular.",
   },
 };
 
-const modeLabels: Record<Lang, Record<string, string>> = {
-  pt: {
-    "1": "Básico",
-    "2": "Intermediário",
-    "3": "Avançado",
-    discount: "Desconto",
-    margin: "Margem",
-    markup: "Markup",
-    "apr-to-month": "APR → mensal",
-    "month-to-apr": "Mensal → APR",
-    upper: "Maiúsculas",
-    lower: "Minúsculas",
-    capitalize: "Capitalizar",
-    encrypt: "Criptografar",
-    decrypt: "Descriptografar",
-    "cm-inch": "cm → pol",
-    "inch-cm": "pol → cm",
-    "kg-lbs": "kg → lbs",
-    "lbs-kg": "lbs → kg",
-    "sqm-sqft": "m² → ft²",
-    "sqft-sqm": "ft² → m²",
-  },
-  en: {
-    "1": "Basic",
-    "2": "Intermediate",
-    "3": "Advanced",
-    discount: "Discount",
-    margin: "Margin",
-    markup: "Markup",
-    "apr-to-month": "APR → monthly",
-    "month-to-apr": "Monthly → APR",
-    upper: "Uppercase",
-    lower: "Lowercase",
-    capitalize: "Capitalize",
-    encrypt: "Encrypt",
-    decrypt: "Decrypt",
-    "cm-inch": "cm → in",
-    "inch-cm": "in → cm",
-    "kg-lbs": "kg → lbs",
-    "lbs-kg": "lbs → kg",
-    "sqm-sqft": "m² → ft²",
-    "sqft-sqm": "ft² → m²",
-  },
-  es: {
-    "1": "Básico",
-    "2": "Intermedio",
-    "3": "Avanzado",
-    discount: "Descuento",
-    margin: "Margen",
-    markup: "Markup",
-    "apr-to-month": "APR → mensual",
-    "month-to-apr": "Mensual → APR",
-    upper: "Mayúsculas",
-    lower: "Minúsculas",
-    capitalize: "Capitalizar",
-    encrypt: "Encriptar",
-    decrypt: "Desencriptar",
-    "cm-inch": "cm → in",
-    "inch-cm": "in → cm",
-    "kg-lbs": "kg → lbs",
-    "lbs-kg": "lbs → kg",
-    "sqm-sqft": "m² → ft²",
-    "sqft-sqm": "ft² → m²",
-  },
-};
 
-const modeOptions = [
-  "1",
-  "2",
-  "3",
-  "discount",
-  "margin",
-  "markup",
-  "apr-to-month",
-  "month-to-apr",
-  "upper",
-  "lower",
-  "capitalize",
-  "encrypt",
-  "decrypt",
-  "cm-inch",
-  "inch-cm",
-  "kg-lbs",
-  "lbs-kg",
-  "sqm-sqft",
-  "sqft-sqm",
-];
 
 const uploadOnlyTools = new Set<ToolId>([
   "pdf-to-word",
@@ -269,8 +177,8 @@ const toolUi: Partial<Record<ToolId, Record<Lang, Localized>>> = {
         "Clique em Calcular para ver calorias estimadas por dia.",
       ],
     },
-    en: { labels: { a: "Height (cm)", b: "Weight (kg)", c: "Age (years)" }, placeholders: { a: "Ex.: 170", b: "Ex.: 69", c: "Ex.: 30" }, steps: ["Enter your height in centimeters.", "Enter your weight and age.", "Choose activity level in modes.", "Click Calculate to get estimated daily calories."] },
-    es: { labels: { a: "Altura (cm)", b: "Peso (kg)", c: "Edad (años)" }, placeholders: { a: "Ej.: 170", b: "Ej.: 69", c: "Ej.: 30" }, steps: ["Ingresa tu altura en centímetros.", "Ingresa tu peso y edad.", "Elige el nivel de actividad en modos.", "Haz clic en Calcular para ver calorías diarias estimadas."] },
+    en: { labels: { a: "Height (cm)", b: "Weight (kg)", c: "Age (years)" }, placeholders: { a: "Ex.: 170", b: "Ex.: 69", c: "Ex.: 30" }, steps: ["Enter your height in centimeters.", "Enter your weight and age.", "The daily estimate uses a standard activity factor.", "Click Calculate to get estimated daily calories."] },
+    es: { labels: { a: "Altura (cm)", b: "Peso (kg)", c: "Edad (años)" }, placeholders: { a: "Ej.: 170", b: "Ej.: 69", c: "Ej.: 30" }, steps: ["Ingresa tu altura en centímetros.", "Ingresa tu peso y edad.", "La estimación diaria usa un factor de actividad estándar.", "Haz clic en Calcular para ver calorías diarias estimadas."] },
   },
   "word-counter": {
     pt: { labels: { text: "Texto" }, placeholders: { text: "Cole aqui o texto completo" }, steps: ["Cole ou digite o texto no campo.", "Revise o conteúdo antes de calcular.", "Clique em Calcular para contar as palavras.", "Use o resultado para revisar tamanho de texto/SEO."] },
@@ -286,19 +194,19 @@ const defaultUi: Record<Lang, Localized> = {
     steps: [
       "Leia o título da ferramenta para saber o objetivo.",
       "Preencha os campos com os dados solicitados.",
-      "Se necessário, escolha um modo de cálculo/conversão.",
+      "Preencha todos os campos exigidos pela ferramenta.",
       "Clique em Calcular para gerar o resultado automaticamente.",
     ],
   },
   en: {
     labels: { a: "Value 1", b: "Value 2", c: "Value 3", text: "Text / URL" },
     placeholders: { a: "Enter first value", b: "Enter second value", c: "Enter third value", text: "Type text, URL or expression" },
-    steps: ["Read the tool title to understand the goal.", "Fill in requested fields.", "Choose a mode if needed.", "Click Calculate to generate the result."],
+    steps: ["Read the tool title to understand the goal.", "Fill in requested fields.", "Fill the required fields shown for the tool.", "Click Calculate to generate the result."],
   },
   es: {
     labels: { a: "Valor 1", b: "Valor 2", c: "Valor 3", text: "Texto / URL" },
     placeholders: { a: "Ingresa el primer valor", b: "Ingresa el segundo valor", c: "Ingresa el tercer valor", text: "Escribe texto, URL o expresión" },
-    steps: ["Lee el título para entender el objetivo.", "Completa los campos solicitados.", "Selecciona un modo si hace falta.", "Haz clic en Calcular para generar el resultado."],
+    steps: ["Lee el título para entender el objetivo.", "Completa los campos solicitados.", "Completa todos los campos requeridos por la herramienta.", "Haz clic en Calcular para generar el resultado."],
   },
 };
 
@@ -329,7 +237,6 @@ export default function PlaceholderTool({ toolId }: Props) {
   const [b, setB] = useState("");
   const [c, setC] = useState("");
   const [text, setText] = useState("");
-  const [mode, setMode] = useState("1");
   const [showUpload, setShowUpload] = useState(false);
   const [result, setResult] = useState("-");
 
@@ -359,8 +266,8 @@ export default function PlaceholderTool({ toolId }: Props) {
       case "calorie-calculator": {
         if (!nA || !nB || !nC) break;
         const bmr = 10 * nB + 6.25 * nA - 5 * nC + 5;
-        const factors = [1.2, 1.375, 1.55, 1.725];
-        nextResult = `${Math.round(bmr * factors[Math.min(Number(mode), 3)])} kcal/dia`;
+        const activityFactor = 1.375;
+        nextResult = `${Math.round(bmr * activityFactor)} kcal/dia`;
         break;
       }
       case "mortgage-calculator": {
@@ -376,16 +283,14 @@ export default function PlaceholderTool({ toolId }: Props) {
         break;
       case "discount-margin-markup": {
         if (!nA) break;
-        if (mode === "discount") nextResult = `${l.finalPrice}: ${(nA * (1 - nB / 100)).toFixed(2)}`;
-        else if (mode === "margin") nextResult = `${l.margin}: ${(((nA - nB) / nA) * 100 || 0).toFixed(2)}%`;
-        else nextResult = `${l.markupPrice}: ${(nA * (1 + nB / 100)).toFixed(2)}`;
+        nextResult = `${l.finalPrice}: ${(nA * (1 - nB / 100)).toFixed(2)}`;
         break;
       }
       case "travel-time-calculator":
         nextResult = nA && nB ? `${(nA / nB).toFixed(2)} h` : "-";
         break;
       case "apr-monthly-converter":
-        if (nA) nextResult = mode === "apr-to-month" ? `${(((1 + nA / 100) ** (1 / 12) - 1) * 100).toFixed(4)}% a.m.` : `${(((1 + nA / 100) ** 12 - 1) * 100).toFixed(4)}% a.a.`;
+        if (nA) nextResult = `${(((1 + nA / 100) ** (1 / 12) - 1) * 100).toFixed(4)}% a.m.`;
         break;
       case "stock-simulator":
       case "investment-simulator":
@@ -395,14 +300,14 @@ export default function PlaceholderTool({ toolId }: Props) {
         nextResult = `${l.words}: ${text.trim() ? text.trim().split(/\s+/).length : 0}`;
         break;
       case "text-case-converter":
-        nextResult = mode === "upper" ? text.toUpperCase() : mode === "capitalize" ? capitalizeWords(text) : text.toLowerCase();
+        nextResult = capitalizeWords(text);
         break;
       case "password-strength-checker":
         nextResult = `${l.strength}: ${getPasswordStrength(text, l)}`;
         break;
       case "encrypt-decrypt": {
         const shift = nA || 3;
-        const operation = mode === "decrypt" ? -shift : shift;
+        const operation = shift;
         nextResult = text.replace(/[a-z]/gi, (char) => {
           const base = char <= "Z" ? 65 : 97;
           const code = (((char.charCodeAt(0) - base + operation) % 26) + 26) % 26;
@@ -430,13 +335,13 @@ export default function PlaceholderTool({ toolId }: Props) {
         nextResult = nA && nB ? `${(nA * nB).toFixed(2)}` : "-";
         break;
       case "cm-inch-converter":
-        nextResult = nA ? (mode === "cm-inch" ? `${(nA / 2.54).toFixed(2)} in` : `${(nA * 2.54).toFixed(2)} cm`) : "-";
+        nextResult = nA ? `${(nA / 2.54).toFixed(2)} in` : "-";
         break;
       case "kg-lbs-converter":
-        nextResult = nA ? (mode === "kg-lbs" ? `${(nA * 2.20462).toFixed(2)} lbs` : `${(nA / 2.20462).toFixed(2)} kg`) : "-";
+        nextResult = nA ? `${(nA * 2.20462).toFixed(2)} lbs` : "-";
         break;
       case "sqm-sqft-converter":
-        nextResult = nA ? (mode === "sqm-sqft" ? `${(nA * 10.7639).toFixed(2)} ft²` : `${(nA / 10.7639).toFixed(2)} m²`) : "-";
+        nextResult = nA ? `${(nA * 10.7639).toFixed(2)} ft²` : "-";
         break;
       case "backlink-counter":
       case "rank-checker":
@@ -458,7 +363,6 @@ export default function PlaceholderTool({ toolId }: Props) {
     setC("");
     setText("");
     setResult("-");
-    setMode("1");
   };
 
   const renderField = (field: FieldKey, value: string, setValue: (value: string) => void) => {
@@ -493,19 +397,6 @@ export default function PlaceholderTool({ toolId }: Props) {
             {renderField("c", c, setC)}
             {renderField("text", text, setText)}
           </div>
-
-          <div className="rounded-xl border border-gray-200 p-4">
-            <p className="mb-2 text-sm font-semibold text-gray-700">{l.modes}</p>
-            <p className="mb-3 text-xs text-gray-500">{l.selectMode}</p>
-            <div className="flex flex-wrap gap-2">
-              {modeOptions.map((value) => (
-                <button key={value} type="button" onClick={() => setMode(value)} className={`rounded-lg border px-3 py-1 ${mode === value ? "bg-emerald-600 text-white" : "bg-white"}`}>
-                  {modeLabels[lang][value]}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={calculate} className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">{l.calculate}</button>
             <button type="button" onClick={clear} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{l.clear}</button>
