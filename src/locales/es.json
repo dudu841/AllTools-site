@@ -240,6 +240,114 @@
         "fahrenheit": "fahrenheit",
         "kelvin": "kelvin"
       }
+    },
+    "social-resizer": {
+      "title": "Redimensionar para Redes Sociales",
+      "desc": "Ajusta imágenes para Instagram, TikTok y otras redes con dimensiones correctas."
+    },
+    "meme-generator": {
+      "title": "Generador de Memes",
+      "desc": "Crea memes rápidamente con texto superior/inferior y salida lista para compartir."
+    },
+    "banner-thumbnail-creator": {
+      "title": "Creador de Banners y Miniaturas",
+      "desc": "Crea banners y miniaturas para redes y anuncios con medidas optimizadas."
+    },
+    "bmi-calculator": {
+      "title": "Calculadora de IMC",
+      "desc": "Calcula el Índice de Masa Corporal según altura y peso."
+    },
+    "calorie-calculator": {
+      "title": "Calculadora de Calorías",
+      "desc": "Estima calorías diarias para mantenimiento, pérdida o aumento de peso."
+    },
+    "mortgage-calculator": {
+      "title": "Calculadora de Hipoteca",
+      "desc": "Simula cuotas hipotecarias con monto, tasa y plazo."
+    },
+    "net-gross-salary": {
+      "title": "Salario Neto / Bruto",
+      "desc": "Convierte salario bruto a neto y estima descuentos."
+    },
+    "discount-margin-markup": {
+      "title": "Calculadora de Descuento, Margen y Markup",
+      "desc": "Calcula descuento, margen y markup para fijar precios."
+    },
+    "travel-time-calculator": {
+      "title": "Calculadora de Tiempo de Viaje",
+      "desc": "Estima el tiempo de viaje según distancia y velocidad."
+    },
+    "apr-monthly-converter": {
+      "title": "Conversor APR ↔ Mensual",
+      "desc": "Convierte tasas APR a mensual y viceversa."
+    },
+    "stock-simulator": {
+      "title": "Simulador de Bolsa / Acciones",
+      "desc": "Simula escenarios de compra y venta de acciones."
+    },
+    "investment-simulator": {
+      "title": "Simulador de Inversiones",
+      "desc": "Proyecta aportes y crecimiento de inversiones en el tiempo."
+    },
+    "word-counter": {
+      "title": "Contador de Palabras",
+      "desc": "Cuenta palabras y estructura de texto para publicaciones y documentos."
+    },
+    "text-case-converter": {
+      "title": "Conversor de Texto",
+      "desc": "Convierte texto a minúsculas, mayúsculas o capitalizado."
+    },
+    "password-strength-checker": {
+      "title": "Verificador de Fuerza de Contraseña",
+      "desc": "Evalúa la fuerza de la contraseña y mejora seguridad."
+    },
+    "encrypt-decrypt": {
+      "title": "Cifrar / Descifrar Online",
+      "desc": "Cifra y descifra texto de forma rápida y segura."
+    },
+    "base-converter": {
+      "title": "Conversor de Base Numérica",
+      "desc": "Convierte valores entre binario, decimal y hexadecimal."
+    },
+    "scientific-calculator": {
+      "title": "Calculadora Científica Online",
+      "desc": "Realiza operaciones científicas avanzadas en línea."
+    },
+    "currency-converter": {
+      "title": "Conversor de Monedas",
+      "desc": "Convierte monedas como USD, EUR y BRL."
+    },
+    "cm-inch-converter": {
+      "title": "Conversor cm ↔ inches",
+      "desc": "Convierte centímetros y pulgadas al instante."
+    },
+    "kg-lbs-converter": {
+      "title": "Conversor kg ↔ lbs",
+      "desc": "Convierte kilogramos y libras rápidamente."
+    },
+    "sqm-sqft-converter": {
+      "title": "Conversor m² ↔ ft²",
+      "desc": "Convierte áreas entre metros cuadrados y pies cuadrados."
+    },
+    "backlink-counter": {
+      "title": "Contador de Backlinks",
+      "desc": "Analiza cantidad de backlinks para seguimiento SEO básico."
+    },
+    "rank-checker": {
+      "title": "Verificador de Rank del Sitio",
+      "desc": "Verifica el posicionamiento medio y rendimiento orgánico."
+    },
+    "meta-tags-checker": {
+      "title": "Verificador de Meta Tags",
+      "desc": "Revisa título, descripción y meta tags para SEO on-page."
+    },
+    "html-css-validator": {
+      "title": "Validador de HTML / CSS",
+      "desc": "Valida estructura HTML y CSS para detectar errores."
+    },
+    "site-speed-checker": {
+      "title": "Velocidad del Sitio",
+      "desc": "Evalúa métricas de velocidad para mejorar el rendimiento."
     }
   },
   "footer": {

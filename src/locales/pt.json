@@ -240,6 +240,114 @@
         "fahrenheit": "fahrenheit",
         "kelvin": "kelvin"
       }
+    },
+    "social-resizer": {
+      "title": "Redimensionar para Redes Sociais",
+      "desc": "Ajuste imagens para formatos ideais de Instagram, TikTok e outras redes com proporções corretas e melhor qualidade visual."
+    },
+    "meme-generator": {
+      "title": "Gerador de Memes",
+      "desc": "Crie memes rapidamente com texto superior e inferior, estilos simples e exportação pronta para compartilhar."
+    },
+    "banner-thumbnail-creator": {
+      "title": "Criador de Banners e Miniaturas",
+      "desc": "Monte banners e miniaturas para YouTube, anúncios e redes sociais com tamanho e layout otimizados."
+    },
+    "bmi-calculator": {
+      "title": "Calculadora de IMC",
+      "desc": "Calcule o Índice de Massa Corporal (IMC) e obtenha uma referência rápida da sua faixa corporal com base em altura e peso."
+    },
+    "calorie-calculator": {
+      "title": "Calculadora de Calorias",
+      "desc": "Estime gasto calórico diário e necessidades de calorias para manutenção, perda ou ganho de peso."
+    },
+    "mortgage-calculator": {
+      "title": "Calculadora de Hipoteca",
+      "desc": "Simule parcelas de financiamento imobiliário com valor, taxa, prazo e custo total."
+    },
+    "net-gross-salary": {
+      "title": "Salário Líquido / Bruto",
+      "desc": "Converta salário bruto para líquido e compare descontos estimados de forma prática."
+    },
+    "discount-margin-markup": {
+      "title": "Calculadora de Desconto, Margem e Markup",
+      "desc": "Calcule desconto, margem e markup para definir preços com mais controle e lucro."
+    },
+    "travel-time-calculator": {
+      "title": "Calculadora de Tempo de Viagem",
+      "desc": "Descubra o tempo estimado de deslocamento com base em distância e velocidade média."
+    },
+    "apr-monthly-converter": {
+      "title": "Conversor de Juros APR ↔ Mensal",
+      "desc": "Converta taxas anuais (APR) para mensal e mensal para anual com precisão."
+    },
+    "stock-simulator": {
+      "title": "Simulador de Bolsa / Ações",
+      "desc": "Simule cenários de compra e venda de ações para analisar ganhos e riscos."
+    },
+    "investment-simulator": {
+      "title": "Simulador de Investimentos",
+      "desc": "Projete aportes mensais, rentabilidade e patrimônio acumulado ao longo do tempo."
+    },
+    "word-counter": {
+      "title": "Contador de Palavras",
+      "desc": "Conte palavras, caracteres e estrutura de texto para artigos, posts e documentos."
+    },
+    "text-case-converter": {
+      "title": "Conversor de Texto",
+      "desc": "Converta texto para minúsculas, maiúsculas ou formato capitalizado em um clique."
+    },
+    "password-strength-checker": {
+      "title": "Verificador de Força de Senha",
+      "desc": "Analise a força da senha e receba recomendações para melhorar segurança."
+    },
+    "encrypt-decrypt": {
+      "title": "Criptografia / Descriptografia Online",
+      "desc": "Proteja mensagens com criptografia e faça descriptografia de texto com praticidade."
+    },
+    "base-converter": {
+      "title": "Conversor de Base Numérica",
+      "desc": "Converta números entre binário, decimal e hexadecimal para estudos e programação."
+    },
+    "scientific-calculator": {
+      "title": "Calculadora Científica Online",
+      "desc": "Realize operações científicas para estudos, engenharia e cálculos avançados."
+    },
+    "currency-converter": {
+      "title": "Conversor de Moedas",
+      "desc": "Converta moedas como USD, EUR e BRL para planejamento de compras e viagens."
+    },
+    "cm-inch-converter": {
+      "title": "Conversor cm ↔ inches",
+      "desc": "Converta centímetros para polegadas e polegadas para centímetros com rapidez."
+    },
+    "kg-lbs-converter": {
+      "title": "Conversor kg ↔ lbs",
+      "desc": "Converta quilogramas para libras e libras para quilogramas em segundos."
+    },
+    "sqm-sqft-converter": {
+      "title": "Conversor m² ↔ ft²",
+      "desc": "Converta área entre metros quadrados e pés quadrados para projetos e imóveis."
+    },
+    "backlink-counter": {
+      "title": "Contador de Backlinks",
+      "desc": "Analise quantidade e distribuição de backlinks para acompanhamento básico de SEO."
+    },
+    "rank-checker": {
+      "title": "Verificador de Rank do Site",
+      "desc": "Verifique posição média de termos e monitore desempenho orgânico de páginas."
+    },
+    "meta-tags-checker": {
+      "title": "Verificador de Meta Tags",
+      "desc": "Revise título, descrição e meta tags para otimização de SEO on-page."
+    },
+    "html-css-validator": {
+      "title": "Validador de HTML / CSS",
+      "desc": "Valide estrutura de HTML e CSS para encontrar erros e melhorar compatibilidade."
+    },
+    "site-speed-checker": {
+      "title": "Velocidade de Site",
+      "desc": "Avalie métricas de velocidade e desempenho para otimizar carregamento e experiência do usuário."
     }
   },
   "footer": {

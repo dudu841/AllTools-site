@@ -240,6 +240,114 @@
         "fahrenheit": "fahrenheit",
         "kelvin": "kelvin"
       }
+    },
+    "social-resizer": {
+      "title": "Social Media Resizer",
+      "desc": "Resize images for Instagram, TikTok and other platforms with proper dimensions."
+    },
+    "meme-generator": {
+      "title": "Meme Generator",
+      "desc": "Create memes quickly with top/bottom text and export-ready output."
+    },
+    "banner-thumbnail-creator": {
+      "title": "Banner & Thumbnail Creator",
+      "desc": "Create banners and thumbnails for social platforms and ads."
+    },
+    "bmi-calculator": {
+      "title": "BMI Calculator",
+      "desc": "Calculate Body Mass Index from height and weight."
+    },
+    "calorie-calculator": {
+      "title": "Calorie Calculator",
+      "desc": "Estimate daily calorie needs for maintenance, loss or gain."
+    },
+    "mortgage-calculator": {
+      "title": "Mortgage Calculator",
+      "desc": "Simulate mortgage payments with amount, rate and term."
+    },
+    "net-gross-salary": {
+      "title": "Net / Gross Salary Calculator",
+      "desc": "Convert gross salary to net and estimate deductions."
+    },
+    "discount-margin-markup": {
+      "title": "Discount, Margin and Markup Calculator",
+      "desc": "Calculate discount, margin and markup for pricing decisions."
+    },
+    "travel-time-calculator": {
+      "title": "Travel Time Calculator",
+      "desc": "Estimate travel time from distance and average speed."
+    },
+    "apr-monthly-converter": {
+      "title": "APR ↔ Monthly Interest Converter",
+      "desc": "Convert APR rates to monthly and monthly rates to APR."
+    },
+    "stock-simulator": {
+      "title": "Stock Market Simulator",
+      "desc": "Simulate stock buy/sell scenarios and projected results."
+    },
+    "investment-simulator": {
+      "title": "Investment Simulator",
+      "desc": "Project periodic investments and growth over time."
+    },
+    "word-counter": {
+      "title": "Word Counter",
+      "desc": "Count words and text structure for posts and documents."
+    },
+    "text-case-converter": {
+      "title": "Text Case Converter",
+      "desc": "Convert text to lowercase, uppercase or capitalized format."
+    },
+    "password-strength-checker": {
+      "title": "Password Strength Checker",
+      "desc": "Check password strength and get security recommendations."
+    },
+    "encrypt-decrypt": {
+      "title": "Online Encrypt / Decrypt",
+      "desc": "Encrypt and decrypt text quickly for safer sharing."
+    },
+    "base-converter": {
+      "title": "Number Base Converter",
+      "desc": "Convert values between binary, decimal and hexadecimal."
+    },
+    "scientific-calculator": {
+      "title": "Online Scientific Calculator",
+      "desc": "Perform advanced scientific operations online."
+    },
+    "currency-converter": {
+      "title": "Currency Converter",
+      "desc": "Convert currencies such as USD, EUR and BRL."
+    },
+    "cm-inch-converter": {
+      "title": "cm ↔ inches Converter",
+      "desc": "Convert centimeters and inches instantly."
+    },
+    "kg-lbs-converter": {
+      "title": "kg ↔ lbs Converter",
+      "desc": "Convert kilograms and pounds quickly."
+    },
+    "sqm-sqft-converter": {
+      "title": "m² ↔ ft² Converter",
+      "desc": "Convert area between square meters and square feet."
+    },
+    "backlink-counter": {
+      "title": "Backlink Counter",
+      "desc": "Analyze backlink totals for basic SEO monitoring."
+    },
+    "rank-checker": {
+      "title": "Website Rank Checker",
+      "desc": "Check average keyword rank and monitor organic performance."
+    },
+    "meta-tags-checker": {
+      "title": "Meta Tags Checker",
+      "desc": "Review title, description and meta tags for on-page SEO."
+    },
+    "html-css-validator": {
+      "title": "HTML / CSS Validator",
+      "desc": "Validate HTML and CSS structure to detect issues."
+    },
+    "site-speed-checker": {
+      "title": "Site Speed Checker",
+      "desc": "Analyze speed metrics to improve loading performance."
     }
   },
   "footer": {
