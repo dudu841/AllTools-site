@@ -11,33 +11,127 @@
     }
   },
   "tools": {
-    "pdf-to-word": { "title": "PDF para Word", "desc": "Converta documentos PDF para o formato Word." },
-    "word-to-pdf": { "title": "Word para PDF", "desc": "Converta documentos Word para o formato PDF." },
-    "compress-pdf": { "title": "Compactar PDF", "desc": "Reduza o tamanho do seu arquivo PDF." },
-    "merge-pdf": { "title": "Unir PDF", "desc": "Combine vários PDFs em um só.", "instruction": "Selecione 2 ou mais PDFs para unir", "selected": "Arquivos Selecionados", "success": "PDFs unidos com sucesso!" },
-    "split-pdf": { "title": "Dividir PDF", "desc": "Extraia páginas do seu PDF.", "instruction": "Selecione um PDF para dividir", "success": "PDF dividido com sucesso!", "select-range": "Selecionar Intervalo de Páginas", "from-page": "Da Página", "to-page": "Até a Página", "pages": "páginas", "extracted": "Páginas {{start}} a {{end}}" },
-    "compress-image": { "title": "Compressor de Imagem", "desc": "Comprima JPG, PNG, SVG e GIFs.", "level": "Nível de Compressão", "original-size": "Tamanho Original", "compressed-size": "Tamanho Compactado", "saved": "Economia" },
-    "resize-image": { "title": "Redimensionar Imagem", "desc": "Altere as dimensões das suas imagens.", "predefined-sizes": "Formatos Rápidos", "width": "Largura (px)", "height": "Altura (px)", "maintain-ratio": "Manter proporção", "custom": "Personalizado" },
-    "convert-image": { "title": "Converter JPG/PNG", "desc": "Converta imagens entre formatos.", "format": "Converter para o formato" },
-    "remove-background": { "title": "Removedor de Fundo", "desc": "Remova o fundo de qualquer imagem.", "bg-color": "Cor de Fundo", "mode-ai": "Remoção Automática com IA", "mode-color": "Remover Cor Específica", "color-to-remove": "Cor para Remover", "tolerance": "Tolerância" },
-    "adjust-image": { "title": "Ajustar Imagem", "desc": "Ajuste brilho, contraste, saturação e desfoque.", "brightness": "Brilho", "contrast": "Contraste", "saturation": "Saturação", "blur": "Desfoque", "hue": "Matiz", "sepia": "Sépia", "invert": "Inverter" },
-    "compound-interest": { "title": "Calculadora de Juros Compostos", "desc": "Calcule o crescimento do seu investimento ao longo do tempo." },
-    "loan-simulator": { "title": "Simulador de Empréstimo", "desc": "Simule pagamentos de empréstimos e juros." },
-    "percentage-calculator": { "title": "Calculadora de Porcentagem", "desc": "Calcule porcentagens facilmente." },
-    "bio-generator": { "title": "Gerador de Bio", "desc": "Crie a bio perfeita para suas redes sociais." },
-    "hashtag-generator": { "title": "Gerador de Hashtags", "desc": "Gere hashtags relevantes para suas postagens." },
-    "character-counter": { "title": "Contador de Caracteres", "desc": "Conte caracteres, palavras e linhas." },
-    "qr-generator": { "title": "Gerador de QR Code", "desc": "Crie QR codes personalizados instantaneamente." },
-    "password-generator": { "title": "Gerador de Senha", "desc": "Gere senhas fortes e seguras." },
-    "age-calculator": { "title": "Calculadora de Idade", "desc": "Calcule sua idade exata em anos, meses e dias." },
-    "unit-converter": { "title": "Conversor de Medidas", "desc": "Converta entre diferentes unidades de medida." }
+    "pdf-to-word": {
+      "title": "PDF para Word",
+      "desc": "Converta documentos PDF para o formato Word."
+    },
+    "word-to-pdf": {
+      "title": "Word para PDF",
+      "desc": "Converta documentos Word para o formato PDF."
+    },
+    "compress-pdf": {
+      "title": "Compactar PDF",
+      "desc": "Reduza o tamanho do seu arquivo PDF."
+    },
+    "merge-pdf": {
+      "title": "Unir PDF",
+      "desc": "Combine vários PDFs em um só.",
+      "instruction": "Selecione 2 ou mais PDFs para unir",
+      "selected": "Arquivos Selecionados",
+      "success": "PDFs unidos com sucesso!"
+    },
+    "split-pdf": {
+      "title": "Dividir PDF",
+      "desc": "Extraia páginas do seu PDF.",
+      "instruction": "Selecione um PDF para dividir",
+      "success": "PDF dividido com sucesso!",
+      "select-range": "Selecionar Intervalo de Páginas",
+      "from-page": "Da Página",
+      "to-page": "Até a Página",
+      "pages": "páginas",
+      "extracted": "Páginas {{start}} a {{end}}"
+    },
+    "compress-image": {
+      "title": "Compressor de Imagem",
+      "desc": "Comprima JPG, PNG, SVG e GIFs.",
+      "level": "Nível de Compressão",
+      "original-size": "Tamanho Original",
+      "compressed-size": "Tamanho Compactado",
+      "saved": "Economia"
+    },
+    "resize-image": {
+      "title": "Redimensionar Imagem",
+      "desc": "Altere as dimensões das suas imagens.",
+      "predefined-sizes": "Formatos Rápidos",
+      "width": "Largura (px)",
+      "height": "Altura (px)",
+      "maintain-ratio": "Manter proporção",
+      "custom": "Personalizado"
+    },
+    "convert-image": {
+      "title": "Converter JPG/PNG",
+      "desc": "Converta imagens entre formatos.",
+      "format": "Converter para o formato"
+    },
+    "remove-background": {
+      "title": "Removedor de Fundo",
+      "desc": "Remova o fundo de qualquer imagem.",
+      "bg-color": "Cor de Fundo",
+      "mode-ai": "Remoção Automática com IA",
+      "mode-color": "Remover Cor Específica",
+      "color-to-remove": "Cor para Remover",
+      "tolerance": "Tolerância"
+    },
+    "adjust-image": {
+      "title": "Ajustar Imagem",
+      "desc": "Ajuste brilho, contraste, saturação e desfoque.",
+      "brightness": "Brilho",
+      "contrast": "Contraste",
+      "saturation": "Saturação",
+      "blur": "Desfoque",
+      "hue": "Matiz",
+      "sepia": "Sépia",
+      "invert": "Inverter"
+    },
+    "compound-interest": {
+      "title": "Calculadora de Juros Compostos",
+      "desc": "Calcule o crescimento do seu investimento ao longo do tempo."
+    },
+    "loan-simulator": {
+      "title": "Simulador de Empréstimo",
+      "desc": "Simule pagamentos de empréstimos e juros."
+    },
+    "percentage-calculator": {
+      "title": "Calculadora de Porcentagem",
+      "desc": "Calcule porcentagens facilmente."
+    },
+    "bio-generator": {
+      "title": "Gerador de Bio",
+      "desc": "Crie a bio perfeita para suas redes sociais."
+    },
+    "hashtag-generator": {
+      "title": "Gerador de Hashtags",
+      "desc": "Gere hashtags relevantes para suas postagens."
+    },
+    "character-counter": {
+      "title": "Contador de Caracteres",
+      "desc": "Conte caracteres, palavras e linhas."
+    },
+    "qr-generator": {
+      "title": "Gerador de QR Code",
+      "desc": "Crie QR codes personalizados instantaneamente."
+    },
+    "password-generator": {
+      "title": "Gerador de Senha",
+      "desc": "Gere senhas fortes e seguras."
+    },
+    "age-calculator": {
+      "title": "Calculadora de Idade",
+      "desc": "Calcule sua idade exata em anos, meses e dias."
+    },
+    "unit-converter": {
+      "title": "Conversor de Medidas",
+      "desc": "Converta entre diferentes unidades de medida."
+    }
   },
   "footer": {
     "privacy": "Política de Privacidade",
     "terms": "Termos de Uso",
     "cookies": "Política de Cookies",
     "contact": "Contato",
-    "rights": "Todos os direitos reservados."
+    "rights": "Todos os direitos reservados.",
+    "legal": "Legal",
+    "support": "Suporte"
   },
   "common": {
     "language": "Idioma",

@@ -11,33 +11,127 @@
     }
   },
   "tools": {
-    "pdf-to-word": { "title": "PDF to Word", "desc": "Convert PDF documents to Word format." },
-    "word-to-pdf": { "title": "Word to PDF", "desc": "Convert Word documents to PDF format." },
-    "compress-pdf": { "title": "Compress PDF", "desc": "Reduce the file size of your PDF." },
-    "merge-pdf": { "title": "Merge PDF", "desc": "Combine multiple PDFs into one.", "instruction": "Select 2 or more PDFs to merge", "selected": "Selected Files", "success": "PDFs Merged Successfully!" },
-    "split-pdf": { "title": "Split PDF", "desc": "Extract pages from your PDF.", "instruction": "Select a PDF to split", "success": "PDF Split Successfully!", "select-range": "Select Page Range", "from-page": "From Page", "to-page": "To Page", "pages": "pages", "extracted": "Pages {{start}} to {{end}}" },
-    "compress-image": { "title": "Image Compressor", "desc": "Compress JPG, PNG, SVG, and GIFs.", "level": "Compression Level", "original-size": "Original Size", "compressed-size": "Compressed Size", "saved": "Saved" },
-    "resize-image": { "title": "Resize Image", "desc": "Change the dimensions of your images.", "predefined-sizes": "Quick Formats", "width": "Width (px)", "height": "Height (px)", "maintain-ratio": "Maintain aspect ratio", "custom": "Custom" },
-    "convert-image": { "title": "Convert JPG/PNG", "desc": "Convert images between formats.", "format": "Convert to Format" },
-    "remove-background": { "title": "Background Remover", "desc": "Remove the background from any image.", "bg-color": "Background Color", "mode-ai": "AI Auto Removal", "mode-color": "Remove Specific Color", "color-to-remove": "Color to Remove", "tolerance": "Tolerance" },
-    "adjust-image": { "title": "Adjust Image", "desc": "Adjust brightness, contrast, saturation, and blur.", "brightness": "Brightness", "contrast": "Contrast", "saturation": "Saturation", "blur": "Blur", "hue": "Hue", "sepia": "Sepia", "invert": "Invert" },
-    "compound-interest": { "title": "Compound Interest Calculator", "desc": "Calculate your investment growth over time." },
-    "loan-simulator": { "title": "Loan Simulator", "desc": "Simulate loan payments and interest." },
-    "percentage-calculator": { "title": "Percentage Calculator", "desc": "Calculate percentages easily." },
-    "bio-generator": { "title": "Bio Generator", "desc": "Create the perfect bio for your social media." },
-    "hashtag-generator": { "title": "Hashtag Generator", "desc": "Generate relevant hashtags for your posts." },
-    "character-counter": { "title": "Character Counter", "desc": "Count characters, words, and lines." },
-    "qr-generator": { "title": "QR Code Generator", "desc": "Create custom QR codes instantly." },
-    "password-generator": { "title": "Password Generator", "desc": "Generate strong and secure passwords." },
-    "age-calculator": { "title": "Age Calculator", "desc": "Calculate your exact age in years, months, and days." },
-    "unit-converter": { "title": "Unit Converter", "desc": "Convert between different units of measurement." }
+    "pdf-to-word": {
+      "title": "PDF to Word",
+      "desc": "Convert PDF documents to Word format."
+    },
+    "word-to-pdf": {
+      "title": "Word to PDF",
+      "desc": "Convert Word documents to PDF format."
+    },
+    "compress-pdf": {
+      "title": "Compress PDF",
+      "desc": "Reduce the file size of your PDF."
+    },
+    "merge-pdf": {
+      "title": "Merge PDF",
+      "desc": "Combine multiple PDFs into one.",
+      "instruction": "Select 2 or more PDFs to merge",
+      "selected": "Selected Files",
+      "success": "PDFs Merged Successfully!"
+    },
+    "split-pdf": {
+      "title": "Split PDF",
+      "desc": "Extract pages from your PDF.",
+      "instruction": "Select a PDF to split",
+      "success": "PDF Split Successfully!",
+      "select-range": "Select Page Range",
+      "from-page": "From Page",
+      "to-page": "To Page",
+      "pages": "pages",
+      "extracted": "Pages {{start}} to {{end}}"
+    },
+    "compress-image": {
+      "title": "Image Compressor",
+      "desc": "Compress JPG, PNG, SVG, and GIFs.",
+      "level": "Compression Level",
+      "original-size": "Original Size",
+      "compressed-size": "Compressed Size",
+      "saved": "Saved"
+    },
+    "resize-image": {
+      "title": "Resize Image",
+      "desc": "Change the dimensions of your images.",
+      "predefined-sizes": "Quick Formats",
+      "width": "Width (px)",
+      "height": "Height (px)",
+      "maintain-ratio": "Maintain aspect ratio",
+      "custom": "Custom"
+    },
+    "convert-image": {
+      "title": "Convert JPG/PNG",
+      "desc": "Convert images between formats.",
+      "format": "Convert to Format"
+    },
+    "remove-background": {
+      "title": "Background Remover",
+      "desc": "Remove the background from any image.",
+      "bg-color": "Background Color",
+      "mode-ai": "AI Auto Removal",
+      "mode-color": "Remove Specific Color",
+      "color-to-remove": "Color to Remove",
+      "tolerance": "Tolerance"
+    },
+    "adjust-image": {
+      "title": "Adjust Image",
+      "desc": "Adjust brightness, contrast, saturation, and blur.",
+      "brightness": "Brightness",
+      "contrast": "Contrast",
+      "saturation": "Saturation",
+      "blur": "Blur",
+      "hue": "Hue",
+      "sepia": "Sepia",
+      "invert": "Invert"
+    },
+    "compound-interest": {
+      "title": "Compound Interest Calculator",
+      "desc": "Calculate your investment growth over time."
+    },
+    "loan-simulator": {
+      "title": "Loan Simulator",
+      "desc": "Simulate loan payments and interest."
+    },
+    "percentage-calculator": {
+      "title": "Percentage Calculator",
+      "desc": "Calculate percentages easily."
+    },
+    "bio-generator": {
+      "title": "Bio Generator",
+      "desc": "Create the perfect bio for your social media."
+    },
+    "hashtag-generator": {
+      "title": "Hashtag Generator",
+      "desc": "Generate relevant hashtags for your posts."
+    },
+    "character-counter": {
+      "title": "Character Counter",
+      "desc": "Count characters, words, and lines."
+    },
+    "qr-generator": {
+      "title": "QR Code Generator",
+      "desc": "Create custom QR codes instantly."
+    },
+    "password-generator": {
+      "title": "Password Generator",
+      "desc": "Generate strong and secure passwords."
+    },
+    "age-calculator": {
+      "title": "Age Calculator",
+      "desc": "Calculate your exact age in years, months, and days."
+    },
+    "unit-converter": {
+      "title": "Unit Converter",
+      "desc": "Convert between different units of measurement."
+    }
   },
   "footer": {
     "privacy": "Privacy Policy",
     "terms": "Terms of Use",
     "cookies": "Cookie Policy",
     "contact": "Contact",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "legal": "Legal",
+    "support": "Support"
   },
   "common": {
     "language": "Language",

@@ -26,9 +26,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
-              Legal
-            </h3>
+            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">{t("footer.legal")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -58,9 +56,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
-              Support
-            </h3>
+            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">{t("footer.support")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
