@@ -8,7 +8,8 @@ import LegalPage from "./pages/LegalPage";
 
 function RootRedirect() {
   const { i18n } = useTranslation();
-  const detectedLang = i18n.language.split("-")[0] || "en";
+  const browserLang = typeof navigator !== "undefined" ? navigator.language.split("-")[0] : "en";
+  const detectedLang = (i18n.language || browserLang).split("-")[0] || browserLang;
   const lang = ["en", "pt", "es"].includes(detectedLang) ? detectedLang : "en";
   return <Navigate to={`/${lang}`} replace />;
 }

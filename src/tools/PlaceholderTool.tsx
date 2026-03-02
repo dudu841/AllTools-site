@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ToolId } from "../config/tools";
 import { FileText, Upload, X } from "lucide-react";
@@ -37,9 +37,11 @@ const messages = {
   pt: {
     result: "Resultado instantâneo",
     clear: "Limpar",
+    action: "Executar ferramenta",
     copy: "Copiar",
     share: "Compartilhar",
     download: "Baixar resultado",
+    optionalUpload: "Upload de arquivo (opcional)",
     uploadTitle: "Enviar arquivo",
     uploadHint: "Selecione o documento/imagem para processar.",
     uploadAction: "Processar arquivo",
@@ -52,9 +54,11 @@ const messages = {
   en: {
     result: "Instant result",
     clear: "Clear",
+    action: "Run tool",
     copy: "Copy",
     share: "Share",
     download: "Download result",
+    optionalUpload: "File upload (optional)",
     uploadTitle: "Upload file",
     uploadHint: "Select document/image to process.",
     uploadAction: "Process file",
@@ -67,9 +71,11 @@ const messages = {
   es: {
     result: "Resultado instantáneo",
     clear: "Limpiar",
+    action: "Ejecutar herramienta",
     copy: "Copiar",
     share: "Compartir",
     download: "Descargar resultado",
+    optionalUpload: "Subir archivo (opcional)",
     uploadTitle: "Subir archivo",
     uploadHint: "Selecciona documento/imagen para procesar.",
     uploadAction: "Procesar archivo",
@@ -295,30 +301,39 @@ export default function PlaceholderTool({ toolId }: Props) {
   const lang = ((i18n.language || "pt").split("-")[0] as Lang) || "pt";
   const m = messages[lang];
   const isUploadOnly = toolId ? uploadOnlyTools.has(toolId) : false;
-  const def = (toolId && toolDefs[toolId]?.pt) || defaultDef.pt;
+  const def = (toolId && (toolDefs[toolId]?.[lang] || toolDefs[toolId]?.pt)) || defaultDef[lang] || defaultDef.pt;
 
   const [values, setValues] = useState<Record<string, string | boolean>>({});
   const [showUpload, setShowUpload] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
+  const [result, setResult] = useState(m.empty);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const result = useMemo(() => {
-    if (isUploadOnly) return "";
-    return def.compute ? def.compute(values, lang) : m.empty;
-  }, [def, values, lang, isUploadOnly, m.empty]);
+  const optionalInputRef = useRef<HTMLInputElement | null>(null);
 
   const clearAll = () => {
     setValues({});
     setSelectedFiles([]);
+    setUploadPreviews([]);
+    setResult(m.empty);
   };
 
   const onFilesSelected = (fileList: FileList | null) => {
     if (!fileList) return;
-    setSelectedFiles(Array.from(fileList));
+    const files = Array.from(fileList);
+    setSelectedFiles(files);
+    setUploadPreviews(files.map((file) => (file.type.startsWith("image/") ? URL.createObjectURL(file) : "")));
+  };
+
+  const runTool = () => {
+    if (def.compute) {
+      setResult(def.compute(values, lang));
+    }
   };
 
   const removeFile = (index: number) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setUploadPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const copyResult = async () => {
@@ -376,7 +391,11 @@ export default function PlaceholderTool({ toolId }: Props) {
                 {selectedFiles.map((file, index) => (
                   <div key={`${file.name}-${index}`} className="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4">
                     <div className="flex items-center gap-3">
-                      <FileText className="h-6 w-6 text-emerald-600" />
+                      {uploadPreviews[index] ? (
+                        <img src={uploadPreviews[index]} alt={file.name} className="h-10 w-10 rounded object-cover" />
+                      ) : (
+                        <FileText className="h-6 w-6 text-emerald-600" />
+                      )}
                       <span className="font-semibold text-gray-700">{file.name}</span>
                     </div>
                     <button type="button" onClick={() => removeFile(index)} aria-label={m.removeFile} className="text-gray-400 hover:text-gray-600">
@@ -398,6 +417,7 @@ export default function PlaceholderTool({ toolId }: Props) {
             ))}
           </div>
           <div className="flex flex-wrap gap-3">
+            <button type="button" onClick={runTool} className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700">{m.action}</button>
             <button type="button" onClick={clearAll} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{m.clear}</button>
           </div>
 
@@ -443,7 +463,25 @@ export default function PlaceholderTool({ toolId }: Props) {
           <button onClick={() => setShowUpload((s) => !s)} className="text-sm font-medium text-emerald-700 underline" type="button">
             {m.optionalUpload}
           </button>
-          {showUpload && <input type="file" className="mt-3 w-full" />}
+          {showUpload && (
+            <div className="mt-3 space-y-3">
+              <input ref={optionalInputRef} type="file" multiple onChange={(e) => onFilesSelected(e.target.files)} className="w-full" />
+              {selectedFiles.length > 0 && (
+                <div className="space-y-2">
+                  {selectedFiles.map((file, index) => (
+                    <div key={`${file.name}-optional-${index}`} className="flex items-center gap-3 rounded-lg border border-gray-200 p-2">
+                      {uploadPreviews[index] ? (
+                        <img src={uploadPreviews[index]} alt={file.name} className="h-10 w-10 rounded object-cover" />
+                      ) : (
+                        <FileText className="h-5 w-5 text-emerald-600" />
+                      )}
+                      <span className="text-sm text-gray-700">{file.name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
