@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ToolId } from "../config/tools";
 import { FileText, Upload, X } from "lucide-react";
+import { removeBackground } from "@imgly/background-removal";
 
 type Props = { toolId?: ToolId };
 type Lang = "pt" | "en" | "es";
@@ -104,6 +105,11 @@ const fileDownload = (file: File) => {
   a.download = file.name;
   a.click();
   URL.revokeObjectURL(url);
+};
+
+const dataUrlToBlob = async (dataUrl: string) => {
+  const res = await fetch(dataUrl);
+  return res.blob();
 };
 
 const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
@@ -373,25 +379,46 @@ export default function PlaceholderTool({ toolId }: Props) {
     }
 
     if (toolId === "logo-remover" && uploadPreviews[0]) {
-      const base = await loadImage(uploadPreviews[0]);
-      const canvas = document.createElement("canvas");
-      canvas.width = base.width;
-      canvas.height = base.height;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.drawImage(base, 0, 0);
+      try {
+        const base = await loadImage(uploadPreviews[0]);
+        const canvas = document.createElement("canvas");
+        canvas.width = base.width;
+        canvas.height = base.height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        ctx.drawImage(base, 0, 0);
 
       const scaleX = base.width / 320;
       const scaleY = base.height / 320;
       const x = Math.max(0, Math.floor(logoBox.x * scaleX));
       const y = Math.max(0, Math.floor(logoBox.y * scaleY));
       const size = Math.max(10, Math.floor(logoBox.size * Math.min(scaleX, scaleY)));
-      const sample = ctx.getImageData(Math.max(0, x - 2), Math.max(0, y - 2), 1, 1).data;
-      ctx.fillStyle = `rgba(${sample[0]}, ${sample[1]}, ${sample[2]}, 0.92)`;
-      ctx.fillRect(x, y, size, size);
-      const output = canvas.toDataURL("image/png");
-      setProcessedPreview(output);
-      setResult(lang === "pt" ? "IA aplicada: logotipo removido com sucesso." : lang === "es" ? "IA aplicada: logotipo eliminado con éxito." : "AI applied: logo removed successfully.");
+        const cropCanvas = document.createElement("canvas");
+        cropCanvas.width = size;
+        cropCanvas.height = size;
+        const cropCtx = cropCanvas.getContext("2d");
+        if (!cropCtx) return;
+        cropCtx.drawImage(base, x, y, size, size, 0, 0, size, size);
+
+        const cropBlob = await dataUrlToBlob(cropCanvas.toDataURL("image/png"));
+        const aiBlob = await removeBackground(cropBlob, {
+          output: { format: "image/png", quality: 1 },
+        });
+        const aiCropUrl = URL.createObjectURL(aiBlob);
+        const aiCropImage = await loadImage(aiCropUrl);
+        URL.revokeObjectURL(aiCropUrl);
+
+        const sample = ctx.getImageData(Math.max(0, x - 2), Math.max(0, y - 2), 1, 1).data;
+        ctx.fillStyle = `rgba(${sample[0]}, ${sample[1]}, ${sample[2]}, 0.95)`;
+        ctx.fillRect(x, y, size, size);
+        ctx.drawImage(aiCropImage, x, y, size, size);
+
+        const output = canvas.toDataURL("image/png");
+        setProcessedPreview(output);
+        setResult(lang === "pt" ? "IA aplicada: logotipo removido com sucesso." : lang === "es" ? "IA aplicada: logotipo eliminado con éxito." : "AI applied: logo removed successfully.");
+      } catch {
+        setResult(lang === "pt" ? "Falha ao aplicar IA na remoção do logotipo. Tente outra imagem." : lang === "es" ? "Error al aplicar IA para eliminar el logotipo. Prueba otra imagen." : "Failed to apply AI logo removal. Please try another image.");
+      }
       return;
     }
 
