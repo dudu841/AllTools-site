@@ -29,6 +29,8 @@ const uploadOnlyTools = new Set<ToolId>([
   "social-resizer",
   "meme-generator",
   "banner-thumbnail-creator",
+  "logo-remover",
+  "image-upscaler-4k",
 ]);
 
 const messages = {
@@ -82,6 +84,33 @@ const messages = {
 const toNumber = (v: string | boolean) => Number(String(v || "").replace(",", "."));
 
 const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
+
+  "logo-remover": {
+    pt: {
+      fields: [],
+      steps: [
+        "Envie a imagem com logotipo.",
+        "Selecione a área do logotipo na foto.",
+        "Aplique a remoção e revise o resultado.",
+        "Baixe a imagem final sem logotipo.",
+      ],
+    },
+    en: { fields: [], steps: ["Upload the image with logo.", "Select the logo area in the photo.", "Apply removal and review result.", "Download the image without logo."] },
+    es: { fields: [], steps: ["Sube la imagen con logotipo.", "Selecciona el área del logotipo en la foto.", "Aplica la eliminación y revisa el resultado.", "Descarga la imagen final sin logotipo."] },
+  },
+  "image-upscaler-4k": {
+    pt: {
+      fields: [],
+      steps: [
+        "Envie a imagem que deseja melhorar.",
+        "Escolha o aprimoramento em alta qualidade até 4K.",
+        "Aguarde o processamento da melhoria.",
+        "Baixe a versão final em maior resolução.",
+      ],
+    },
+    en: { fields: [], steps: ["Upload the image you want to enhance.", "Choose high-quality upscaling up to 4K.", "Wait for processing.", "Download the final higher-resolution image."] },
+    es: { fields: [], steps: ["Sube la imagen que deseas mejorar.", "Elige la mejora en alta calidad hasta 4K.", "Espera el procesamiento.", "Descarga la imagen final en mayor resolución."] },
+  },
   "bmi-calculator": {
     pt: {
       fields: [

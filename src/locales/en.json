@@ -253,6 +253,14 @@
       "title": "Banner & Thumbnail Creator",
       "desc": "Create banners and thumbnails for social platforms and ads."
     },
+    "logo-remover": {
+      "title": "Logo Remover",
+      "desc": "Remove logos from photos after manually selecting where the logo appears in the image."
+    },
+    "image-upscaler-4k": {
+      "title": "Image Enhancer up to 4K",
+      "desc": "Improve image quality and upscale to high definition up to 4K in a few clicks."
+    },
     "bmi-calculator": {
       "title": "BMI Calculator",
       "desc": "Calculate Body Mass Index from height and weight."

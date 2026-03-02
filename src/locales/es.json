@@ -253,6 +253,14 @@
       "title": "Creador de Banners y Miniaturas",
       "desc": "Crea banners y miniaturas para redes y anuncios con medidas optimizadas."
     },
+    "logo-remover": {
+      "title": "Removedor de Logotipo",
+      "desc": "Elimina logotipos de fotos tras seleccionar manualmente dónde aparece el logo en la imagen."
+    },
+    "image-upscaler-4k": {
+      "title": "Mejorador de Imagen hasta 4K",
+      "desc": "Mejora la calidad de la imagen y haz upscale en alta definición hasta 4K en pocos clics."
+    },
     "bmi-calculator": {
       "title": "Calculadora de IMC",
       "desc": "Calcula el Índice de Masa Corporal según altura y peso."

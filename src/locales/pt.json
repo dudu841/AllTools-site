@@ -253,6 +253,14 @@
       "title": "Criador de Banners e Miniaturas",
       "desc": "Monte banners e miniaturas para YouTube, anúncios e redes sociais com tamanho e layout otimizados."
     },
+    "logo-remover": {
+      "title": "Removedor de Logotipo",
+      "desc": "Remova logotipos de fotos após selecionar manualmente a área da marca na imagem."
+    },
+    "image-upscaler-4k": {
+      "title": "Melhorador de Imagem até 4K",
+      "desc": "Aumente a qualidade da imagem e faça upscale em alta definição até 4K com poucos cliques."
+    },
     "bmi-calculator": {
       "title": "Calculadora de IMC",
       "desc": "Calcule o Índice de Massa Corporal (IMC) e obtenha uma referência rápida da sua faixa corporal com base em altura e peso."
