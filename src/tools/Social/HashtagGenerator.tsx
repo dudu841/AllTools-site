@@ -18,12 +18,11 @@ export default function HashtagGenerator() {
       ...baseWords.map((w) => `#${w.toLowerCase()}love`),
       ...baseWords.map((w) => `#${w.toLowerCase()}style`),
       ...baseWords.map((w) => `#${w.toLowerCase()}tips`),
-      ...baseWords.map((w) => `#instadaily`),
-      ...baseWords.map((w) => `#explorepage`),
-      ...baseWords.map((w) => `#trending`),
+      ...baseWords.map(() => `#instadaily`),
+      ...baseWords.map(() => `#explorepage`),
+      ...baseWords.map(() => `#trending`),
     ];
 
-    // Shuffle and pick 15
     const shuffled = generated.sort(() => 0.5 - Math.random());
     setHashtags(shuffled.slice(0, 15));
     setCopied(false);
@@ -38,13 +37,11 @@ export default function HashtagGenerator() {
   return (
     <div className="space-y-6 max-w-xl mx-auto">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Enter a keyword or topic
-        </label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.hashtag-generator.keyword")}</label>
         <div className="flex gap-4">
           <input
             type="text"
-            placeholder="e.g. travel, fitness, coding"
+            placeholder={t("tools.hashtag-generator.keywordPlaceholder")}
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && generateHashtags()}
@@ -63,10 +60,7 @@ export default function HashtagGenerator() {
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-xl relative">
           <div className="flex flex-wrap gap-2 pr-12">
             {hashtags.map((tag, i) => (
-              <span
-                key={i}
-                className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm text-emerald-700 font-medium shadow-sm"
-              >
+              <span key={i} className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm text-emerald-700 font-medium shadow-sm">
                 {tag}
               </span>
             ))}
@@ -76,11 +70,7 @@ export default function HashtagGenerator() {
             className="absolute top-4 right-4 p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
             title={t("common.copy")}
           >
-            {copied ? (
-              <Check className="w-5 h-5 text-emerald-600" />
-            ) : (
-              <Copy className="w-5 h-5" />
-            )}
+            {copied ? <Check className="w-5 h-5 text-emerald-600" /> : <Copy className="w-5 h-5" />}
           </button>
         </div>
       )}

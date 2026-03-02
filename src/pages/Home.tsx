@@ -1,75 +1,76 @@
-import SEO from "../components/SEO"
+import { Link, useParams } from "react-router-dom";
+import SEO from "../components/SEO";
+import { categories, toolPaths, type ToolId } from "../config/tools";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation();
+  const { lang = "pt" } = useParams<{ lang: string }>();
+  const currentLang = ["pt", "en", "es"].includes(lang) ? (lang as "pt" | "en" | "es") : "pt";
+
   return (
     <>
-      <SEO
-  title="Toolss – Ferramentas Online Gratuitas"
-  description="Use ferramentas online gratuitas para converter PDF, compactar arquivos, editar imagens e muito mais."
-/>
+      <SEO title={t("home.seoTitle")} description={t("home.seoDesc")} />
 
-      <div className="container">
+      <div className="space-y-6 text-center sm:space-y-8">
+        <section className="rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 p-5 sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-wider text-emerald-700">{t("home.marketing.eyebrow")}</p>
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">{t("home.title")}</h1>
+          <p className="mx-auto mt-3 max-w-4xl text-base leading-relaxed text-gray-700 sm:text-lg">{t("home.subtitle")}</p>
+        </section>
 
-        <h1>Toolss - Sua Caixa de Ferramentas Online Gratuita</h1>
+        <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+          <h2 className="text-2xl font-bold text-gray-900">{t("home.marketing.aboutTitle")}</h2>
+          <p className="mx-auto mt-3 max-w-4xl text-gray-700 leading-relaxed">{t("home.marketing.aboutText")}</p>
+        </section>
 
-        <p>
-          A Toolss é uma plataforma completa de ferramentas online gratuitas
-          desenvolvidas para facilitar sua vida digital. Aqui você pode
-          converter PDF, compactar arquivos, editar imagens, utilizar
-          calculadoras financeiras e muito mais — tudo direto no navegador,
-          sem instalação e sem cadastro.
-        </p>
+        <section className="mx-auto w-full max-w-6xl">
+          <div className="grid grid-cols-1 justify-items-center gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            {categories.map((category) => (
+              <article key={category.id} className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-4 text-center shadow-sm sm:p-6">
+                <h2 className="mb-4 text-xl font-bold text-gray-900 sm:text-2xl">{t(`home.categories.${category.id}`)}</h2>
 
-        <h2>Ferramentas para PDF</h2>
-        <ul>
-          <li><a href="/pt/converter-pdf-para-word">Converter PDF para Word</a></li>
-          <li><a href="/pt/compactar-pdf">Compactar PDF</a></li>
-          <li><a href="/pt/unir-pdf">Unir PDF</a></li>
-          <li><a href="/pt/dividir-pdf">Dividir PDF</a></li>
-        </ul>
+                <ul className="space-y-3 text-left">
+                  {category.tools.map((toolId) => {
+                    const id = toolId as ToolId;
+                    return (
+                      <li key={id}>
+                        <Link
+                          to={`/${currentLang}/${toolPaths[id][currentLang]}`}
+                          className="block rounded-xl border border-gray-100 px-3 py-2 text-center transition hover:border-emerald-200 hover:bg-emerald-50"
+                        >
+                          <p className="text-sm font-semibold text-emerald-700 sm:text-base">{t(`tools.${id}.title`)}</p>
+                          <p className="mt-1 text-xs text-gray-600 sm:text-sm">{t(`tools.${id}.desc`)}</p>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
 
-        <h2>Ferramentas para Imagem</h2>
-        <ul>
-          <li><a href="/pt/compressor-de-imagem">Compressor de Imagem</a></li>
-          <li><a href="/pt/redimensionar-imagem">Redimensionar Imagem</a></li>
-          <li><a href="/pt/converter-jpg-png">Converter JPG para PNG</a></li>
-          <li><a href="/pt/removedor-de-fundo">Removedor de Fundo</a></li>
-        </ul>
+        <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+          <h2 className="text-2xl font-bold text-gray-900">{t("home.marketing.benefitsTitle")}</h2>
+          <div className="mt-5 grid grid-cols-1 gap-4 text-left sm:gap-6 lg:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <article key={item} className="rounded-xl border border-gray-100 p-4">
+                <h3 className="text-lg font-semibold text-gray-900">{t(`home.marketing.benefit${item}Title`)}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-700">{t(`home.marketing.benefit${item}Text`)}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
-        <h2>Calculadoras Online</h2>
-        <ul>
-          <li><a href="/pt/calculadora-de-juros-compostos">Calculadora de Juros Compostos</a></li>
-          <li><a href="/pt/simulador-de-emprestimo">Simulador de Empréstimo</a></li>
-          <li><a href="/pt/calculadora-de-porcentagem">Calculadora de Porcentagem</a></li>
-        </ul>
-
-        <h2>Por que escolher a Toolss?</h2>
-        <ul>
-          <li>Ferramentas 100% online</li>
-          <li>Sem necessidade de cadastro</li>
-          <li>Compatível com celular, tablet e computador</li>
-          <li>Processamento rápido</li>
-          <li>Privacidade e segurança dos arquivos</li>
-        </ul>
-
-        <h2>Segurança e Privacidade</h2>
-        <p>
-          Na Toolss, levamos sua privacidade a sério. Os arquivos enviados
-          são processados de forma segura e não são armazenados permanentemente.
-          Nosso objetivo é oferecer uma experiência simples, rápida e confiável.
-        </p>
-
-        <h2>Perguntas Frequentes</h2>
-
-        <h3>As ferramentas da Toolss são gratuitas?</h3>
-        <p>Sim, todas as ferramentas disponíveis são gratuitas para uso online.</p>
-
-        <h3>Preciso criar uma conta?</h3>
-        <p>Não. Você pode usar as ferramentas sem cadastro.</p>
-
-        <h3>Funciona no celular?</h3>
-        <p>Sim, a Toolss é totalmente responsiva e funciona em qualquer dispositivo.</p>
-
+        <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+          <h2 className="text-2xl font-bold text-gray-900">{t("home.marketing.howTitle")}</h2>
+          <ol className="mx-auto mt-4 max-w-3xl list-decimal space-y-2 pl-5 text-left text-gray-700">
+            {[1, 2, 3, 4, 5].map((step) => (
+              <li key={step}>{t(`home.marketing.how${step}`)}</li>
+            ))}
+          </ol>
+        </section>
       </div>
     </>
   );

@@ -34,13 +34,7 @@ export default function PasswordGenerator() {
 
   useEffect(() => {
     generatePassword();
-  }, [
-    length,
-    includeUppercase,
-    includeLowercase,
-    includeNumbers,
-    includeSymbols,
-  ]);
+  }, [length, includeUppercase, includeLowercase, includeNumbers, includeSymbols]);
 
   const copyToClipboard = () => {
     if (!password) return;
@@ -49,23 +43,19 @@ export default function PasswordGenerator() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Calculate strength (simple heuristic)
   const strength =
-    password.length > 12 &&
-    includeUppercase &&
-    includeLowercase &&
-    includeNumbers &&
-    includeSymbols
-      ? "Strong"
+    password.length > 12 && includeUppercase && includeLowercase && includeNumbers && includeSymbols
+      ? "strong"
       : password.length > 8
-        ? "Medium"
-        : "Weak";
+      ? "medium"
+      : "weak";
+
   const strengthColor =
-    strength === "Strong"
+    strength === "strong"
       ? "text-emerald-600 bg-emerald-100"
-      : strength === "Medium"
-        ? "text-yellow-600 bg-yellow-100"
-        : "text-red-600 bg-red-100";
+      : strength === "medium"
+      ? "text-yellow-600 bg-yellow-100"
+      : "text-red-600 bg-red-100";
 
   return (
     <div className="space-y-8 max-w-xl mx-auto">
@@ -80,7 +70,7 @@ export default function PasswordGenerator() {
           <button
             onClick={generatePassword}
             className="p-3 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors"
-            title="Regenerate"
+            title={t("tools.password-generator.regenerate")}
           >
             <RefreshCw className="w-5 h-5" />
           </button>
@@ -89,32 +79,22 @@ export default function PasswordGenerator() {
             className="p-3 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors"
             title={t("common.copy")}
           >
-            {copied ? (
-              <Check className="w-5 h-5 text-emerald-600" />
-            ) : (
-              <Copy className="w-5 h-5" />
-            )}
+            {copied ? <Check className="w-5 h-5 text-emerald-600" /> : <Copy className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       <div className="flex justify-between items-center px-2">
-        <span className="text-sm font-medium text-gray-500">
-          Password Strength:
-        </span>
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${strengthColor}`}
-        >
-          {strength}
+        <span className="text-sm font-medium text-gray-500">{t("tools.password-generator.strength")}</span>
+        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${strengthColor}`}>
+          {t(`tools.password-generator.levels.${strength}`)}
         </span>
       </div>
 
       <div className="space-y-6 bg-white border border-gray-200 p-6 rounded-2xl shadow-sm">
         <div>
           <div className="flex justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700">
-              Password Length
-            </label>
+            <label className="text-sm font-medium text-gray-700">{t("tools.password-generator.length")}</label>
             <span className="text-sm font-bold text-emerald-600">{length}</span>
           </div>
           <input
@@ -129,35 +109,12 @@ export default function PasswordGenerator() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
           {[
-            {
-              id: "uppercase",
-              label: "Uppercase (A-Z)",
-              state: includeUppercase,
-              setter: setIncludeUppercase,
-            },
-            {
-              id: "lowercase",
-              label: "Lowercase (a-z)",
-              state: includeLowercase,
-              setter: setIncludeLowercase,
-            },
-            {
-              id: "numbers",
-              label: "Numbers (0-9)",
-              state: includeNumbers,
-              setter: setIncludeNumbers,
-            },
-            {
-              id: "symbols",
-              label: "Symbols (!@#$)",
-              state: includeSymbols,
-              setter: setIncludeSymbols,
-            },
+            { id: "uppercase", label: t("tools.password-generator.options.uppercase"), state: includeUppercase, setter: setIncludeUppercase },
+            { id: "lowercase", label: t("tools.password-generator.options.lowercase"), state: includeLowercase, setter: setIncludeLowercase },
+            { id: "numbers", label: t("tools.password-generator.options.numbers"), state: includeNumbers, setter: setIncludeNumbers },
+            { id: "symbols", label: t("tools.password-generator.options.symbols"), state: includeSymbols, setter: setIncludeSymbols },
           ].map((option) => (
-            <label
-              key={option.id}
-              className="flex items-center gap-3 cursor-pointer p-3 rounded-xl hover:bg-gray-50 transition-colors"
-            >
+            <label key={option.id} className="flex items-center gap-3 cursor-pointer p-3 rounded-xl hover:bg-gray-50 transition-colors">
               <input
                 type="checkbox"
                 checked={option.state}

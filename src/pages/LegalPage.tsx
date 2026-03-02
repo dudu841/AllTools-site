@@ -12,7 +12,7 @@ export default function LegalPage({
   return (
     <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <Helmet>
-        <title>{t(`legal.${type}.title`)} | AllTools</title>
+        <title>{t(`legal.${type}.title`)} | Toolss</title>
       </Helmet>
 
       <h1 className="text-3xl font-bold text-gray-900 mb-8">
