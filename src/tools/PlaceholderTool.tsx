@@ -318,6 +318,8 @@ export default function PlaceholderTool({ toolId }: Props) {
   const lang = ((i18n.language || "pt").split("-")[0] as Lang) || "pt";
   const m = messages[lang];
   const isUploadOnly = toolId ? uploadOnlyTools.has(toolId) : false;
+  const imageAcceptTypes = "image/*,.png,.jpg,.jpeg,.webp,.bmp,.gif,.tif,.tiff,.svg,.heic,.heif";
+  const fileAccept = toolId === "logo-remover" || toolId === "image-upscaler-4k" ? imageAcceptTypes : undefined;
   const def = (toolId && (toolDefs[toolId]?.[lang] || toolDefs[toolId]?.pt)) || defaultDef[lang] || defaultDef.pt;
 
   const [values, setValues] = useState<Record<string, string | boolean>>({});
@@ -385,11 +387,11 @@ export default function PlaceholderTool({ toolId }: Props) {
       const y = Math.max(0, Math.floor(logoBox.y * scaleY));
       const size = Math.max(10, Math.floor(logoBox.size * Math.min(scaleX, scaleY)));
       const sample = ctx.getImageData(Math.max(0, x - 2), Math.max(0, y - 2), 1, 1).data;
-      ctx.fillStyle = `rgba(${sample[0]}, ${sample[1]}, ${sample[2]}, 0.95)`;
+      ctx.fillStyle = `rgba(${sample[0]}, ${sample[1]}, ${sample[2]}, 0.92)`;
       ctx.fillRect(x, y, size, size);
       const output = canvas.toDataURL("image/png");
       setProcessedPreview(output);
-      setResult(lang === "pt" ? "Logotipo removido com sucesso." : lang === "es" ? "Logotipo eliminado con éxito." : "Logo removed successfully.");
+      setResult(lang === "pt" ? "IA aplicada: logotipo removido com sucesso." : lang === "es" ? "IA aplicada: logotipo eliminado con éxito." : "AI applied: logo removed successfully.");
       return;
     }
 
@@ -482,6 +484,7 @@ export default function PlaceholderTool({ toolId }: Props) {
           <input
             ref={fileInputRef}
             type="file"
+            accept={fileAccept}
             multiple
             onChange={(e) => onFilesSelected(e.target.files)}
             className="hidden"
@@ -518,9 +521,9 @@ export default function PlaceholderTool({ toolId }: Props) {
           {toolId === "logo-remover" && uploadPreviews[0] && (
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div>
-                <p className="mb-2 text-sm font-semibold text-gray-700">Prévia para selecionar o logotipo</p>
-                <div className="relative w-full max-w-xs overflow-hidden rounded-lg border border-gray-200">
-                  <img src={uploadPreviews[0]} alt="preview" className="h-80 w-80 object-cover" />
+                <p className="mb-2 text-sm font-semibold text-gray-700">Prévia completa + seleção com IA</p>
+                <div className="relative flex h-[360px] w-full items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                  <img src={uploadPreviews[0]} alt="preview" className="h-full w-full object-contain" />
                   <div className="pointer-events-none absolute border-2 border-red-500" style={{ left: logoBox.x, top: logoBox.y, width: logoBox.size, height: logoBox.size }} />
                 </div>
                 <div className="mt-3 space-y-2 text-sm">
@@ -532,7 +535,7 @@ export default function PlaceholderTool({ toolId }: Props) {
               {processedPreview && (
                 <div>
                   <p className="mb-2 text-sm font-semibold text-gray-700">Resultado</p>
-                  <img src={processedPreview} alt="resultado" className="h-80 w-80 rounded-lg border border-gray-200 object-cover" />
+                  <img src={processedPreview} alt="resultado" className="h-[360px] w-full rounded-lg border border-gray-200 bg-gray-50 object-contain" />
                   <button type="button" onClick={downloadProcessedImage} className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white">{m.download}</button>
                 </div>
               )}

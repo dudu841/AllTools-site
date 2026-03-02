@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
@@ -111,6 +111,16 @@ export default function ToolWrapper() {
 
   const ToolComponent = toolComponents[currentToolId];
   const primaryAction = t(getPrimaryActionKey(currentToolId));
+  const [aiPrompt, setAiPrompt] = useState("");
+
+  const aiSuggestions = useMemo(() => {
+    const title = t(`tools.${currentToolId}.title`);
+    return [
+      t("common.guide.step1"),
+      `${title}: ${t(`tools.${currentToolId}.desc`)}`,
+      `${t("common.guide.step3", { action: primaryAction })}`,
+    ];
+  }, [currentToolId, primaryAction, t]);
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8">
@@ -145,6 +155,33 @@ export default function ToolWrapper() {
           <li>{t("common.guide.step3", { action: primaryAction })}</li>
           <li>{t("common.guide.step4")}</li>
         </ol>
+      </section>
+
+      <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 md:p-8">
+        <h3 className="text-xl font-bold text-emerald-900">🤖 Auxílio de IA</h3>
+        <p className="mt-2 text-emerald-800">
+          Assistente interativo para orientar o uso da ferramenta e sugerir próximos passos automaticamente.
+        </p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {aiSuggestions.map((suggestion) => (
+            <button
+              key={suggestion}
+              type="button"
+              onClick={() => setAiPrompt(suggestion)}
+              className="rounded-full border border-emerald-300 bg-white px-4 py-2 text-sm text-emerald-800 hover:bg-emerald-100"
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-xl border border-emerald-300 bg-white p-4">
+          <p className="text-sm font-semibold text-emerald-900">Resposta IA</p>
+          <p className="mt-2 text-sm text-gray-700">
+            {aiPrompt || `A IA está pronta para ajudar em ${t(`tools.${currentToolId}.title`)}. Selecione uma sugestão acima para começar.`}
+          </p>
+        </div>
       </section>
 
       <AdBanner slotId="tool-bottom" className="mt-8" />
