@@ -113,13 +113,13 @@ export default function ToolWrapper() {
   const primaryAction = t(getPrimaryActionKey(currentToolId));
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-8">
+    <div className="w-full max-w-5xl mx-auto py-8">
       <Helmet>
         <title>{t(`tools.${currentToolId}.title`)} | Toolss</title>
         <meta name="description" content={t(`tools.${currentToolId}.desc`)} />
       </Helmet>
 
-      <div className="mb-8 text-center">
+      <div className="mb-8 rounded-3xl border border-gray-200 bg-white p-6 text-center shadow-sm">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           {t(`tools.${currentToolId}.title`)}
         </h1>
@@ -130,11 +130,14 @@ export default function ToolWrapper() {
 
       <AdBanner slotId="tool-top" className="mb-8" />
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-6 md:p-8">
+        <p className="mb-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {t("common.guide.step1")} {t("common.guide.step2")}
+        </p>
         <ToolComponent />
       </div>
 
-      <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+      <section className="mt-8 rounded-3xl border border-gray-200 bg-white p-6 md:p-8">
         <h2 className="text-2xl font-bold text-gray-900">{t("common.objectiveTitle")}</h2>
         <p className="mt-3 text-gray-700">{t(`tools.${currentToolId}.desc`)}</p>
 

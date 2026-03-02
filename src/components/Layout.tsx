@@ -15,7 +15,7 @@ export default function Layout() {
   }, [lang, i18n]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-gray-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 via-white to-emerald-50/30 text-gray-900 font-sans">
       <Header />
       <main className="flex-grow w-full max-w-7xl mx-auto px-3 py-5 sm:px-6 sm:py-8 lg:px-8">
         <Outlet />

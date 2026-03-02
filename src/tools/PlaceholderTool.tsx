@@ -428,6 +428,10 @@ export default function PlaceholderTool({ toolId }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
+      <div className="rounded-3xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        {isUploadOnly ? "1) Envie seu arquivo. 2) Clique no botão de ação. 3) Baixe o resultado." : "1) Preencha os campos. 2) Clique no botão de ação. 3) Confira o resultado abaixo."}
+      </div>
+
       {isUploadOnly ? (
         <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
           <button
@@ -563,7 +567,7 @@ export default function PlaceholderTool({ toolId }: Props) {
         </div>
       )}
 
-      <div className="rounded-xl border border-gray-200 p-4">
+      <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
         <h3 className="text-base font-semibold text-gray-900">{m.howTo}</h3>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
           {def.steps.map((step) => (
@@ -573,7 +577,7 @@ export default function PlaceholderTool({ toolId }: Props) {
       </div>
 
       {!isUploadOnly && (
-        <div className="rounded-xl border border-gray-200 p-4">
+        <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
           <button onClick={() => setShowUpload((s) => !s)} className="text-sm font-medium text-emerald-700 underline" type="button">
             {m.optionalUpload}
           </button>
