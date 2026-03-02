@@ -33,11 +33,8 @@ const uploadOnlyTools = new Set<ToolId>([
 
 const messages = {
   pt: {
-    result: "Resultado instantâneo",
     clear: "Limpar",
     action: "Executar ferramenta",
-    copy: "Copiar",
-    share: "Compartilhar",
     download: "Baixar resultado",
     optionalUpload: "Upload de arquivo (opcional)",
     uploadTitle: "Enviar arquivo",
@@ -51,11 +48,8 @@ const messages = {
     empty: "Preencha os campos para ver o resultado.",
   },
   en: {
-    result: "Instant result",
     clear: "Clear",
     action: "Run tool",
-    copy: "Copy",
-    share: "Share",
     download: "Download result",
     optionalUpload: "File upload (optional)",
     uploadTitle: "Upload file",
@@ -69,11 +63,8 @@ const messages = {
     empty: "Fill the fields to see the result.",
   },
   es: {
-    result: "Resultado instantáneo",
     clear: "Limpiar",
     action: "Ejecutar herramienta",
-    copy: "Copiar",
-    share: "Compartir",
     download: "Descargar resultado",
     optionalUpload: "Subir archivo (opcional)",
     uploadTitle: "Subir archivo",
@@ -433,31 +424,6 @@ export default function PlaceholderTool({ toolId }: Props) {
     setUploadPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const copyResult = async () => {
-    if (!result) return;
-    await navigator.clipboard.writeText(result);
-  };
-
-  const shareResult = async () => {
-    if (!result) return;
-    if (navigator.share) {
-      await navigator.share({ text: result });
-    } else {
-      await navigator.clipboard.writeText(result);
-    }
-  };
-
-  const downloadResult = () => {
-    if (!result) return;
-    const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "resultado-toolss.txt";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   const bmiValue = result.includes("IMC:") ? Number(result.split("IMC:")[1]?.split("|")[0]) : NaN;
 
   return (
@@ -563,15 +529,7 @@ export default function PlaceholderTool({ toolId }: Props) {
             {m.uploadAction}
           </button>
 
-          <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900">
-            <p className="font-semibold">{m.result}</p>
-            <p className="mt-1 break-words">{result}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button type="button" onClick={copyResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.copy}</button>
-              <button type="button" onClick={shareResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.share}</button>
-              <button type="button" onClick={downloadResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.download}</button>
-            </div>
-          </div>
+          {result && result !== m.empty && <p className="mt-4 text-sm text-gray-700">{result}</p>}
         </div>
       ) : (
         <>
@@ -585,15 +543,7 @@ export default function PlaceholderTool({ toolId }: Props) {
             <button type="button" onClick={clearAll} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{m.clear}</button>
           </div>
 
-          <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900">
-            <p className="font-semibold">{m.result}</p>
-            <p className="mt-1 break-words">{result}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button type="button" onClick={copyResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.copy}</button>
-              <button type="button" onClick={shareResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.share}</button>
-              <button type="button" onClick={downloadResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.download}</button>
-            </div>
-          </div>
+          {result && result !== m.empty && <p className="text-sm text-gray-700">{result}</p>}
         </>
       )}
 
