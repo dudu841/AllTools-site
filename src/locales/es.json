@@ -255,7 +255,7 @@
     },
     "logo-remover": {
       "title": "Removedor de Logotipo",
-      "desc": "Elimina logotipos de fotos tras seleccionar manualmente dónde aparece el logo en la imagen."
+      "desc": "Elimina logotipos automáticamente con IA y descarga la imagen final en segundos."
     },
     "image-upscaler-4k": {
       "title": "Mejorador de Imagen hasta 4K",

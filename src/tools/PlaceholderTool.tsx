@@ -107,10 +107,6 @@ const fileDownload = (file: File) => {
   URL.revokeObjectURL(url);
 };
 
-const dataUrlToBlob = async (dataUrl: string) => {
-  const res = await fetch(dataUrl);
-  return res.blob();
-};
 
 const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
 
@@ -119,13 +115,13 @@ const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
       fields: [],
       steps: [
         "Envie a imagem com logotipo.",
-        "Selecione a área do logotipo na foto.",
+        "A IA analisa a imagem automaticamente para identificar o logotipo.",
         "Aplique a remoção e revise o resultado.",
         "Baixe a imagem final sem logotipo.",
       ],
     },
-    en: { fields: [], steps: ["Upload the image with logo.", "Select the logo area in the photo.", "Apply removal and review result.", "Download the image without logo."] },
-    es: { fields: [], steps: ["Sube la imagen con logotipo.", "Selecciona el área del logotipo en la foto.", "Aplica la eliminación y revisa el resultado.", "Descarga la imagen final sin logotipo."] },
+    en: { fields: [], steps: ["Upload the image with logo.", "AI automatically analyzes the image to identify the logo.", "Apply removal and review result.", "Download the image without logo."] },
+    es: { fields: [], steps: ["Sube la imagen con logotipo.", "La IA analiza automáticamente la imagen para identificar el logotipo.", "Aplica la eliminación y revisa el resultado.", "Descarga la imagen final sin logotipo."] },
   },
   "image-upscaler-4k": {
     pt: {
@@ -334,7 +330,6 @@ export default function PlaceholderTool({ toolId }: Props) {
   const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
   const [processedPreview, setProcessedPreview] = useState<string>("");
   const [upscaleLevel, setUpscaleLevel] = useState<"1k" | "2k" | "4k">("2k");
-  const [logoBox, setLogoBox] = useState({ x: 20, y: 20, size: 80 });
   const [result, setResult] = useState(m.empty);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const optionalInputRef = useRef<HTMLInputElement | null>(null);
@@ -378,46 +373,16 @@ export default function PlaceholderTool({ toolId }: Props) {
       return;
     }
 
-    if (toolId === "logo-remover" && uploadPreviews[0]) {
+    if (toolId === "logo-remover" && selectedFiles[0]) {
       try {
-        const base = await loadImage(uploadPreviews[0]);
-        const canvas = document.createElement("canvas");
-        canvas.width = base.width;
-        canvas.height = base.height;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(base, 0, 0);
-
-      const scaleX = base.width / 320;
-      const scaleY = base.height / 320;
-      const x = Math.max(0, Math.floor(logoBox.x * scaleX));
-      const y = Math.max(0, Math.floor(logoBox.y * scaleY));
-      const size = Math.max(10, Math.floor(logoBox.size * Math.min(scaleX, scaleY)));
-        const cropCanvas = document.createElement("canvas");
-        cropCanvas.width = size;
-        cropCanvas.height = size;
-        const cropCtx = cropCanvas.getContext("2d");
-        if (!cropCtx) return;
-        cropCtx.drawImage(base, x, y, size, size, 0, 0, size, size);
-
-        const cropBlob = await dataUrlToBlob(cropCanvas.toDataURL("image/png"));
-        const aiBlob = await removeBackground(cropBlob, {
+        const aiBlob = await removeBackground(selectedFiles[0], {
           output: { format: "image/png", quality: 1 },
         });
-        const aiCropUrl = URL.createObjectURL(aiBlob);
-        const aiCropImage = await loadImage(aiCropUrl);
-        URL.revokeObjectURL(aiCropUrl);
-
-        const sample = ctx.getImageData(Math.max(0, x - 2), Math.max(0, y - 2), 1, 1).data;
-        ctx.fillStyle = `rgba(${sample[0]}, ${sample[1]}, ${sample[2]}, 0.95)`;
-        ctx.fillRect(x, y, size, size);
-        ctx.drawImage(aiCropImage, x, y, size, size);
-
-        const output = canvas.toDataURL("image/png");
-        setProcessedPreview(output);
-        setResult(lang === "pt" ? "IA aplicada: logotipo removido com sucesso." : lang === "es" ? "IA aplicada: logotipo eliminado con éxito." : "AI applied: logo removed successfully.");
+        const aiUrl = URL.createObjectURL(aiBlob);
+        setProcessedPreview(aiUrl);
+        setResult(lang === "pt" ? "IA concluiu a remoção do logotipo." : lang === "es" ? "La IA terminó de eliminar el logotipo." : "AI finished logo removal.");
       } catch {
-        setResult(lang === "pt" ? "Falha ao aplicar IA na remoção do logotipo. Tente outra imagem." : lang === "es" ? "Error al aplicar IA para eliminar el logotipo. Prueba otra imagen." : "Failed to apply AI logo removal. Please try another image.");
+        setResult(lang === "pt" ? "Falha ao remover logotipo com IA. Tente outra imagem." : lang === "es" ? "Error al eliminar logotipo con IA. Prueba otra imagen." : "Failed to remove logo with AI. Please try another image.");
       }
       return;
     }
@@ -548,20 +513,14 @@ export default function PlaceholderTool({ toolId }: Props) {
           {toolId === "logo-remover" && uploadPreviews[0] && (
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div>
-                <p className="mb-2 text-sm font-semibold text-gray-700">Prévia completa + seleção com IA</p>
+                <p className="mb-2 text-sm font-semibold text-gray-700">Prévia da imagem enviada</p>
                 <div className="relative flex h-[360px] w-full items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
                   <img src={uploadPreviews[0]} alt="preview" className="h-full w-full object-contain" />
-                  <div className="pointer-events-none absolute border-2 border-red-500" style={{ left: logoBox.x, top: logoBox.y, width: logoBox.size, height: logoBox.size }} />
-                </div>
-                <div className="mt-3 space-y-2 text-sm">
-                  <label className="block">X: <input type="range" min={0} max={240} value={logoBox.x} onChange={(e) => setLogoBox((b) => ({ ...b, x: Number(e.target.value) }))} className="w-full" /></label>
-                  <label className="block">Y: <input type="range" min={0} max={240} value={logoBox.y} onChange={(e) => setLogoBox((b) => ({ ...b, y: Number(e.target.value) }))} className="w-full" /></label>
-                  <label className="block">Tamanho: <input type="range" min={40} max={200} value={logoBox.size} onChange={(e) => setLogoBox((b) => ({ ...b, size: Number(e.target.value) }))} className="w-full" /></label>
                 </div>
               </div>
               {processedPreview && (
                 <div>
-                  <p className="mb-2 text-sm font-semibold text-gray-700">Resultado</p>
+                  <p className="mb-2 text-sm font-semibold text-gray-700">Resultado com IA</p>
                   <img src={processedPreview} alt="resultado" className="h-[360px] w-full rounded-lg border border-gray-200 bg-gray-50 object-contain" />
                   <button type="button" onClick={downloadProcessedImage} className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white">{m.download}</button>
                 </div>
