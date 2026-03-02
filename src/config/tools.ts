@@ -47,7 +47,7 @@ export type ToolId =
   | "rank-checker"
   | "meta-tags-checker"
   | "html-css-validator"
-  | "site-speed-checker";
+;
 
 export const toolPaths: Record<ToolId, { en: string; pt: string; es: string }> = {
   "pdf-to-word": { en: "pdf-to-word-converter", pt: "converter-pdf-para-word", es: "convertidor-pdf-a-word" },
@@ -98,7 +98,6 @@ export const toolPaths: Record<ToolId, { en: string; pt: string; es: string }> =
   "rank-checker": { en: "rank-checker", pt: "verificador-de-rank", es: "verificador-de-rank" },
   "meta-tags-checker": { en: "meta-tags-checker", pt: "verificador-de-meta-tags", es: "verificador-de-meta-tags" },
   "html-css-validator": { en: "html-css-validator", pt: "validador-html-css", es: "validador-html-css" },
-  "site-speed-checker": { en: "site-speed-checker", pt: "velocidade-do-site", es: "velocidad-del-sitio" },
 };
 
 export const categories = [
@@ -167,7 +166,6 @@ export const categories = [
       "rank-checker",
       "meta-tags-checker",
       "html-css-validator",
-      "site-speed-checker",
     ],
   },
 ] as const;

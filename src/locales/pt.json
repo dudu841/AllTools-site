@@ -352,20 +352,7 @@
     "html-css-validator": {
       "title": "Validador de HTML / CSS",
       "desc": "Valide estrutura de HTML e CSS para encontrar erros e melhorar compatibilidade."
-    },
-    "site-speed-checker": {
-      "title": "Velocidade de Site",
-      "desc": "Avalie métricas de velocidade e desempenho para otimizar carregamento e experiência do usuário."
     }
-  },
-  "footer": {
-    "privacy": "Política de Privacidade",
-    "terms": "Termos de Uso",
-    "cookies": "Política de Cookies",
-    "contact": "Contato",
-    "rights": "Todos os direitos reservados.",
-    "legal": "Legal",
-    "support": "Suporte"
   },
   "common": {
     "language": "Idioma",

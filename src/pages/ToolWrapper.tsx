@@ -77,7 +77,6 @@ const toolComponents: Record<ToolId, React.FC> = {
   "rank-checker": placeholder("rank-checker"),
   "meta-tags-checker": placeholder("meta-tags-checker"),
   "html-css-validator": placeholder("html-css-validator"),
-  "site-speed-checker": placeholder("site-speed-checker"),
 };
 
 function getPrimaryActionKey(toolId: ToolId): "common.convert" | "common.compress" | "common.calculate" | "common.generate" {
