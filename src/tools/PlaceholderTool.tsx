@@ -39,6 +39,7 @@ const messages = {
     download: "Baixar resultado",
     uploadTitle: "Enviar arquivo",
     uploadHint: "Selecione o documento/imagem para processar.",
+    uploadAction: "Processar arquivo",
     howTo: "Passo a passo",
     bmiTable: "Veja a interpretação do IMC",
     empty: "Preencha os campos para ver o resultado.",
@@ -51,6 +52,7 @@ const messages = {
     download: "Download result",
     uploadTitle: "Upload file",
     uploadHint: "Select document/image to process.",
+    uploadAction: "Process file",
     howTo: "Step by step",
     bmiTable: "BMI interpretation",
     empty: "Fill the fields to see the result.",
@@ -63,6 +65,7 @@ const messages = {
     download: "Descargar resultado",
     uploadTitle: "Subir archivo",
     uploadHint: "Selecciona documento/imagen para procesar.",
+    uploadAction: "Procesar archivo",
     howTo: "Paso a paso",
     bmiTable: "Interpretación del IMC",
     empty: "Completa los campos para ver el resultado.",
@@ -302,13 +305,7 @@ export default function PlaceholderTool({ toolId }: Props) {
           <p className="text-sm font-semibold text-gray-800">{m.uploadTitle}</p>
           <p className="mt-1 text-sm text-gray-600">{m.uploadHint}</p>
           <input type="file" className="mt-4 w-full rounded-lg border border-gray-300 bg-white p-2" />
-          {def.fields.length > 0 && (
-            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-              {def.fields.map((f) => (
-                <Field key={f.key} field={f} value={values[f.key]} onChange={(val) => setValues((prev) => ({ ...prev, [f.key]: val }))} />
-              ))}
-            </div>
-          )}
+          <button type="button" className="mt-4 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700">{m.uploadAction}</button>
         </div>
       ) : (
         <>
