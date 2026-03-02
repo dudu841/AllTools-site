@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ToolId } from "../config/tools";
 import { FileText, Upload, X } from "lucide-react";
@@ -318,8 +318,19 @@ export default function PlaceholderTool({ toolId }: Props) {
     setResult(m.empty);
   };
 
+  useEffect(() => {
+    return () => {
+      uploadPreviews.forEach((preview) => {
+        if (preview) URL.revokeObjectURL(preview);
+      });
+    };
+  }, [uploadPreviews]);
+
   const onFilesSelected = (fileList: FileList | null) => {
     if (!fileList) return;
+    uploadPreviews.forEach((preview) => {
+      if (preview) URL.revokeObjectURL(preview);
+    });
     const files = Array.from(fileList);
     setSelectedFiles(files);
     setUploadPreviews(files.map((file) => (file.type.startsWith("image/") ? URL.createObjectURL(file) : "")));
@@ -329,6 +340,22 @@ export default function PlaceholderTool({ toolId }: Props) {
     if (def.compute) {
       setResult(def.compute(values, lang));
     }
+  };
+
+  const runUploadTool = () => {
+    if (!selectedFiles.length) {
+      setResult(m.empty);
+      return;
+    }
+
+    const actionText =
+      lang === "pt"
+        ? `Arquivo pronto para processamento: ${selectedFiles.map((file) => file.name).join(", ")}`
+        : lang === "es"
+          ? `Archivo listo para procesar: ${selectedFiles.map((file) => file.name).join(", ")}`
+          : `File ready for processing: ${selectedFiles.map((file) => file.name).join(", ")}`;
+
+    setResult(actionText);
   };
 
   const removeFile = (index: number) => {
@@ -407,7 +434,24 @@ export default function PlaceholderTool({ toolId }: Props) {
             </div>
           )}
 
-          <button type="button" className="mt-6 w-full rounded-2xl bg-emerald-600 px-6 py-4 text-2xl font-semibold text-white hover:bg-emerald-700">{m.uploadAction}</button>
+          <button
+            type="button"
+            onClick={runUploadTool}
+            disabled={!selectedFiles.length}
+            className="mt-6 w-full rounded-2xl bg-emerald-600 px-6 py-4 text-2xl font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
+          >
+            {m.uploadAction}
+          </button>
+
+          <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900">
+            <p className="font-semibold">{m.result}</p>
+            <p className="mt-1 break-words">{result}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" onClick={copyResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.copy}</button>
+              <button type="button" onClick={shareResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.share}</button>
+              <button type="button" onClick={downloadResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.download}</button>
+            </div>
+          </div>
         </div>
       ) : (
         <>
