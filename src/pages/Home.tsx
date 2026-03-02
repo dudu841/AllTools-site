@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SEO from "../components/SEO";
 import { categories, toolPaths, type ToolId } from "../config/tools";
@@ -7,6 +8,24 @@ export default function Home() {
   const { t } = useTranslation();
   const { lang = "pt" } = useParams<{ lang: string }>();
   const currentLang = ["pt", "en", "es"].includes(lang) ? (lang as "pt" | "en" | "es") : "pt";
+  const [search, setSearch] = useState("");
+
+  const filteredCategories = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return categories;
+
+    return categories
+      .map((category) => ({
+        ...category,
+        tools: category.tools.filter((toolId) => {
+          const id = toolId as ToolId;
+          const title = t(`tools.${id}.title`).toLowerCase();
+          const desc = t(`tools.${id}.desc`).toLowerCase();
+          return title.includes(query) || desc.includes(query);
+        }),
+      }))
+      .filter((category) => category.tools.length > 0);
+  }, [search, t]);
 
   return (
     <>
@@ -25,8 +44,18 @@ export default function Home() {
         </section>
 
         <section className="mx-auto w-full max-w-6xl">
+          <div className="mb-5 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:mb-6 sm:p-5">
+            <input
+              type="text"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={t("home.searchPlaceholder", { defaultValue: "Qual ferramenta precisa?" })}
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none ring-emerald-300 focus:ring-2 sm:text-base"
+            />
+          </div>
+
           <div className="grid grid-cols-1 justify-items-center gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
-            {categories.map((category) => (
+            {filteredCategories.map((category) => (
               <article key={category.id} className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-4 text-center shadow-sm sm:p-6">
                 <h2 className="mb-4 text-xl font-bold text-gray-900 sm:text-2xl">{t(`home.categories.${category.id}`)}</h2>
 
