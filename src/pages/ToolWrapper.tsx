@@ -26,10 +26,12 @@ import AdjustImage from "../tools/Image/AdjustImage";
 import MergePdf from "../tools/Pdf/MergePdf";
 import SplitPdf from "../tools/Pdf/SplitPdf";
 
+const placeholder = (toolId: ToolId): React.FC => () => <PlaceholderTool toolId={toolId} />;
+
 const toolComponents: Record<ToolId, React.FC> = {
-  "pdf-to-word": PlaceholderTool,
-  "word-to-pdf": PlaceholderTool,
-  "compress-pdf": PlaceholderTool,
+  "pdf-to-word": placeholder("pdf-to-word"),
+  "word-to-pdf": placeholder("word-to-pdf"),
+  "compress-pdf": placeholder("compress-pdf"),
   "merge-pdf": MergePdf,
   "split-pdf": SplitPdf,
   "compress-image": CompressImage,
@@ -47,11 +49,54 @@ const toolComponents: Record<ToolId, React.FC> = {
   "password-generator": PasswordGenerator,
   "age-calculator": AgeCalculator,
   "unit-converter": UnitConverter,
+  "social-resizer": placeholder("social-resizer"),
+  "meme-generator": placeholder("meme-generator"),
+  "banner-thumbnail-creator": placeholder("banner-thumbnail-creator"),
+  "bmi-calculator": placeholder("bmi-calculator"),
+  "calorie-calculator": placeholder("calorie-calculator"),
+  "mortgage-calculator": placeholder("mortgage-calculator"),
+  "net-gross-salary": placeholder("net-gross-salary"),
+  "discount-margin-markup": placeholder("discount-margin-markup"),
+  "travel-time-calculator": placeholder("travel-time-calculator"),
+  "apr-monthly-converter": placeholder("apr-monthly-converter"),
+  "stock-simulator": placeholder("stock-simulator"),
+  "investment-simulator": placeholder("investment-simulator"),
+  "word-counter": placeholder("word-counter"),
+  "text-case-converter": placeholder("text-case-converter"),
+  "password-strength-checker": placeholder("password-strength-checker"),
+  "encrypt-decrypt": placeholder("encrypt-decrypt"),
+  "base-converter": placeholder("base-converter"),
+  "scientific-calculator": placeholder("scientific-calculator"),
+  "currency-converter": placeholder("currency-converter"),
+  "cm-inch-converter": placeholder("cm-inch-converter"),
+  "kg-lbs-converter": placeholder("kg-lbs-converter"),
+  "sqm-sqft-converter": placeholder("sqm-sqft-converter"),
+  "backlink-counter": placeholder("backlink-counter"),
+  "rank-checker": placeholder("rank-checker"),
+  "meta-tags-checker": placeholder("meta-tags-checker"),
+  "html-css-validator": placeholder("html-css-validator"),
+  "site-speed-checker": placeholder("site-speed-checker"),
 };
+
+function getPrimaryActionKey(toolId: ToolId): "common.convert" | "common.compress" | "common.calculate" | "common.generate" {
+  if (["pdf-to-word", "word-to-pdf", "convert-image", "unit-converter"].includes(toolId)) {
+    return "common.convert";
+  }
+
+  if (["compress-pdf", "compress-image"].includes(toolId)) {
+    return "common.compress";
+  }
+
+  if (["compound-interest", "loan-simulator", "percentage-calculator", "age-calculator"].includes(toolId)) {
+    return "common.calculate";
+  }
+
+  return "common.generate";
+}
 
 export default function ToolWrapper() {
   const { lang, toolPath } = useParams<{ lang: string; toolPath: string }>();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Find the tool ID based on the path and language
   let currentToolId: ToolId | null = null;
@@ -67,11 +112,12 @@ export default function ToolWrapper() {
   }
 
   const ToolComponent = toolComponents[currentToolId];
+  const primaryAction = t(getPrimaryActionKey(currentToolId));
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8">
       <Helmet>
-        <title>{t(`tools.${currentToolId}.title`)} | AllTools</title>
+        <title>{t(`tools.${currentToolId}.title`)} | Toolss</title>
         <meta name="description" content={t(`tools.${currentToolId}.desc`)} />
       </Helmet>
 
@@ -89,6 +135,19 @@ export default function ToolWrapper() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
         <ToolComponent />
       </div>
+
+      <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-gray-900">{t("common.objectiveTitle")}</h2>
+        <p className="mt-3 text-gray-700">{t(`tools.${currentToolId}.desc`)}</p>
+
+        <h3 className="mt-6 text-xl font-semibold text-gray-900">{t("common.howToUseTitle")}</h3>
+        <ol className="mt-3 list-decimal space-y-2 pl-5 text-gray-700">
+          <li>{t("common.guide.step1")}</li>
+          <li>{t("common.guide.step2")}</li>
+          <li>{t("common.guide.step3", { action: primaryAction })}</li>
+          <li>{t("common.guide.step4")}</li>
+        </ol>
+      </section>
 
       <AdBanner slotId="tool-bottom" className="mt-8" />
     </div>

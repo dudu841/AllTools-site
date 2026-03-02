@@ -17,7 +17,7 @@ export default function CompoundInterest() {
     <div className="space-y-6 max-w-md mx-auto">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Initial Investment
+          {t("tools.compound-interest.fields.initialInvestment")}
         </label>
         <input
           type="number"
@@ -28,7 +28,7 @@ export default function CompoundInterest() {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Annual Interest Rate (%)
+          {t("tools.compound-interest.fields.annualRate")}
         </label>
         <input
           type="number"
@@ -39,7 +39,7 @@ export default function CompoundInterest() {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Years to Grow
+          {t("tools.compound-interest.fields.years")}
         </label>
         <input
           type="number"
@@ -57,14 +57,10 @@ export default function CompoundInterest() {
 
       {result !== null && (
         <div className="mt-8 p-6 bg-emerald-50 rounded-xl text-center">
-          <h3 className="text-lg font-medium text-emerald-800 mb-2">
-            {t("common.result")}
-          </h3>
-          <p className="text-4xl font-bold text-emerald-600">
-            ${result.toFixed(2)}
-          </p>
+          <h3 className="text-lg font-medium text-emerald-800 mb-2">{t("common.result")}</h3>
+          <p className="text-4xl font-bold text-emerald-600">${result.toFixed(2)}</p>
           <p className="text-sm text-emerald-600 mt-2">
-            Total interest earned: ${(result - principal).toFixed(2)}
+            {t("tools.compound-interest.totalInterest")}: ${(result - principal).toFixed(2)}
           </p>
         </div>
       )}
