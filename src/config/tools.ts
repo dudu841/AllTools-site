@@ -9,9 +9,6 @@ export type ToolId =
   | "convert-image"
   | "remove-background"
   | "adjust-image"
-  | "social-resizer"
-  | "meme-generator"
-  | "banner-thumbnail-creator"
   | "logo-remover"
   | "image-upscaler-4k"
   | "compound-interest"
@@ -60,9 +57,6 @@ export const toolPaths: Record<ToolId, { en: string; pt: string; es: string }> =
   "convert-image": { en: "convert-jpg-png", pt: "converter-jpg-png", es: "convertir-jpg-png" },
   "remove-background": { en: "background-remover", pt: "removedor-de-fundo", es: "eliminador-de-fondo" },
   "adjust-image": { en: "adjust-image", pt: "ajustar-imagem", es: "ajustar-imagen" },
-  "social-resizer": { en: "social-media-resizer", pt: "redimensionar-para-redes", es: "redimensionar-para-redes" },
-  "meme-generator": { en: "meme-generator", pt: "gerador-de-memes", es: "generador-de-memes" },
-  "banner-thumbnail-creator": { en: "banner-thumbnail-creator", pt: "criador-de-banners-miniaturas", es: "creador-de-banners-miniaturas" },
   "logo-remover": { en: "logo-remover", pt: "removedor-de-logotipo", es: "removedor-de-logotipo" },
   "image-upscaler-4k": { en: "image-upscaler-4k", pt: "melhorador-de-imagem-4k", es: "mejorador-de-imagen-4k" },
   "compound-interest": { en: "compound-interest-calculator", pt: "calculadora-de-juros-compostos", es: "calculadora-de-interes-compuesto" },
@@ -115,9 +109,6 @@ export const categories = [
       "convert-image",
       "remove-background",
       "adjust-image",
-      "social-resizer",
-      "meme-generator",
-      "banner-thumbnail-creator",
       "logo-remover",
       "image-upscaler-4k",
     ],

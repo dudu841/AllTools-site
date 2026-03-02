@@ -26,9 +26,6 @@ const uploadOnlyTools = new Set<ToolId>([
   "pdf-to-word",
   "word-to-pdf",
   "compress-pdf",
-  "social-resizer",
-  "meme-generator",
-  "banner-thumbnail-creator",
   "logo-remover",
   "image-upscaler-4k",
 ]);
@@ -46,6 +43,7 @@ const messages = {
     uploadHint: "Selecione o documento/imagem para processar.",
     uploadAction: "Processar arquivo",
     selectedFiles: "Arquivos selecionados",
+    downloadFile: "Baixar arquivo",
     removeFile: "Remover arquivo",
     howTo: "Passo a passo",
     bmiTable: "Veja a interpretação do IMC",
@@ -63,6 +61,7 @@ const messages = {
     uploadHint: "Select document/image to process.",
     uploadAction: "Process file",
     selectedFiles: "Selected files",
+    downloadFile: "Download file",
     removeFile: "Remove file",
     howTo: "Step by step",
     bmiTable: "BMI interpretation",
@@ -80,6 +79,7 @@ const messages = {
     uploadHint: "Selecciona documento/imagen para procesar.",
     uploadAction: "Procesar archivo",
     selectedFiles: "Archivos seleccionados",
+    downloadFile: "Descargar archivo",
     removeFile: "Eliminar archivo",
     howTo: "Paso a paso",
     bmiTable: "Interpretación del IMC",
@@ -88,6 +88,23 @@ const messages = {
 };
 
 const toNumber = (v: string | boolean) => Number(String(v || "").replace(",", "."));
+
+const loadImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+
+const fileDownload = (file: File) => {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = file.name;
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
 const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
 
@@ -307,6 +324,9 @@ export default function PlaceholderTool({ toolId }: Props) {
   const [showUpload, setShowUpload] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
+  const [processedPreview, setProcessedPreview] = useState<string>("");
+  const [upscaleLevel, setUpscaleLevel] = useState<"1k" | "2k" | "4k">("2k");
+  const [logoBox, setLogoBox] = useState({ x: 20, y: 20, size: 80 });
   const [result, setResult] = useState(m.empty);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const optionalInputRef = useRef<HTMLInputElement | null>(null);
@@ -315,6 +335,7 @@ export default function PlaceholderTool({ toolId }: Props) {
     setValues({});
     setSelectedFiles([]);
     setUploadPreviews([]);
+    setProcessedPreview("");
     setResult(m.empty);
   };
 
@@ -333,6 +354,7 @@ export default function PlaceholderTool({ toolId }: Props) {
     });
     const files = Array.from(fileList);
     setSelectedFiles(files);
+    setProcessedPreview("");
     setUploadPreviews(files.map((file) => (file.type.startsWith("image/") ? URL.createObjectURL(file) : "")));
   };
 
@@ -342,9 +364,55 @@ export default function PlaceholderTool({ toolId }: Props) {
     }
   };
 
-  const runUploadTool = () => {
+  const runUploadTool = async () => {
     if (!selectedFiles.length) {
       setResult(m.empty);
+      return;
+    }
+
+    if (toolId === "logo-remover" && uploadPreviews[0]) {
+      const base = await loadImage(uploadPreviews[0]);
+      const canvas = document.createElement("canvas");
+      canvas.width = base.width;
+      canvas.height = base.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(base, 0, 0);
+
+      const scaleX = base.width / 320;
+      const scaleY = base.height / 320;
+      const x = Math.max(0, Math.floor(logoBox.x * scaleX));
+      const y = Math.max(0, Math.floor(logoBox.y * scaleY));
+      const size = Math.max(10, Math.floor(logoBox.size * Math.min(scaleX, scaleY)));
+      const sample = ctx.getImageData(Math.max(0, x - 2), Math.max(0, y - 2), 1, 1).data;
+      ctx.fillStyle = `rgba(${sample[0]}, ${sample[1]}, ${sample[2]}, 0.95)`;
+      ctx.fillRect(x, y, size, size);
+      const output = canvas.toDataURL("image/png");
+      setProcessedPreview(output);
+      setResult(lang === "pt" ? "Logotipo removido com sucesso." : lang === "es" ? "Logotipo eliminado con éxito." : "Logo removed successfully.");
+      return;
+    }
+
+    if (toolId === "image-upscaler-4k" && uploadPreviews[0]) {
+      const base = await loadImage(uploadPreviews[0]);
+      const mult = upscaleLevel === "4k" ? 4 : upscaleLevel === "2k" ? 2 : 1;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(base.width * mult, base.width);
+      canvas.height = Math.max(base.height * mult, base.height);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(base, 0, 0, canvas.width, canvas.height);
+      const output = canvas.toDataURL("image/png");
+      setProcessedPreview(output);
+      setResult(
+        lang === "pt"
+          ? `Imagem melhorada para ${upscaleLevel.toUpperCase()}.`
+          : lang === "es"
+            ? `Imagen mejorada a ${upscaleLevel.toUpperCase()}.`
+            : `Image enhanced to ${upscaleLevel.toUpperCase()}.`,
+      );
       return;
     }
 
@@ -356,6 +424,14 @@ export default function PlaceholderTool({ toolId }: Props) {
           : `File ready for processing: ${selectedFiles.map((file) => file.name).join(", ")}`;
 
     setResult(actionText);
+  };
+
+  const downloadProcessedImage = () => {
+    if (!processedPreview) return;
+    const a = document.createElement("a");
+    a.href = processedPreview;
+    a.download = `${toolId || "tool"}-result.png`;
+    a.click();
   };
 
   const removeFile = (index: number) => {
@@ -416,21 +492,76 @@ export default function PlaceholderTool({ toolId }: Props) {
               <p className="text-3xl font-bold text-gray-900">{m.selectedFiles} ({selectedFiles.length})</p>
               <div className="mt-4 space-y-3">
                 {selectedFiles.map((file, index) => (
-                  <div key={`${file.name}-${index}`} className="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                    <div className="flex items-center gap-3">
+                  <div key={`${file.name}-${index}`} className="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4 gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       {uploadPreviews[index] ? (
                         <img src={uploadPreviews[index]} alt={file.name} className="h-10 w-10 rounded object-cover" />
                       ) : (
                         <FileText className="h-6 w-6 text-emerald-600" />
                       )}
-                      <span className="font-semibold text-gray-700">{file.name}</span>
+                      <span className="font-semibold text-gray-700 truncate">{file.name}</span>
                     </div>
-                    <button type="button" onClick={() => removeFile(index)} aria-label={m.removeFile} className="text-gray-400 hover:text-gray-600">
-                      <X className="h-6 w-6" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button type="button" onClick={() => fileDownload(file)} className="rounded-md border border-emerald-300 px-2 py-1 text-xs text-emerald-700">
+                        {m.downloadFile}
+                      </button>
+                      <button type="button" onClick={() => removeFile(index)} aria-label={m.removeFile} className="text-gray-400 hover:text-gray-600">
+                        <X className="h-6 w-6" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {toolId === "logo-remover" && uploadPreviews[0] && (
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div>
+                <p className="mb-2 text-sm font-semibold text-gray-700">Prévia para selecionar o logotipo</p>
+                <div className="relative w-full max-w-xs overflow-hidden rounded-lg border border-gray-200">
+                  <img src={uploadPreviews[0]} alt="preview" className="h-80 w-80 object-cover" />
+                  <div className="pointer-events-none absolute border-2 border-red-500" style={{ left: logoBox.x, top: logoBox.y, width: logoBox.size, height: logoBox.size }} />
+                </div>
+                <div className="mt-3 space-y-2 text-sm">
+                  <label className="block">X: <input type="range" min={0} max={240} value={logoBox.x} onChange={(e) => setLogoBox((b) => ({ ...b, x: Number(e.target.value) }))} className="w-full" /></label>
+                  <label className="block">Y: <input type="range" min={0} max={240} value={logoBox.y} onChange={(e) => setLogoBox((b) => ({ ...b, y: Number(e.target.value) }))} className="w-full" /></label>
+                  <label className="block">Tamanho: <input type="range" min={40} max={200} value={logoBox.size} onChange={(e) => setLogoBox((b) => ({ ...b, size: Number(e.target.value) }))} className="w-full" /></label>
+                </div>
+              </div>
+              {processedPreview && (
+                <div>
+                  <p className="mb-2 text-sm font-semibold text-gray-700">Resultado</p>
+                  <img src={processedPreview} alt="resultado" className="h-80 w-80 rounded-lg border border-gray-200 object-cover" />
+                  <button type="button" onClick={downloadProcessedImage} className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white">{m.download}</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {toolId === "image-upscaler-4k" && uploadPreviews[0] && (
+            <div className="mt-6">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Nível de melhoria
+                <select value={upscaleLevel} onChange={(e) => setUpscaleLevel(e.target.value as "1k" | "2k" | "4k")} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+                  <option value="1k">1K</option>
+                  <option value="2k">2K</option>
+                  <option value="4k">4K</option>
+                </select>
+              </label>
+              {processedPreview && (
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  <div>
+                    <p className="mb-2 text-sm font-semibold text-gray-700">Antes</p>
+                    <img src={uploadPreviews[0]} alt="antes" className="h-64 w-full rounded-lg border border-gray-200 object-contain" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-sm font-semibold text-gray-700">Depois</p>
+                    <img src={processedPreview} alt="depois" className="h-64 w-full rounded-lg border border-gray-200 object-contain" />
+                    <button type="button" onClick={downloadProcessedImage} className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white">{m.download}</button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -520,6 +651,9 @@ export default function PlaceholderTool({ toolId }: Props) {
                         <FileText className="h-5 w-5 text-emerald-600" />
                       )}
                       <span className="text-sm text-gray-700">{file.name}</span>
+                      <button type="button" onClick={() => fileDownload(file)} className="ml-auto rounded-md border border-emerald-300 px-2 py-1 text-xs text-emerald-700">
+                        {m.downloadFile}
+                      </button>
                     </div>
                   ))}
                 </div>
