@@ -4,93 +4,22 @@ import type { ToolId } from "../config/tools";
 
 type Props = { toolId?: ToolId };
 type Lang = "pt" | "en" | "es";
-type FieldKey = "a" | "b" | "c" | "text";
 
-type Localized = {
-  labels: Partial<Record<FieldKey, string>>;
-  placeholders: Partial<Record<FieldKey, string>>;
+type FieldType = "text" | "number" | "select" | "checkbox";
+
+type FieldDef = {
+  key: string;
+  label: string;
+  placeholder?: string;
+  type: FieldType;
+  options?: Array<{ label: string; value: string }>;
+};
+
+type ToolDef = {
+  fields: FieldDef[];
   steps: string[];
+  compute?: (values: Record<string, string | boolean>, lang: Lang) => string;
 };
-
-const common: Record<Lang, Record<string, string>> = {
-  pt: {
-    calculate: "Calcular",
-    clear: "Limpar",
-    result: "Resultado",
-    optionalUpload: "Upload de arquivo (opcional)",
-    uploadTitle: "Enviar arquivo",
-    uploadHint: "Selecione ou arraste seu arquivo para começar.",
-    detailedGuide: "Passo a passo desta ferramenta",
-    interpretation: "Veja a interpretação do IMC",
-    bmi: "Seu IMC",
-    invalidNumber: "Número inválido",
-    invalidExpression: "Expressão inválida",
-    weak: "fraca",
-    medium: "média",
-    strong: "forte",
-    finalPrice: "Preço final",
-    margin: "Margem",
-    markupPrice: "Preço com markup",
-    installment: "Parcela mensal",
-    netSalary: "Salário líquido",
-    projected: "Valor projetado",
-    words: "Palavras",
-    strength: "Força",
-    quickAnalysis: "Análise rápida para",
-  },
-  en: {
-    calculate: "Calculate",
-    clear: "Clear",
-    result: "Result",
-    optionalUpload: "File upload (optional)",
-    uploadTitle: "Upload file",
-    uploadHint: "Select or drag your file to start.",
-    detailedGuide: "Step-by-step for this tool",
-    interpretation: "See BMI interpretation",
-    bmi: "Your BMI",
-    invalidNumber: "Invalid number",
-    invalidExpression: "Invalid expression",
-    weak: "weak",
-    medium: "medium",
-    strong: "strong",
-    finalPrice: "Final price",
-    margin: "Margin",
-    markupPrice: "Price with markup",
-    installment: "Monthly installment",
-    netSalary: "Net salary",
-    projected: "Projected value",
-    words: "Words",
-    strength: "Strength",
-    quickAnalysis: "Quick analysis for",
-  },
-  es: {
-    calculate: "Calcular",
-    clear: "Limpiar",
-    result: "Resultado",
-    optionalUpload: "Subir archivo (opcional)",
-    uploadTitle: "Subir archivo",
-    uploadHint: "Selecciona o arrastra tu archivo para comenzar.",
-    detailedGuide: "Paso a paso de esta herramienta",
-    interpretation: "Vea la interpretación del IMC",
-    bmi: "Tu IMC",
-    invalidNumber: "Número inválido",
-    invalidExpression: "Expresión inválida",
-    weak: "débil",
-    medium: "media",
-    strong: "fuerte",
-    finalPrice: "Precio final",
-    margin: "Margen",
-    markupPrice: "Precio con markup",
-    installment: "Cuota mensual",
-    netSalary: "Salario neto",
-    projected: "Valor proyectado",
-    words: "Palabras",
-    strength: "Fuerza",
-    quickAnalysis: "Análisis rápido para",
-  },
-};
-
-
 
 const uploadOnlyTools = new Set<ToolId>([
   "pdf-to-word",
@@ -101,340 +30,329 @@ const uploadOnlyTools = new Set<ToolId>([
   "banner-thumbnail-creator",
 ]);
 
+const messages = {
+  pt: {
+    result: "Resultado instantâneo",
+    clear: "Limpar",
+    copy: "Copiar",
+    share: "Compartilhar",
+    download: "Baixar resultado",
+    uploadTitle: "Enviar arquivo",
+    uploadHint: "Selecione o documento/imagem para processar.",
+    howTo: "Passo a passo",
+    bmiTable: "Veja a interpretação do IMC",
+    empty: "Preencha os campos para ver o resultado.",
+  },
+  en: {
+    result: "Instant result",
+    clear: "Clear",
+    copy: "Copy",
+    share: "Share",
+    download: "Download result",
+    uploadTitle: "Upload file",
+    uploadHint: "Select document/image to process.",
+    howTo: "Step by step",
+    bmiTable: "BMI interpretation",
+    empty: "Fill the fields to see the result.",
+  },
+  es: {
+    result: "Resultado instantáneo",
+    clear: "Limpiar",
+    copy: "Copiar",
+    share: "Compartir",
+    download: "Descargar resultado",
+    uploadTitle: "Subir archivo",
+    uploadHint: "Selecciona documento/imagen para procesar.",
+    howTo: "Paso a paso",
+    bmiTable: "Interpretación del IMC",
+    empty: "Completa los campos para ver el resultado.",
+  },
+};
 
-const toolUi: Partial<Record<ToolId, Record<Lang, Localized>>> = {
+const toNumber = (v: string | boolean) => Number(String(v || "").replace(",", "."));
+
+const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
   "bmi-calculator": {
     pt: {
-      labels: { a: "Altura (ex.: 1,70)", b: "Peso (ex.: 69,2)" },
-      placeholders: { a: "Metros", b: "Quilos" },
-      steps: [
-        "Digite sua altura em metros (exemplo: 1,70).",
-        "Digite seu peso em quilos (exemplo: 69,2).",
-        "Clique em Calcular para ver o IMC automaticamente.",
-        "Use a tabela de interpretação para entender sua classificação.",
+      fields: [
+        { key: "height", label: "Altura", placeholder: "Ex.: 1,70 (m)", type: "number" },
+        { key: "weight", label: "Peso", placeholder: "Ex.: 69,2 (kg)", type: "number" },
+        { key: "age", label: "Idade (opcional)", placeholder: "Ex.: 30", type: "number" },
+        { key: "sex", label: "Sexo (opcional)", type: "select", options: [{ label: "Feminino", value: "f" }, { label: "Masculino", value: "m" }] },
       ],
+      steps: ["Informe altura e peso.", "Veja IMC e classificação instantânea.", "Use a tabela de referência abaixo.", "Ajuste hábitos com base no resultado."],
+      compute: (values) => {
+        const h = toNumber(values.height);
+        const w = toNumber(values.weight);
+        if (!h || !w) return messages.pt.empty;
+        const imc = w / (h * h);
+        const cls = imc < 18.5 ? "Magreza" : imc < 25 ? "Normal" : imc < 30 ? "Sobrepeso" : imc < 40 ? "Obesidade" : "Obesidade grave";
+        const calories = Math.round(w * 30);
+        return `IMC: ${imc.toFixed(2)} | Classificação: ${cls} | Sugestão calórica básica: ~${calories} kcal/dia`;
+      },
     },
-    en: {
-      labels: { a: "Height (ex.: 1.70)", b: "Weight (ex.: 69.2)" },
-      placeholders: { a: "Meters", b: "Kilograms" },
-      steps: [
-        "Enter your height in meters (example: 1.70).",
-        "Enter your weight in kilograms (example: 69.2).",
-        "Click Calculate to see your BMI instantly.",
-        "Use the interpretation table to understand the result.",
-      ],
-    },
-    es: {
-      labels: { a: "Altura (ej.: 1,70)", b: "Peso (ej.: 69,2)" },
-      placeholders: { a: "Metros", b: "Kilos" },
-      steps: [
-        "Ingresa tu altura en metros (ejemplo: 1,70).",
-        "Ingresa tu peso en kilos (ejemplo: 69,2).",
-        "Haz clic en Calcular para ver tu IMC al instante.",
-        "Usa la tabla para interpretar tu clasificación.",
-      ],
-    },
-  },
-
-  "pdf-to-word": {
-    pt: { labels: {}, placeholders: {}, steps: ["Clique em Enviar arquivo e selecione o PDF.", "Aguarde o processamento para conversão em Word.", "Revise o arquivo convertido e baixe o resultado."] },
-    en: { labels: {}, placeholders: {}, steps: ["Click Upload file and choose your PDF.", "Wait for processing to convert to Word.", "Review and download the converted file."] },
-    es: { labels: {}, placeholders: {}, steps: ["Haz clic en Subir archivo y elige tu PDF.", "Espera el procesamiento para convertir a Word.", "Revisa y descarga el archivo convertido."] },
-  },
-  "word-to-pdf": {
-    pt: { labels: {}, placeholders: {}, steps: ["Clique em Enviar arquivo e selecione o documento Word.", "Aguarde a conversão para PDF.", "Baixe o PDF final pronto para compartilhar."] },
-    en: { labels: {}, placeholders: {}, steps: ["Click Upload file and choose your Word document.", "Wait for the PDF conversion.", "Download the final PDF ready to share."] },
-    es: { labels: {}, placeholders: {}, steps: ["Haz clic en Subir archivo y selecciona el documento Word.", "Espera la conversión a PDF.", "Descarga el PDF final listo para compartir."] },
-  },
-  "compress-pdf": {
-    pt: { labels: {}, placeholders: {}, steps: ["Clique em Enviar arquivo para selecionar o PDF.", "A ferramenta compacta automaticamente mantendo a qualidade possível.", "Baixe o PDF compactado no final do processo."] },
-    en: { labels: {}, placeholders: {}, steps: ["Click Upload file to select your PDF.", "The tool compresses automatically while preserving quality.", "Download the compressed PDF after processing."] },
-    es: { labels: {}, placeholders: {}, steps: ["Haz clic en Subir archivo para seleccionar tu PDF.", "La herramienta comprime automáticamente manteniendo calidad.", "Descarga el PDF comprimido al finalizar."] },
-  },
-  "social-resizer": {
-    pt: { labels: {}, placeholders: {}, steps: ["Envie sua imagem na área de upload.", "Escolha o formato de rede social desejado (Instagram, TikTok etc.).", "Baixe a versão redimensionada com proporção correta."] },
-    en: { labels: {}, placeholders: {}, steps: ["Upload your image in the upload area.", "Choose the target social format (Instagram, TikTok, etc.).", "Download the resized version with correct ratio."] },
-    es: { labels: {}, placeholders: {}, steps: ["Sube tu imagen en el área de carga.", "Elige el formato de red social (Instagram, TikTok, etc.).", "Descarga la versión redimensionada con proporción correcta."] },
-  },
-  "meme-generator": {
-    pt: { labels: {}, placeholders: {}, steps: ["Envie a imagem base do meme.", "Adicione os textos superior e inferior no editor da ferramenta.", "Gere e baixe o meme final para compartilhar."] },
-    en: { labels: {}, placeholders: {}, steps: ["Upload your meme base image.", "Add top and bottom text in the tool editor.", "Generate and download the final meme."] },
-    es: { labels: {}, placeholders: {}, steps: ["Sube la imagen base del meme.", "Agrega texto superior e inferior en el editor.", "Genera y descarga el meme final."] },
-  },
-  "banner-thumbnail-creator": {
-    pt: { labels: {}, placeholders: {}, steps: ["Envie imagem ou arte base.", "Escolha tamanho/layout de banner ou miniatura.", "Exporte o arquivo final otimizado para publicação."] },
-    en: { labels: {}, placeholders: {}, steps: ["Upload your base image/artwork.", "Choose banner or thumbnail size/layout.", "Export the final optimized file."] },
-    es: { labels: {}, placeholders: {}, steps: ["Sube tu imagen o diseño base.", "Elige tamaño y diseño de banner o miniatura.", "Exporta el archivo final optimizado."] },
+    en: { fields: [], steps: [], compute: undefined },
+    es: { fields: [], steps: [], compute: undefined },
   },
   "calorie-calculator": {
     pt: {
-      labels: { a: "Altura (cm)", b: "Peso (kg)", c: "Idade (anos)" },
-      placeholders: { a: "Ex.: 170", b: "Ex.: 69", c: "Ex.: 30" },
-      steps: [
-        "Informe sua altura em centímetros.",
-        "Informe seu peso e sua idade.",
-        "Escolha o nível de atividade nos modos (Básico/Intermediário/Avançado).",
-        "Clique em Calcular para ver calorias estimadas por dia.",
+      fields: [
+        { key: "sex", label: "Sexo", type: "select", options: [{ label: "Feminino", value: "f" }, { label: "Masculino", value: "m" }] },
+        { key: "age", label: "Idade", type: "number", placeholder: "Ex.: 30" },
+        { key: "weight", label: "Peso (kg)", type: "number", placeholder: "Ex.: 70" },
+        { key: "height", label: "Altura (cm)", type: "number", placeholder: "Ex.: 170" },
+        { key: "activity", label: "Atividade", type: "select", options: [{ label: "Sedentário", value: "1.2" }, { label: "Moderado", value: "1.55" }, { label: "Intenso", value: "1.725" }] },
+        { key: "goal", label: "Objetivo", type: "select", options: [{ label: "Manter", value: "0" }, { label: "Perder", value: "-400" }, { label: "Ganhar", value: "300" }] },
       ],
+      steps: ["Preencha sexo, idade, peso e altura.", "Escolha atividade e objetivo.", "Veja TMB e calorias recomendadas.", "Ajuste metas conforme evolução."],
+      compute: (v) => {
+        const age = toNumber(v.age); const weight = toNumber(v.weight); const height = toNumber(v.height);
+        const sex = String(v.sex || "m");
+        if (!age || !weight || !height) return messages.pt.empty;
+        const bmr = sex === "f" ? 10 * weight + 6.25 * height - 5 * age - 161 : 10 * weight + 6.25 * height - 5 * age + 5;
+        const daily = bmr * Number(v.activity || 1.2) + Number(v.goal || 0);
+        return `TMB: ${Math.round(bmr)} kcal | Recomendação diária: ${Math.round(daily)} kcal`;
+      },
     },
-    en: { labels: { a: "Height (cm)", b: "Weight (kg)", c: "Age (years)" }, placeholders: { a: "Ex.: 170", b: "Ex.: 69", c: "Ex.: 30" }, steps: ["Enter your height in centimeters.", "Enter your weight and age.", "The daily estimate uses a standard activity factor.", "Click Calculate to get estimated daily calories."] },
-    es: { labels: { a: "Altura (cm)", b: "Peso (kg)", c: "Edad (años)" }, placeholders: { a: "Ej.: 170", b: "Ej.: 69", c: "Ej.: 30" }, steps: ["Ingresa tu altura en centímetros.", "Ingresa tu peso y edad.", "La estimación diaria usa un factor de actividad estándar.", "Haz clic en Calcular para ver calorías diarias estimadas."] },
+  },
+  "mortgage-calculator": {
+    pt: {
+      fields: [
+        { key: "property", label: "Valor do imóvel", type: "number" },
+        { key: "entry", label: "Entrada", type: "number" },
+        { key: "rate", label: "Juros anual (%)", type: "number" },
+        { key: "years", label: "Prazo (anos)", type: "number" },
+        { key: "system", label: "Sistema", type: "select", options: [{ label: "Price", value: "price" }, { label: "SAC", value: "sac" }] },
+      ],
+      steps: ["Informe imóvel, entrada, juros e prazo.", "Escolha Price ou SAC.", "Veja parcela estimada.", "Use para comparar cenários."],
+      compute: (v) => {
+        const principal = toNumber(v.property) - toNumber(v.entry);
+        const r = toNumber(v.rate) / 100 / 12;
+        const n = toNumber(v.years) * 12;
+        if (!principal || !r || !n) return messages.pt.empty;
+        if (v.system === "sac") {
+          const amort = principal / n;
+          const first = amort + principal * r;
+          return `SAC | 1ª parcela: ${first.toFixed(2)} | Amortização: ${amort.toFixed(2)}`;
+        }
+        const pmt = (principal * r * (1 + r) ** n) / ((1 + r) ** n - 1);
+        return `Price | Parcela estimada: ${pmt.toFixed(2)} | Total meses: ${n}`;
+      },
+    },
+  },
+  "net-gross-salary": {
+    pt: {
+      fields: [
+        { key: "gross", label: "Salário bruto", type: "number" },
+        { key: "country", label: "País", type: "select", options: [{ label: "Brasil", value: "br" }, { label: "Portugal", value: "pt" }, { label: "EUA", value: "us" }] },
+        { key: "dependents", label: "Dependentes", type: "number" },
+      ],
+      steps: ["Informe salário bruto e país.", "Adicione dependentes.", "Veja estimativa de descontos e salário líquido.", "Confira estimativas anual e 13º."],
+      compute: (v) => {
+        const gross = toNumber(v.gross);
+        if (!gross) return messages.pt.empty;
+        const dep = toNumber(v.dependents);
+        const inss = gross * 0.11;
+        const ir = Math.max(0, gross * 0.1 - dep * 80);
+        const net = gross - inss - ir;
+        return `INSS: ${inss.toFixed(2)} | IR: ${ir.toFixed(2)} | Líquido: ${net.toFixed(2)} | Anual: ${(net * 12).toFixed(2)} | 13º: ${net.toFixed(2)}`;
+      },
+    },
+  },
+  "discount-margin-markup": {
+    pt: {
+      fields: [
+        { key: "original", label: "Preço original", type: "number" },
+        { key: "discount", label: "Desconto (%)", type: "number" },
+        { key: "cost", label: "Custo (margem/markup)", type: "number" },
+        { key: "profit", label: "Lucro (%)", type: "number" },
+      ],
+      steps: ["Preencha preço e desconto.", "Opcional: custo e lucro para margem/markup.", "Veja os 3 resultados juntos."],
+      compute: (v) => {
+        const original = toNumber(v.original);
+        if (!original) return messages.pt.empty;
+        const discount = toNumber(v.discount);
+        const finalPrice = original * (1 - discount / 100);
+        const cost = toNumber(v.cost);
+        const profit = toNumber(v.profit);
+        const markup = cost ? cost * (1 + profit / 100) : 0;
+        const margin = original ? ((original - cost) / original) * 100 : 0;
+        return `Preço com desconto: ${finalPrice.toFixed(2)} | Markup: ${markup.toFixed(2)} | Margem: ${margin.toFixed(2)}%`;
+      },
+    },
+  },
+  "travel-time-calculator": {
+    pt: {
+      fields: [
+        { key: "distance", label: "Distância (km)", type: "number" },
+        { key: "speed", label: "Velocidade média (km/h)", type: "number" },
+        { key: "stops", label: "Paradas (min)", type: "number" },
+        { key: "consumption", label: "Consumo (km/l)", type: "number" },
+        { key: "fuel", label: "Preço combustível", type: "number" },
+      ],
+      steps: ["Informe distância e velocidade.", "Adicione paradas e consumo para cálculo avançado.", "Veja tempo e custo estimados."],
+      compute: (v) => {
+        const d = toNumber(v.distance); const s = toNumber(v.speed);
+        if (!d || !s) return messages.pt.empty;
+        const stops = toNumber(v.stops) / 60;
+        const hours = d / s + stops;
+        const fuelCost = toNumber(v.consumption) && toNumber(v.fuel) ? (d / toNumber(v.consumption)) * toNumber(v.fuel) : 0;
+        return `Tempo estimado: ${hours.toFixed(2)} h | Custo combustível: ${fuelCost.toFixed(2)}`;
+      },
+    },
   },
   "word-counter": {
-    pt: { labels: { text: "Texto" }, placeholders: { text: "Cole aqui o texto completo" }, steps: ["Cole ou digite o texto no campo.", "Revise o conteúdo antes de calcular.", "Clique em Calcular para contar as palavras.", "Use o resultado para revisar tamanho de texto/SEO."] },
-    en: { labels: { text: "Text" }, placeholders: { text: "Paste your full text here" }, steps: ["Paste or type your text.", "Review content before calculating.", "Click Calculate to count words.", "Use the result for content/SEO size checks."] },
-    es: { labels: { text: "Texto" }, placeholders: { text: "Pega aquí el texto completo" }, steps: ["Pega o escribe el texto.", "Revisa el contenido antes de calcular.", "Haz clic en Calcular para contar palabras.", "Usa el resultado para tamaño de contenido/SEO."] },
+    pt: {
+      fields: [{ key: "text", label: "Texto", placeholder: "Cole seu texto aqui", type: "text" }],
+      steps: ["Cole o texto.", "Veja contagem instantânea de palavras, caracteres e parágrafos."],
+      compute: (v) => {
+        const text = String(v.text || "");
+        if (!text.trim()) return messages.pt.empty;
+        const words = text.trim().split(/\s+/).length;
+        const chars = text.length;
+        const noSpace = text.replace(/\s/g, "").length;
+        const paragraphs = text.split(/\n+/).filter(Boolean).length;
+        return `Palavras: ${words} | Caracteres: ${chars} | Sem espaço: ${noSpace} | Parágrafos: ${paragraphs}`;
+      },
+    },
+  },
+  "text-case-converter": {
+    pt: {
+      fields: [
+        { key: "text", label: "Texto", type: "text" },
+        { key: "action", label: "Ação", type: "select", options: [{ label: "MAIÚSCULAS", value: "upper" }, { label: "minúsculas", value: "lower" }, { label: "Capitalizar", value: "capitalize" }, { label: "Alternado", value: "alternate" }, { label: "Inverter", value: "reverse" }] },
+      ],
+      steps: ["Digite o texto.", "Escolha a transformação.", "Copie o resultado."],
+      compute: (v) => {
+        const text = String(v.text || "");
+        const action = String(v.action || "upper");
+        if (!text) return messages.pt.empty;
+        if (action === "upper") return text.toUpperCase();
+        if (action === "lower") return text.toLowerCase();
+        if (action === "capitalize") return text.toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase());
+        if (action === "alternate") return text.split("").map((c, i) => (i % 2 ? c.toLowerCase() : c.toUpperCase())).join("");
+        return text.split("").reverse().join("");
+      },
+    },
   },
 };
 
-const defaultUi: Record<Lang, Localized> = {
+const defaultDef: Record<Lang, ToolDef> = {
   pt: {
-    labels: { a: "Valor 1", b: "Valor 2", c: "Valor 3", text: "Texto / URL" },
-    placeholders: { a: "Digite o primeiro valor", b: "Digite o segundo valor", c: "Digite o terceiro valor", text: "Digite texto, URL ou expressão" },
-    steps: [
-      "Leia o título da ferramenta para saber o objetivo.",
-      "Preencha os campos com os dados solicitados.",
-      "Preencha todos os campos exigidos pela ferramenta.",
-      "Clique em Calcular para gerar o resultado automaticamente.",
+    fields: [
+      { key: "a", label: "Valor 1", type: "number" },
+      { key: "b", label: "Valor 2", type: "number" },
+      { key: "text", label: "Texto/URL", type: "text" },
     ],
+    steps: ["Preencha os campos da ferramenta.", "Veja o resultado instantâneo e copie se necessário."],
+    compute: (v) => (String(v.text || "") || (toNumber(v.a) + toNumber(v.b)).toString() || messages.pt.empty),
   },
-  en: {
-    labels: { a: "Value 1", b: "Value 2", c: "Value 3", text: "Text / URL" },
-    placeholders: { a: "Enter first value", b: "Enter second value", c: "Enter third value", text: "Type text, URL or expression" },
-    steps: ["Read the tool title to understand the goal.", "Fill in requested fields.", "Fill the required fields shown for the tool.", "Click Calculate to generate the result."],
-  },
-  es: {
-    labels: { a: "Valor 1", b: "Valor 2", c: "Valor 3", text: "Texto / URL" },
-    placeholders: { a: "Ingresa el primer valor", b: "Ingresa el segundo valor", c: "Ingresa el tercer valor", text: "Escribe texto, URL o expresión" },
-    steps: ["Lee el título para entender el objetivo.", "Completa los campos solicitados.", "Completa todos los campos requeridos por la herramienta.", "Haz clic en Calcular para generar el resultado."],
-  },
+  en: { fields: [], steps: [], compute: undefined },
+  es: { fields: [], steps: [], compute: undefined },
 };
-
-function capitalizeWords(value: string) {
-  return value.toLowerCase().split(" ").map((word) => (word ? word[0].toUpperCase() + word.slice(1) : "")).join(" ");
-}
-
-function getPasswordStrength(password: string, langCommon: Record<string, string>) {
-  let score = 0;
-  if (password.length >= 8) score += 1;
-  if (/[A-Z]/.test(password)) score += 1;
-  if (/[a-z]/.test(password)) score += 1;
-  if (/[0-9]/.test(password)) score += 1;
-  if (/[^A-Za-z0-9]/.test(password)) score += 1;
-  if (score <= 2) return langCommon.weak;
-  if (score <= 4) return langCommon.medium;
-  return langCommon.strong;
-}
 
 export default function PlaceholderTool({ toolId }: Props) {
   const { i18n } = useTranslation();
   const lang = ((i18n.language || "pt").split("-")[0] as Lang) || "pt";
-  const l = common[lang] ?? common.pt;
-  const currentUi = toolId ? toolUi[toolId]?.[lang] ?? defaultUi[lang] : defaultUi[lang];
+  const m = messages[lang];
   const isUploadOnly = toolId ? uploadOnlyTools.has(toolId) : false;
+  const def = (toolId && toolDefs[toolId]?.pt) || defaultDef.pt;
 
-  const [a, setA] = useState("");
-  const [b, setB] = useState("");
-  const [c, setC] = useState("");
-  const [text, setText] = useState("");
+  const [values, setValues] = useState<Record<string, string | boolean>>({});
   const [showUpload, setShowUpload] = useState(false);
-  const [result, setResult] = useState("-");
 
-  const bmiClassification = useMemo(() => {
-    const value = Number(result);
-    if (Number.isNaN(value)) return "-";
-    if (value < 18.5) return lang === "pt" ? "Magreza" : lang === "es" ? "Bajo peso" : "Underweight";
-    if (value < 25) return lang === "pt" ? "Normal" : lang === "es" ? "Normal" : "Normal";
-    if (value < 30) return lang === "pt" ? "Sobrepeso" : lang === "es" ? "Sobrepeso" : "Overweight";
-    if (value < 40) return lang === "pt" ? "Obesidade" : lang === "es" ? "Obesidad" : "Obesity";
-    return lang === "pt" ? "Obesidade grave" : lang === "es" ? "Obesidad grave" : "Severe obesity";
-  }, [result, lang]);
+  const result = useMemo(() => {
+    if (isUploadOnly) return "";
+    return def.compute ? def.compute(values, lang) : m.empty;
+  }, [def, values, lang, isUploadOnly, m.empty]);
 
-  const calculate = () => {
-    const nA = Number(String(a).replace(",", "."));
-    const nB = Number(String(b).replace(",", "."));
-    const nC = Number(String(c).replace(",", "."));
+  const clearAll = () => setValues({});
 
-    let nextResult = "-";
+  const copyResult = async () => {
+    if (!result) return;
+    await navigator.clipboard.writeText(result);
+  };
 
-    switch (toolId) {
-      case "bmi-calculator": {
-        if (!nA || !nB) break;
-        nextResult = (nB / (nA * nA)).toFixed(2);
-        break;
-      }
-      case "calorie-calculator": {
-        if (!nA || !nB || !nC) break;
-        const bmr = 10 * nB + 6.25 * nA - 5 * nC + 5;
-        const activityFactor = 1.375;
-        nextResult = `${Math.round(bmr * activityFactor)} kcal/dia`;
-        break;
-      }
-      case "mortgage-calculator": {
-        if (!nA || !nB || !nC) break;
-        const monthlyRate = nB / 100 / 12;
-        const totalMonths = nC * 12;
-        const installment = (nA * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
-        nextResult = `${l.installment}: ${installment.toFixed(2)}`;
-        break;
-      }
-      case "net-gross-salary":
-        nextResult = nA ? `${l.netSalary}: ${(nA * (1 - nB / 100)).toFixed(2)}` : "-";
-        break;
-      case "discount-margin-markup": {
-        if (!nA) break;
-        nextResult = `${l.finalPrice}: ${(nA * (1 - nB / 100)).toFixed(2)}`;
-        break;
-      }
-      case "travel-time-calculator":
-        nextResult = nA && nB ? `${(nA / nB).toFixed(2)} h` : "-";
-        break;
-      case "apr-monthly-converter":
-        if (nA) nextResult = `${(((1 + nA / 100) ** (1 / 12) - 1) * 100).toFixed(4)}% a.m.`;
-        break;
-      case "stock-simulator":
-      case "investment-simulator":
-        nextResult = nA && nB && nC ? `${l.projected}: ${(nA * Math.pow(1 + nB / 100, nC)).toFixed(2)}` : "-";
-        break;
-      case "word-counter":
-        nextResult = `${l.words}: ${text.trim() ? text.trim().split(/\s+/).length : 0}`;
-        break;
-      case "text-case-converter":
-        nextResult = capitalizeWords(text);
-        break;
-      case "password-strength-checker":
-        nextResult = `${l.strength}: ${getPasswordStrength(text, l)}`;
-        break;
-      case "encrypt-decrypt": {
-        const shift = nA || 3;
-        const operation = shift;
-        nextResult = text.replace(/[a-z]/gi, (char) => {
-          const base = char <= "Z" ? 65 : 97;
-          const code = (((char.charCodeAt(0) - base + operation) % 26) + 26) % 26;
-          return String.fromCharCode(base + code);
-        });
-        break;
-      }
-      case "base-converter": {
-        if (!text) break;
-        const parsed = parseInt(text, Number(a || 10));
-        nextResult = Number.isNaN(parsed) ? l.invalidNumber : parsed.toString(Number(b || 2));
-        break;
-      }
-      case "scientific-calculator": {
-        if (!text) break;
-        try {
-          // eslint-disable-next-line no-new-func
-          nextResult = String(Function(`"use strict"; return (${text})`)());
-        } catch {
-          nextResult = l.invalidExpression;
-        }
-        break;
-      }
-      case "currency-converter":
-        nextResult = nA && nB ? `${(nA * nB).toFixed(2)}` : "-";
-        break;
-      case "cm-inch-converter":
-        nextResult = nA ? `${(nA / 2.54).toFixed(2)} in` : "-";
-        break;
-      case "kg-lbs-converter":
-        nextResult = nA ? `${(nA * 2.20462).toFixed(2)} lbs` : "-";
-        break;
-      case "sqm-sqft-converter":
-        nextResult = nA ? `${(nA * 10.7639).toFixed(2)} ft²` : "-";
-        break;
-      case "backlink-counter":
-      case "rank-checker":
-      case "meta-tags-checker":
-      case "html-css-validator":
-      case "site-speed-checker":
-        nextResult = text ? `${l.quickAnalysis}: ${text}` : "-";
-        break;
-      default:
-        nextResult = text || "-";
+  const shareResult = async () => {
+    if (!result) return;
+    if (navigator.share) {
+      await navigator.share({ text: result });
+    } else {
+      await navigator.clipboard.writeText(result);
     }
-
-    setResult(nextResult);
   };
 
-  const clear = () => {
-    setA("");
-    setB("");
-    setC("");
-    setText("");
-    setResult("-");
+  const downloadResult = () => {
+    if (!result) return;
+    const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "resultado-toolss.txt";
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
-  const renderField = (field: FieldKey, value: string, setValue: (value: string) => void) => {
-    if (!currentUi.labels[field]) return null;
-
-    return (
-      <label className="block" key={field}>
-        <span className="mb-1 block text-sm font-semibold text-gray-700">{currentUi.labels[field]}</span>
-        <input
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          placeholder={currentUi.placeholders[field]}
-          className="w-full rounded-xl border border-gray-300 px-4 py-3"
-        />
-      </label>
-    );
-  };
+  const bmiValue = result.includes("IMC:") ? Number(result.split("IMC:")[1]?.split("|")[0]) : NaN;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       {isUploadOnly ? (
         <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
-          <p className="text-sm font-semibold text-gray-800">{l.uploadTitle}</p>
-          <p className="mt-1 text-sm text-gray-600">{l.uploadHint}</p>
+          <p className="text-sm font-semibold text-gray-800">{m.uploadTitle}</p>
+          <p className="mt-1 text-sm text-gray-600">{m.uploadHint}</p>
           <input type="file" className="mt-4 w-full rounded-lg border border-gray-300 bg-white p-2" />
+          {def.fields.length > 0 && (
+            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+              {def.fields.map((f) => (
+                <Field key={f.key} field={f} value={values[f.key]} onChange={(val) => setValues((prev) => ({ ...prev, [f.key]: val }))} />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {renderField("a", a, setA)}
-            {renderField("b", b, setB)}
-            {renderField("c", c, setC)}
-            {renderField("text", text, setText)}
+            {def.fields.map((f) => (
+              <Field key={f.key} field={f} value={values[f.key]} onChange={(val) => setValues((prev) => ({ ...prev, [f.key]: val }))} />
+            ))}
           </div>
           <div className="flex flex-wrap gap-3">
-            <button type="button" onClick={calculate} className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">{l.calculate}</button>
-            <button type="button" onClick={clear} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{l.clear}</button>
+            <button type="button" onClick={clearAll} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{m.clear}</button>
           </div>
 
           <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900">
-            <p className="font-semibold">{l.result}</p>
+            <p className="font-semibold">{m.result}</p>
             <p className="mt-1 break-words">{result}</p>
-            {toolId === "bmi-calculator" && result !== "-" && <p className="mt-2 text-sm font-medium">{l.bmi}: {result} ({bmiClassification})</p>}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" onClick={copyResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.copy}</button>
+              <button type="button" onClick={shareResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.share}</button>
+              <button type="button" onClick={downloadResult} className="rounded-lg border border-emerald-300 px-3 py-1 text-sm">{m.download}</button>
+            </div>
           </div>
         </>
       )}
 
-      {toolId === "bmi-calculator" && (
+      {toolId === "bmi-calculator" && !Number.isNaN(bmiValue) && (
         <div className="overflow-hidden rounded-xl border border-blue-200">
-          <div className="bg-blue-700 px-4 py-3 text-sm font-semibold text-white">{l.interpretation}</div>
+          <div className="bg-blue-700 px-4 py-3 text-sm font-semibold text-white">{m.bmiTable}</div>
           <table className="w-full text-left text-sm">
-            <thead className="bg-blue-50 text-blue-800">
-              <tr>
-                <th className="px-4 py-2">IMC</th>
-                <th className="px-4 py-2">{lang === "pt" ? "Classificação" : lang === "es" ? "Clasificación" : "Classification"}</th>
-              </tr>
-            </thead>
+            <thead className="bg-blue-50 text-blue-800"><tr><th className="px-4 py-2">IMC</th><th className="px-4 py-2">Classificação</th></tr></thead>
             <tbody className="bg-white text-gray-700">
-              <tr><td className="px-4 py-2">&lt; 18,5</td><td className="px-4 py-2">{lang === "pt" ? "Magreza" : lang === "es" ? "Bajo peso" : "Underweight"}</td></tr>
-              <tr><td className="px-4 py-2">18,5 - 24,9</td><td className="px-4 py-2">{lang === "pt" ? "Normal" : "Normal"}</td></tr>
-              <tr><td className="px-4 py-2">25,0 - 29,9</td><td className="px-4 py-2">{lang === "pt" ? "Sobrepeso" : lang === "es" ? "Sobrepeso" : "Overweight"}</td></tr>
-              <tr><td className="px-4 py-2">30,0 - 39,9</td><td className="px-4 py-2">{lang === "pt" ? "Obesidade" : lang === "es" ? "Obesidad" : "Obesity"}</td></tr>
-              <tr><td className="px-4 py-2">≥ 40,0</td><td className="px-4 py-2">{lang === "pt" ? "Obesidade grave" : lang === "es" ? "Obesidad grave" : "Severe obesity"}</td></tr>
+              <tr><td className="px-4 py-2">&lt; 18,5</td><td className="px-4 py-2">Magreza</td></tr>
+              <tr><td className="px-4 py-2">18,5 - 24,9</td><td className="px-4 py-2">Normal</td></tr>
+              <tr><td className="px-4 py-2">25,0 - 29,9</td><td className="px-4 py-2">Sobrepeso</td></tr>
+              <tr><td className="px-4 py-2">30,0 - 39,9</td><td className="px-4 py-2">Obesidade</td></tr>
+              <tr><td className="px-4 py-2">≥ 40,0</td><td className="px-4 py-2">Obesidade grave</td></tr>
             </tbody>
           </table>
         </div>
       )}
 
       <div className="rounded-xl border border-gray-200 p-4">
-        <h3 className="text-base font-semibold text-gray-900">{l.detailedGuide}</h3>
+        <h3 className="text-base font-semibold text-gray-900">{m.howTo}</h3>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
-          {currentUi.steps.map((step) => (
+          {def.steps.map((step) => (
             <li key={step}>{step}</li>
           ))}
         </ol>
@@ -442,12 +360,50 @@ export default function PlaceholderTool({ toolId }: Props) {
 
       {!isUploadOnly && (
         <div className="rounded-xl border border-gray-200 p-4">
-          <button onClick={() => setShowUpload((state) => !state)} className="text-sm font-medium text-emerald-700 underline" type="button">
-            {l.optionalUpload}
+          <button onClick={() => setShowUpload((s) => !s)} className="text-sm font-medium text-emerald-700 underline" type="button">
+            {m.optionalUpload}
           </button>
           {showUpload && <input type="file" className="mt-3 w-full" />}
         </div>
       )}
     </div>
+  );
+}
+
+function Field({ field, value, onChange }: { field: FieldDef; value: string | boolean | undefined; onChange: (v: string | boolean) => void }) {
+  if (field.type === "select") {
+    return (
+      <label className="block">
+        <span className="mb-1 block text-sm font-semibold text-gray-700">{field.label}</span>
+        <select className="w-full rounded-xl border border-gray-300 px-4 py-3" value={String(value || "")} onChange={(e) => onChange(e.target.value)}>
+          <option value="">Selecione...</option>
+          {field.options?.map((option) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
+      </label>
+    );
+  }
+
+  if (field.type === "checkbox") {
+    return (
+      <label className="flex items-center gap-2 rounded-xl border border-gray-300 px-4 py-3">
+        <input type="checkbox" checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} />
+        <span className="text-sm font-semibold text-gray-700">{field.label}</span>
+      </label>
+    );
+  }
+
+  return (
+    <label className="block">
+      <span className="mb-1 block text-sm font-semibold text-gray-700">{field.label}</span>
+      <input
+        type={field.type}
+        value={String(value || "")}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={field.placeholder}
+        className="w-full rounded-xl border border-gray-300 px-4 py-3"
+      />
+    </label>
   );
 }
