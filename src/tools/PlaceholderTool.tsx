@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ToolId } from "../config/tools";
-import { FileText, Upload, X } from "lucide-react";
+import { CheckCircle2, Download, FileText, Upload, X } from "lucide-react";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { removeBackground } from "@imgly/background-removal";
 
 type Props = { toolId?: ToolId };
@@ -47,6 +48,7 @@ const messages = {
     empty: "Preencha os campos para ver o resultado.",
     processing: "Processando...",
     success: "Concluído com sucesso.",
+    resultReady: "Resultado pronto",
     error: "Ocorreu um erro ao processar.",
     dragDrop: "Arraste e solte aqui ou clique para selecionar",
   },
@@ -65,6 +67,7 @@ const messages = {
     empty: "Fill the fields to see the result.",
     processing: "Processing...",
     success: "Completed successfully.",
+    resultReady: "Result ready",
     error: "There was an error while processing.",
     dragDrop: "Drag and drop here or click to select",
   },
@@ -83,6 +86,7 @@ const messages = {
     empty: "Completa los campos para ver el resultado.",
     processing: "Procesando...",
     success: "Completado con éxito.",
+    resultReady: "Resultado listo",
     error: "Hubo un error al procesar.",
     dragDrop: "Arrastra y suelta aquí o haz clic para seleccionar",
   },
@@ -107,6 +111,31 @@ const fileDownload = (file: File) => {
   URL.revokeObjectURL(url);
 };
 
+const downloadFromUrl = (url: string, filename: string) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+};
+
+async function buildReportPdf(title: string, content: string): Promise<Blob> {
+  const pdf = await PDFDocument.create();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const page = pdf.addPage([595, 842]);
+  const lines = content.split("\n");
+  let y = 800;
+
+  page.drawText(title, { x: 40, y, size: 16, font, color: rgb(0, 0.4, 0.2) });
+  y -= 28;
+
+  for (const line of lines) {
+    if (y < 40) break;
+    page.drawText(line.slice(0, 110), { x: 40, y, size: 11, font, color: rgb(0.1, 0.1, 0.1) });
+    y -= 16;
+  }
+
+  return new Blob([await pdf.save()], { type: "application/pdf" });
+}
 
 const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
 
@@ -331,6 +360,8 @@ export default function PlaceholderTool({ toolId }: Props) {
   const [processedPreview, setProcessedPreview] = useState<string>("");
   const [upscaleLevel, setUpscaleLevel] = useState<"1k" | "2k" | "4k">("2k");
   const [result, setResult] = useState(m.empty);
+  const [outputFileName, setOutputFileName] = useState("");
+  const [outputDownloadUrl, setOutputDownloadUrl] = useState("");
   const [status, setStatus] = useState<"idle" | "ready" | "processing" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
@@ -345,6 +376,9 @@ export default function PlaceholderTool({ toolId }: Props) {
     setResult(m.empty);
     setStatus("idle");
     setErrorMsg("");
+    setOutputFileName("");
+    if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+    setOutputDownloadUrl("");
   };
 
   useEffect(() => {
@@ -354,6 +388,12 @@ export default function PlaceholderTool({ toolId }: Props) {
       });
     };
   }, [uploadPreviews]);
+
+  useEffect(() => {
+    return () => {
+      if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+    };
+  }, [outputDownloadUrl]);
 
   const onFilesSelected = (fileList: FileList | null) => {
     if (!fileList) return;
@@ -374,13 +414,27 @@ export default function PlaceholderTool({ toolId }: Props) {
     setErrorMsg("");
   };
 
-  const runTool = () => {
+  const runTool = async () => {
     setStatus("processing");
     setErrorMsg("");
     if (def.compute) {
       const value = def.compute(values, lang);
       setResult(value);
-      setStatus(value === m.empty ? "ready" : "success");
+      if (value === m.empty) {
+        setStatus("ready");
+        return;
+      }
+
+      try {
+        const reportBlob = await buildReportPdf(`Toolss - ${toolId || "report"}`, value.replace(/ \| /g, "\n"));
+        if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+        setOutputDownloadUrl(URL.createObjectURL(reportBlob));
+        setOutputFileName(`${toolId || "resultado"}-relatorio.pdf`);
+      } catch {
+        // fallback: keep success with textual result even if report generation fails
+      }
+
+      setStatus("success");
     } else {
       setStatus("error");
       setErrorMsg(m.error);
@@ -404,6 +458,9 @@ export default function PlaceholderTool({ toolId }: Props) {
         });
         const aiUrl = URL.createObjectURL(aiBlob);
         setProcessedPreview(aiUrl);
+        if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+        setOutputDownloadUrl(aiUrl);
+        setOutputFileName(`${selectedFiles[0].name.replace(/\.[^/.]+$/, "")}-sem-logotipo.png`);
         setResult(lang === "pt" ? "IA concluiu a remoção do logotipo." : lang === "es" ? "La IA terminó de eliminar el logotipo." : "AI finished logo removal.");
         setStatus("success");
       } catch {
@@ -426,6 +483,9 @@ export default function PlaceholderTool({ toolId }: Props) {
       ctx.drawImage(base, 0, 0, canvas.width, canvas.height);
       const output = canvas.toDataURL("image/png");
       setProcessedPreview(output);
+      if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+      setOutputDownloadUrl(output);
+      setOutputFileName(`${selectedFiles[0].name.replace(/\.[^/.]+$/, "")}-${upscaleLevel}.png`);
       setResult(
         lang === "pt"
           ? `Imagem melhorada para ${upscaleLevel.toUpperCase()}.`
@@ -445,15 +505,17 @@ export default function PlaceholderTool({ toolId }: Props) {
           : `File ready for processing: ${selectedFiles.map((file) => file.name).join(", ")}`;
 
     setResult(actionText);
+    const sourceFile = selectedFiles[0];
+    const generatedBlob = sourceFile ? sourceFile.slice(0, sourceFile.size, sourceFile.type || "application/octet-stream") : new Blob([actionText], { type: "text/plain" });
+    if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+    setOutputDownloadUrl(URL.createObjectURL(generatedBlob));
+    setOutputFileName(sourceFile ? `processado-${sourceFile.name}` : `${toolId || "resultado"}.txt`);
     setStatus("success");
   };
 
   const downloadProcessedImage = () => {
-    if (!processedPreview) return;
-    const a = document.createElement("a");
-    a.href = processedPreview;
-    a.download = `${toolId || "tool"}-result.png`;
-    a.click();
+    if (!outputDownloadUrl && !processedPreview) return;
+    downloadFromUrl(outputDownloadUrl || processedPreview, outputFileName || `${toolId || "tool"}-result.png`);
   };
 
   const removeFile = (index: number) => {
@@ -496,7 +558,7 @@ export default function PlaceholderTool({ toolId }: Props) {
             className="hidden"
           />
 
-          {selectedFiles.length > 0 && (
+          {selectedFiles.length > 0 && status !== "success" && (
             <div className="mt-6">
               <p className="text-3xl font-bold text-gray-900">{m.selectedFiles} ({selectedFiles.length})</p>
               <div className="mt-4 space-y-3">
@@ -568,14 +630,32 @@ export default function PlaceholderTool({ toolId }: Props) {
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={runUploadTool}
-            disabled={!selectedFiles.length || status === "processing"}
-            className="mt-6 w-full rounded-2xl bg-emerald-600 px-6 py-4 text-2xl font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
-          >
-            {status === "processing" ? m.processing : m.uploadAction}
-          </button>
+          {status !== "success" && (
+            <button
+              type="button"
+              onClick={runUploadTool}
+              disabled={!selectedFiles.length || status === "processing"}
+              className="mt-6 w-full rounded-2xl bg-emerald-600 px-6 py-4 text-2xl font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
+            >
+              {status === "processing" ? m.processing : m.uploadAction}
+            </button>
+          )}
+
+          {status === "success" && outputDownloadUrl && (
+            <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+              <p className="flex items-center gap-2 text-2xl font-bold text-emerald-800">
+                <CheckCircle2 className="h-8 w-8" /> {m.resultReady}
+              </p>
+              <p className="mt-2 text-sm text-emerald-700">{outputFileName}</p>
+              <button
+                type="button"
+                onClick={downloadProcessedImage}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#00C853] px-6 py-3 text-lg font-semibold text-white hover:brightness-95"
+              >
+                <Download className="h-5 w-5" /> {m.download}
+              </button>
+            </div>
+          )}
 
           {result && result !== m.empty && <p className="mt-4 text-sm text-gray-700">{result}</p>}
         </div>
@@ -592,11 +672,25 @@ export default function PlaceholderTool({ toolId }: Props) {
           </div>
 
           {result && result !== m.empty && <p className="text-sm text-gray-700">{result}</p>}
+
+          {status === "success" && outputDownloadUrl && (
+            <button
+              type="button"
+              onClick={() => downloadFromUrl(outputDownloadUrl, outputFileName || `${toolId || "resultado"}-relatorio.pdf`)}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#00C853] px-6 py-3 font-semibold text-white"
+            >
+              <Download className="h-5 w-5" /> {m.download}
+            </button>
+          )}
         </>
       )}
 
       {status === "error" && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{errorMsg || m.error}</p>}
-      {status === "success" && <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{m.success}</p>}
+      {status === "success" && (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          <p className="flex items-center gap-2 font-semibold"><CheckCircle2 className="h-5 w-5" /> {m.success}</p>
+        </div>
+      )}
 
       {toolId === "bmi-calculator" && !Number.isNaN(bmiValue) && (
         <div className="overflow-hidden rounded-xl border border-blue-200">
@@ -622,7 +716,7 @@ export default function PlaceholderTool({ toolId }: Props) {
           {showUpload && (
             <div className="mt-3 space-y-3">
               <input ref={optionalInputRef} type="file" multiple onChange={(e) => onFilesSelected(e.target.files)} className="w-full" />
-              {selectedFiles.length > 0 && (
+              {selectedFiles.length > 0 && status !== "success" && (
                 <div className="space-y-2">
                   {selectedFiles.map((file, index) => (
                     <div key={`${file.name}-optional-${index}`} className="flex items-center gap-3 rounded-lg border border-gray-200 p-2">
