@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Upload, Download, FileText } from "lucide-react";
+import { Upload, Download, FileText, CheckCircle2 } from "lucide-react";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
 function sanitizeForPdfLib(input: string): string {
@@ -235,14 +235,20 @@ export default function WordToPdf() {
             {isProcessing ? t("common.processing") : t("common.convert")}
           </button>
           {downloadUrl && (
-            <a
-              href={downloadUrl}
-              download={outputName}
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white"
-            >
-              <Download className="h-4 w-4" />
-              {t("common.download")}
-            </a>
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <p className="flex items-center gap-2 text-emerald-800 font-semibold">
+                <CheckCircle2 className="h-5 w-5" />
+                {lang === "pt" ? "Conversão concluída." : lang === "es" ? "Conversión finalizada." : "Conversion completed."}
+              </p>
+              <a
+                href={downloadUrl}
+                download={outputName}
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#00C853] px-4 py-3 font-semibold text-white"
+              >
+                <Download className="h-4 w-4" />
+                {t("common.download")}
+              </a>
+            </div>
           )}
         </div>
       )}

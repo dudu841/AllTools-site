@@ -25,6 +25,7 @@ import RemoveBackground from "../tools/Image/RemoveBackground";
 import AdjustImage from "../tools/Image/AdjustImage";
 import MergePdf from "../tools/Pdf/MergePdf";
 import SplitPdf from "../tools/Pdf/SplitPdf";
+import CompressPdf from "../tools/Pdf/CompressPdf";
 import PdfToWord from "../tools/Pdf/PdfToWord";
 import WordToPdf from "../tools/Pdf/WordToPdf";
 
@@ -33,7 +34,7 @@ const placeholder = (toolId: ToolId): React.FC => () => <PlaceholderTool toolId=
 const toolComponents: Record<ToolId, React.FC> = {
   "pdf-to-word": PdfToWord,
   "word-to-pdf": WordToPdf,
-  "compress-pdf": placeholder("compress-pdf"),
+  "compress-pdf": CompressPdf,
   "merge-pdf": MergePdf,
   "split-pdf": SplitPdf,
   "compress-image": CompressImage,

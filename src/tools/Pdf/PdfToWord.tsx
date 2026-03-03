@@ -1,13 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Upload, Download, FileText } from "lucide-react";
+import { Upload, Download, FileText, CheckCircle2 } from "lucide-react";
+import { PDFDocument } from "pdf-lib";
 
-async function extractBasicPdfText(file: File): Promise<string> {
+function decodeEscapedPdfString(value: string): string {
+  return value
+    .replace(/\\\(/g, "(")
+    .replace(/\\\)/g, ")")
+    .replace(/\\n/g, "\n")
+    .replace(/\\r/g, "\n")
+    .replace(/\\t/g, " ")
+    .replace(/\\([0-7]{1,3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8)));
+}
+
+async function extractPdfText(file: File): Promise<string> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const decoded = new TextDecoder("latin1").decode(bytes);
-  const matches = [...decoded.matchAll(/\(([^\)]{2,})\)/g)].map((m) => m[1]);
-  const joined = matches.join(" ").replace(/\s+/g, " ").trim();
-  return joined;
+
+  const streamText = Array.from(decoded.matchAll(/\(([^()]*)\)\s*Tj/gm)).map((m) => decodeEscapedPdfString(m[1]));
+  const arrayText = Array.from(decoded.matchAll(/\[((?:.|\n)*?)\]\s*TJ/gm))
+    .map((m) => m[1])
+    .flatMap((chunk) => Array.from(chunk.matchAll(/\(([^()]*)\)/g)).map((m) => decodeEscapedPdfString(m[1])));
+
+  const text = [...streamText, ...arrayText].join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  return text;
 }
 
 function buildWordHtml(title: string, body: string): string {
@@ -32,17 +48,58 @@ export default function PdfToWord() {
 
   const lang = (i18n.language || "pt").slice(0, 2);
 
-  const onFile = (selected?: File | null) => {
+  const labels = useMemo(
+    () => ({
+      invalid:
+        lang === "pt"
+          ? "Envie um arquivo PDF válido."
+          : lang === "es"
+            ? "Sube un PDF válido."
+            : "Upload a valid PDF file.",
+      failed:
+        lang === "pt"
+          ? "Erro ao converter PDF para Word."
+          : lang === "es"
+            ? "Error al convertir PDF a Word."
+            : "Error converting PDF to Word.",
+      empty:
+        lang === "pt"
+          ? "Este PDF não possui texto extraível no navegador."
+          : lang === "es"
+            ? "Este PDF no tiene texto extraíble en el navegador."
+            : "This PDF has no browser-extractable text.",
+      done:
+        lang === "pt" ? "Conversão concluída." : lang === "es" ? "Conversión finalizada." : "Conversion completed.",
+    }),
+    [lang],
+  );
+
+  const onFile = async (selected?: File | null) => {
     if (!selected) return;
     if (!(selected.type === "application/pdf" || selected.name.toLowerCase().endsWith(".pdf"))) {
-      setError(lang === "pt" ? "Envie um arquivo PDF válido." : lang === "es" ? "Sube un PDF válido." : "Upload a valid PDF file.");
+      setError(labels.invalid);
+      return;
+    }
+
+    try {
+      await PDFDocument.load(await selected.arrayBuffer(), { ignoreEncryption: true });
+    } catch {
+      setError(labels.invalid);
       return;
     }
 
     setFile(selected);
     setError("");
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
     setDownloadUrl(null);
     setOutputName(`${selected.name.replace(/\.pdf$/i, "")}.doc`);
+  };
+
+  const clearAll = () => {
+    setFile(null);
+    setError("");
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(null);
   };
 
   const onConvert = async () => {
@@ -51,13 +108,14 @@ export default function PdfToWord() {
     setError("");
 
     try {
-      const text = await extractBasicPdfText(file);
-      const body = text || (lang === "pt" ? "Texto do PDF não pôde ser extraído com fidelidade total no navegador." : lang === "es" ? "El texto del PDF no pudo extraerse con fidelidad total en el navegador." : "PDF text could not be fully extracted with fidelity in-browser.");
+      const text = await extractPdfText(file);
+      const body = text || labels.empty;
       const html = buildWordHtml(file.name, body);
       const blob = new Blob([html], { type: "application/msword" });
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
       setDownloadUrl(URL.createObjectURL(blob));
     } catch {
-      setError(lang === "pt" ? "Erro ao converter PDF para Word." : lang === "es" ? "Error al convertir PDF a Word." : "Error converting PDF to Word.");
+      setError(labels.failed);
     } finally {
       setIsProcessing(false);
     }
@@ -76,10 +134,21 @@ export default function PdfToWord() {
         <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-5">
           <div className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 p-3 border border-gray-200">
             <div className="flex items-center gap-2 min-w-0"><FileText className="h-5 w-5 text-emerald-600" /><span className="truncate text-sm text-gray-700">{file.name}</span></div>
-            <button type="button" onClick={() => { setFile(null); setDownloadUrl(null); setError(""); }} className="text-sm text-red-600">{t("common.clear")}</button>
+            <button type="button" onClick={clearAll} className="text-sm text-red-600">{t("common.clear")}</button>
           </div>
-          <button type="button" onClick={onConvert} disabled={isProcessing} className="w-full rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">{isProcessing ? t("common.processing") : t("common.convert")}</button>
-          {downloadUrl && <a href={downloadUrl} download={outputName} className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white"><Download className="h-4 w-4" />{t("common.download")}</a>}
+
+          {!downloadUrl && (
+            <button type="button" onClick={onConvert} disabled={isProcessing} className="w-full rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
+              {isProcessing ? t("common.processing") : t("common.convert")}
+            </button>
+          )}
+
+          {downloadUrl && (
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <p className="flex items-center gap-2 text-emerald-800 font-semibold"><CheckCircle2 className="h-5 w-5" />{labels.done}</p>
+              <a href={downloadUrl} download={outputName} className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#00C853] px-4 py-3 font-semibold text-white"><Download className="h-4 w-4" />{t("common.download")}</a>
+            </div>
+          )}
         </div>
       )}
       {error && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
