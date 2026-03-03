@@ -5,7 +5,7 @@ import { Download } from "lucide-react";
 
 export default function QrGenerator() {
   const { t } = useTranslation();
-  const [text, setText] = useState("https://alltools.com");
+  const [text, setText] = useState("https://toolss.com");
   const [size, setSize] = useState(256);
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
@@ -30,9 +30,7 @@ export default function QrGenerator() {
       downloadLink.click();
     };
 
-    img.src =
-      "data:image/svg+xml;base64," +
-      btoa(unescape(encodeURIComponent(svgData)));
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   };
 
   return (
@@ -40,22 +38,18 @@ export default function QrGenerator() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              URL or Text
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.qr-generator.urlOrText")}</label>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Enter URL or text here..."
+              placeholder={t("tools.qr-generator.urlPlaceholder")}
               className="w-full h-32 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Size (px)
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.qr-generator.size")}</label>
               <input
                 type="number"
                 value={size}
@@ -66,9 +60,7 @@ export default function QrGenerator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Foreground
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.qr-generator.foreground")}</label>
               <input
                 type="color"
                 value={fgColor}
@@ -77,9 +69,7 @@ export default function QrGenerator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Background
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("tools.qr-generator.background")}</label>
               <input
                 type="color"
                 value={bgColor}
@@ -92,15 +82,7 @@ export default function QrGenerator() {
 
         <div className="flex flex-col items-center justify-center space-y-6 bg-gray-50 p-8 rounded-2xl border border-gray-200">
           <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-            <QRCodeSVG
-              id="qr-code-svg"
-              value={text || " "}
-              size={size}
-              fgColor={fgColor}
-              bgColor={bgColor}
-              level="H"
-              includeMargin={true}
-            />
+            <QRCodeSVG id="qr-code-svg" value={text || " "} size={size} fgColor={fgColor} bgColor={bgColor} level="H" includeMargin={true} />
           </div>
           <button
             onClick={downloadQR}

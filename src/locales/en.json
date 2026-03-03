@@ -8,36 +8,351 @@
       "finance": "Finance",
       "social": "Social Media",
       "utilities": "Utilities"
+    },
+    "seoTitle": "Toolss – Free Online Tools for PDF, Images, Finance and More",
+    "seoDesc": "Use Toolss tools to convert PDF files, edit images, create QR codes, calculate interest and more. 100% online, no installation, no signup.",
+    "marketing": {
+      "eyebrow": "Complete and practical platform",
+      "aboutTitle": "What is Toolss and what is the website goal?",
+      "aboutText": "Toolss is an online tools platform designed to solve everyday tasks with speed, simplicity, and reliability. Our goal is to save your time with direct solutions for PDF, image, finance, social, and utility workflows.",
+      "benefitsTitle": "Why use Toolss?",
+      "benefit1Title": "Everything in one place",
+      "benefit1Text": "Access multiple tools in a single website without installing software.",
+      "benefit2Title": "Simple and fast workflow",
+      "benefit2Text": "The interface is clear: choose your tool, provide your data, and get results in just a few steps.",
+      "benefit3Title": "Works on any device",
+      "benefit3Text": "Use it on mobile, tablet, or desktop with the same practical experience.",
+      "howTitle": "How to use Toolss tools (step by step)",
+      "how1": "Choose a category and click the tool you want.",
+      "how2": "Read the tool objective and usage instructions.",
+      "how3": "Fill in the fields or upload your file securely.",
+      "how4": "Click run (convert, compress, calculate, or generate).",
+      "how5": "Review the result and download/copy when available."
     }
   },
   "tools": {
-    "pdf-to-word": { "title": "PDF to Word", "desc": "Convert PDF documents to Word format." },
-    "word-to-pdf": { "title": "Word to PDF", "desc": "Convert Word documents to PDF format." },
-    "compress-pdf": { "title": "Compress PDF", "desc": "Reduce the file size of your PDF." },
-    "merge-pdf": { "title": "Merge PDF", "desc": "Combine multiple PDFs into one.", "instruction": "Select 2 or more PDFs to merge", "selected": "Selected Files", "success": "PDFs Merged Successfully!" },
-    "split-pdf": { "title": "Split PDF", "desc": "Extract pages from your PDF.", "instruction": "Select a PDF to split", "success": "PDF Split Successfully!", "select-range": "Select Page Range", "from-page": "From Page", "to-page": "To Page", "pages": "pages", "extracted": "Pages {{start}} to {{end}}" },
-    "compress-image": { "title": "Image Compressor", "desc": "Compress JPG, PNG, SVG, and GIFs.", "level": "Compression Level", "original-size": "Original Size", "compressed-size": "Compressed Size", "saved": "Saved" },
-    "resize-image": { "title": "Resize Image", "desc": "Change the dimensions of your images.", "predefined-sizes": "Quick Formats", "width": "Width (px)", "height": "Height (px)", "maintain-ratio": "Maintain aspect ratio", "custom": "Custom" },
-    "convert-image": { "title": "Convert JPG/PNG", "desc": "Convert images between formats.", "format": "Convert to Format" },
-    "remove-background": { "title": "Background Remover", "desc": "Remove the background from any image.", "bg-color": "Background Color", "mode-ai": "AI Auto Removal", "mode-color": "Remove Specific Color", "color-to-remove": "Color to Remove", "tolerance": "Tolerance" },
-    "adjust-image": { "title": "Adjust Image", "desc": "Adjust brightness, contrast, saturation, and blur.", "brightness": "Brightness", "contrast": "Contrast", "saturation": "Saturation", "blur": "Blur", "hue": "Hue", "sepia": "Sepia", "invert": "Invert" },
-    "compound-interest": { "title": "Compound Interest Calculator", "desc": "Calculate your investment growth over time." },
-    "loan-simulator": { "title": "Loan Simulator", "desc": "Simulate loan payments and interest." },
-    "percentage-calculator": { "title": "Percentage Calculator", "desc": "Calculate percentages easily." },
-    "bio-generator": { "title": "Bio Generator", "desc": "Create the perfect bio for your social media." },
-    "hashtag-generator": { "title": "Hashtag Generator", "desc": "Generate relevant hashtags for your posts." },
-    "character-counter": { "title": "Character Counter", "desc": "Count characters, words, and lines." },
-    "qr-generator": { "title": "QR Code Generator", "desc": "Create custom QR codes instantly." },
-    "password-generator": { "title": "Password Generator", "desc": "Generate strong and secure passwords." },
-    "age-calculator": { "title": "Age Calculator", "desc": "Calculate your exact age in years, months, and days." },
-    "unit-converter": { "title": "Unit Converter", "desc": "Convert between different units of measurement." }
-  },
-  "footer": {
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Use",
-    "cookies": "Cookie Policy",
-    "contact": "Contact",
-    "rights": "All rights reserved."
+    "pdf-to-word": {
+      "title": "PDF to Word",
+      "desc": "Convert PDF documents to Word format."
+    },
+    "word-to-pdf": {
+      "title": "Word to PDF",
+      "desc": "Convert Word documents to PDF format."
+    },
+    "compress-pdf": {
+      "title": "Compress PDF",
+      "desc": "Reduce the file size of your PDF."
+    },
+    "merge-pdf": {
+      "title": "Merge PDF",
+      "desc": "Combine multiple PDFs into one.",
+      "instruction": "Select 2 or more PDFs to merge",
+      "selected": "Selected Files",
+      "success": "PDFs Merged Successfully!"
+    },
+    "split-pdf": {
+      "title": "Split PDF",
+      "desc": "Extract pages from your PDF.",
+      "instruction": "Select a PDF to split",
+      "success": "PDF Split Successfully!",
+      "select-range": "Select Page Range",
+      "from-page": "From Page",
+      "to-page": "To Page",
+      "pages": "pages",
+      "extracted": "Pages {{start}} to {{end}}"
+    },
+    "compress-image": {
+      "title": "Image Compressor",
+      "desc": "Compress JPG, PNG, SVG, and GIFs.",
+      "level": "Compression Level",
+      "original-size": "Original Size",
+      "compressed-size": "Compressed Size",
+      "saved": "Saved"
+    },
+    "resize-image": {
+      "title": "Resize Image",
+      "desc": "Change the dimensions of your images.",
+      "predefined-sizes": "Quick Formats",
+      "width": "Width (px)",
+      "height": "Height (px)",
+      "maintain-ratio": "Maintain aspect ratio",
+      "custom": "Custom"
+    },
+    "convert-image": {
+      "title": "Convert JPG/PNG",
+      "desc": "Convert images between formats.",
+      "format": "Convert to Format"
+    },
+    "remove-background": {
+      "title": "Background Remover",
+      "desc": "Remove the background from any image.",
+      "bg-color": "Background Color",
+      "mode-ai": "AI Auto Removal",
+      "mode-color": "Remove Specific Color",
+      "color-to-remove": "Color to Remove",
+      "tolerance": "Tolerance",
+      "previewAlt": "Preview",
+      "processedAlt": "Processed image",
+      "transparent": "Transparent",
+      "customColor": "Custom Color"
+    },
+    "adjust-image": {
+      "title": "Adjust Image",
+      "desc": "Adjust brightness, contrast, saturation, and blur.",
+      "brightness": "Brightness",
+      "contrast": "Contrast",
+      "saturation": "Saturation",
+      "blur": "Blur",
+      "hue": "Hue",
+      "sepia": "Sepia",
+      "invert": "Invert"
+    },
+    "compound-interest": {
+      "title": "Compound Interest Calculator",
+      "desc": "Calculate your investment growth over time.",
+      "fields": {
+        "initialInvestment": "Initial Investment",
+        "annualRate": "Annual Interest Rate (%)",
+        "years": "Years to Grow"
+      },
+      "totalInterest": "Total interest earned"
+    },
+    "loan-simulator": {
+      "title": "Loan Simulator",
+      "desc": "Simulate loan payments and interest.",
+      "fields": {
+        "amount": "Loan Amount",
+        "annualRate": "Annual Interest Rate (%)",
+        "termMonths": "Loan Term (Months)"
+      },
+      "results": {
+        "monthlyPayment": "Monthly Payment",
+        "totalInterest": "Total Interest",
+        "totalPayment": "Total Payment"
+      }
+    },
+    "percentage-calculator": {
+      "title": "Percentage Calculator",
+      "desc": "Calculate percentages easily.",
+      "fields": {
+        "whatIs": "What is",
+        "of": "of",
+        "number": "Number"
+      }
+    },
+    "bio-generator": {
+      "title": "Bio Generator",
+      "desc": "Create the perfect bio for your social media.",
+      "profession": "Profession / Role",
+      "professionPlaceholder": "e.g. Software Engineer",
+      "hobbies": "Hobbies / Interests",
+      "hobbiesPlaceholder": "e.g. photography, coffee",
+      "vibe": "Vibe",
+      "vibeOptions": {
+        "professional": "Professional",
+        "creative": "Creative",
+        "funny": "Funny"
+      },
+      "templates": {
+        "professional": "Helping businesses grow through {{profession}}. Passionate about {{hobbies}}. Let's connect! 🚀",
+        "creative": "✨ {{profession}} by day, {{hobbies}} enthusiast by night. Creating magic every day. ✨",
+        "funny": "Professional {{profession}}. I run on coffee and {{hobbies}}. Probably thinking about food right now. 🍕"
+      }
+    },
+    "hashtag-generator": {
+      "title": "Hashtag Generator",
+      "desc": "Generate relevant hashtags for your posts.",
+      "keyword": "Enter a keyword or topic",
+      "keywordPlaceholder": "e.g. travel, fitness, coding"
+    },
+    "character-counter": {
+      "title": "Character Counter",
+      "desc": "Count characters, words, and lines.",
+      "placeholder": "Type or paste your text here...",
+      "labels": {
+        "characters": "Characters",
+        "words": "Words",
+        "lines": "Lines",
+        "paragraphs": "Paragraphs",
+        "noSpaces": "No spaces"
+      }
+    },
+    "qr-generator": {
+      "title": "QR Code Generator",
+      "desc": "Create custom QR codes instantly.",
+      "urlOrText": "URL or Text",
+      "urlPlaceholder": "Enter URL or text here...",
+      "size": "Size (px)",
+      "foreground": "Foreground",
+      "background": "Background"
+    },
+    "password-generator": {
+      "title": "Password Generator",
+      "desc": "Generate strong and secure passwords.",
+      "strength": "Password Strength:",
+      "length": "Password Length",
+      "regenerate": "Regenerate",
+      "levels": {
+        "strong": "Strong",
+        "medium": "Medium",
+        "weak": "Weak"
+      },
+      "options": {
+        "uppercase": "Uppercase (A-Z)",
+        "lowercase": "Lowercase (a-z)",
+        "numbers": "Numbers (0-9)",
+        "symbols": "Symbols (!@#$)"
+      }
+    },
+    "age-calculator": {
+      "title": "Age Calculator",
+      "desc": "Calculate your exact age in years, months, and days.",
+      "dateOfBirth": "Date of Birth",
+      "labels": {
+        "years": "Years",
+        "months": "Months",
+        "days": "Days"
+      }
+    },
+    "unit-converter": {
+      "title": "Unit Converter",
+      "desc": "Convert between different units of measurement.",
+      "categories": {
+        "length": "Length",
+        "weight": "Weight",
+        "temperature": "Temperature"
+      },
+      "units": {
+        "meters": "meters",
+        "kilometers": "kilometers",
+        "centimeters": "centimeters",
+        "millimeters": "millimeters",
+        "miles": "miles",
+        "yards": "yards",
+        "feet": "feet",
+        "inches": "inches",
+        "kilograms": "kilograms",
+        "grams": "grams",
+        "milligrams": "milligrams",
+        "pounds": "pounds",
+        "ounces": "ounces",
+        "celsius": "celsius",
+        "fahrenheit": "fahrenheit",
+        "kelvin": "kelvin"
+      }
+    },
+    "social-resizer": {
+      "title": "Social Media Resizer",
+      "desc": "Resize images for Instagram, TikTok and other platforms with proper dimensions."
+    },
+    "meme-generator": {
+      "title": "Meme Generator",
+      "desc": "Create memes quickly with top/bottom text and export-ready output."
+    },
+    "banner-thumbnail-creator": {
+      "title": "Banner & Thumbnail Creator",
+      "desc": "Create banners and thumbnails for social platforms and ads."
+    },
+    "logo-remover": {
+      "title": "Logo Remover",
+      "desc": "Automatically remove logos with AI and download the final image in seconds."
+    },
+    "image-upscaler-4k": {
+      "title": "Image Enhancer up to 4K",
+      "desc": "Improve image quality and upscale to high definition up to 4K in a few clicks."
+    },
+    "bmi-calculator": {
+      "title": "BMI Calculator",
+      "desc": "Calculate Body Mass Index from height and weight."
+    },
+    "calorie-calculator": {
+      "title": "Calorie Calculator",
+      "desc": "Estimate daily calorie needs for maintenance, loss or gain."
+    },
+    "mortgage-calculator": {
+      "title": "Mortgage Calculator",
+      "desc": "Simulate mortgage payments with amount, rate and term."
+    },
+    "net-gross-salary": {
+      "title": "Net / Gross Salary Calculator",
+      "desc": "Convert gross salary to net and estimate deductions."
+    },
+    "discount-margin-markup": {
+      "title": "Discount, Margin and Markup Calculator",
+      "desc": "Calculate discount, margin and markup for pricing decisions."
+    },
+    "travel-time-calculator": {
+      "title": "Travel Time Calculator",
+      "desc": "Estimate travel time from distance and average speed."
+    },
+    "apr-monthly-converter": {
+      "title": "APR ↔ Monthly Interest Converter",
+      "desc": "Convert APR rates to monthly and monthly rates to APR."
+    },
+    "stock-simulator": {
+      "title": "Stock Market Simulator",
+      "desc": "Simulate stock buy/sell scenarios and projected results."
+    },
+    "investment-simulator": {
+      "title": "Investment Simulator",
+      "desc": "Project periodic investments and growth over time."
+    },
+    "word-counter": {
+      "title": "Word Counter",
+      "desc": "Count words and text structure for posts and documents."
+    },
+    "text-case-converter": {
+      "title": "Text Case Converter",
+      "desc": "Convert text to lowercase, uppercase or capitalized format."
+    },
+    "password-strength-checker": {
+      "title": "Password Strength Checker",
+      "desc": "Check password strength and get security recommendations."
+    },
+    "encrypt-decrypt": {
+      "title": "Online Encrypt / Decrypt",
+      "desc": "Encrypt and decrypt text quickly for safer sharing."
+    },
+    "base-converter": {
+      "title": "Number Base Converter",
+      "desc": "Convert values between binary, decimal and hexadecimal."
+    },
+    "scientific-calculator": {
+      "title": "Online Scientific Calculator",
+      "desc": "Perform advanced scientific operations online."
+    },
+    "currency-converter": {
+      "title": "Currency Converter",
+      "desc": "Convert currencies such as USD, EUR and BRL."
+    },
+    "cm-inch-converter": {
+      "title": "cm ↔ inches Converter",
+      "desc": "Convert centimeters and inches instantly."
+    },
+    "kg-lbs-converter": {
+      "title": "kg ↔ lbs Converter",
+      "desc": "Convert kilograms and pounds quickly."
+    },
+    "sqm-sqft-converter": {
+      "title": "m² ↔ ft² Converter",
+      "desc": "Convert area between square meters and square feet."
+    },
+    "backlink-counter": {
+      "title": "Backlink Counter",
+      "desc": "Analyze backlink totals for basic SEO monitoring."
+    },
+    "rank-checker": {
+      "title": "Website Rank Checker",
+      "desc": "Check average keyword rank and monitor organic performance."
+    },
+    "meta-tags-checker": {
+      "title": "Meta Tags Checker",
+      "desc": "Review title, description and meta tags for on-page SEO."
+    },
+    "html-css-validator": {
+      "title": "HTML / CSS Validator",
+      "desc": "Validate HTML and CSS structure to detect issues."
+    }
   },
   "common": {
     "language": "Language",
@@ -54,20 +369,30 @@
     "processing": "Processing...",
     "reset": "Reset",
     "supported-images": "JPG, PNG, WebP up to 10MB",
-    "supported-pdfs": "PDF up to 50MB"
+    "supported-pdfs": "PDF up to 50MB",
+    "objectiveTitle": "Tool objective",
+    "howToUseTitle": "How to use (step by step)",
+    "guide": {
+      "step1": "Fill in the required fields or upload the requested file.",
+      "step2": "Adjust the options according to your needs.",
+      "step3": "Click \"{{action}}\" to run the tool.",
+      "step4": "Review the result and, when available, download or copy the content."
+    },
+    "adSpace": "Advertisement Space",
+    "slot": "Slot"
   },
   "legal": {
     "privacy": {
       "title": "Privacy Policy",
-      "text": "At AllTools, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by AllTools and how we use it.\n\nIf you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.\n\nThis Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in AllTools. This policy is not applicable to any information collected offline or via channels other than this website."
+      "text": "At Toolss, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Toolss and how we use it.\n\nIf you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.\n\nThis Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in Toolss. This policy is not applicable to any information collected offline or via channels other than this website."
     },
     "terms": {
       "title": "Terms of Use",
-      "text": "Welcome to AllTools!\n\nThese terms and conditions outline the rules and regulations for the use of AllTools's Website.\n\nBy accessing this website we assume you accept these terms and conditions. Do not continue to use AllTools if you do not agree to take all of the terms and conditions stated on this page.\n\nThe following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: \"Client\", \"You\" and \"Your\" refers to you, the person log on this website and compliant to the Company's terms and conditions."
+      "text": "Welcome to Toolss!\n\nThese terms and conditions outline the rules and regulations for the use of Toolss's Website.\n\nBy accessing this website we assume you accept these terms and conditions. Do not continue to use Toolss if you do not agree to take all of the terms and conditions stated on this page.\n\nThe following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: \"Client\", \"You\" and \"Your\" refers to you, the person log on this website and compliant to the Company's terms and conditions."
     },
     "cookies": {
       "title": "Cookie Policy",
-      "text": "This is the Cookie Policy for AllTools.\n\nWhat Are Cookies\nAs is common practice with almost all professional websites this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the sites functionality.\n\nHow We Use Cookies\nWe use cookies for a variety of reasons detailed below. Unfortunately in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site."
+      "text": "This is the Cookie Policy for Toolss.\n\nWhat Are Cookies\nAs is common practice with almost all professional websites this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the sites functionality.\n\nHow We Use Cookies\nWe use cookies for a variety of reasons detailed below. Unfortunately in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site."
     },
     "contact": {
       "title": "Contact Us",

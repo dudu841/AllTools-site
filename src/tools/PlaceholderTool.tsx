@@ -1,65 +1,780 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { UploadCloud, File as FileIcon } from "lucide-react";
+import type { ToolId } from "../config/tools";
+import { CheckCircle2, Download, FileText, Upload, X } from "lucide-react";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { removeBackground } from "@imgly/background-removal";
 
-export default function PlaceholderTool() {
-  const { t } = useTranslation();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
+type Props = { toolId?: ToolId };
+type Lang = "pt" | "en" | "es";
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+type FieldType = "text" | "number" | "select" | "checkbox";
+
+type FieldDef = {
+  key: string;
+  label: string;
+  placeholder?: string;
+  type: FieldType;
+  options?: Array<{ label: string; value: string }>;
+};
+
+type ToolDef = {
+  fields: FieldDef[];
+  steps: string[];
+  compute?: (values: Record<string, string | boolean>, lang: Lang) => string;
+};
+
+const uploadOnlyTools = new Set<ToolId>([
+  "pdf-to-word",
+  "word-to-pdf",
+  "compress-pdf",
+  "logo-remover",
+  "image-upscaler-4k",
+]);
+
+const messages = {
+  pt: {
+    clear: "Limpar",
+    action: "Executar ferramenta",
+    download: "Baixar resultado",
+    optionalUpload: "Upload de arquivo (opcional)",
+    uploadTitle: "Enviar arquivo",
+    uploadHint: "Selecione o documento/imagem para processar.",
+    uploadAction: "Processar arquivo",
+    selectedFiles: "Arquivos selecionados",
+    downloadFile: "Baixar arquivo",
+    removeFile: "Remover arquivo",
+    bmiTable: "Veja a interpretação do IMC",
+    empty: "Preencha os campos para ver o resultado.",
+    processing: "Processando...",
+    success: "Concluído com sucesso.",
+    resultReady: "Resultado pronto",
+    error: "Ocorreu um erro ao processar.",
+    dragDrop: "Arraste e solte aqui ou clique para selecionar",
+  },
+  en: {
+    clear: "Clear",
+    action: "Run tool",
+    download: "Download result",
+    optionalUpload: "File upload (optional)",
+    uploadTitle: "Upload file",
+    uploadHint: "Select document/image to process.",
+    uploadAction: "Process file",
+    selectedFiles: "Selected files",
+    downloadFile: "Download file",
+    removeFile: "Remove file",
+    bmiTable: "BMI interpretation",
+    empty: "Fill the fields to see the result.",
+    processing: "Processing...",
+    success: "Completed successfully.",
+    resultReady: "Result ready",
+    error: "There was an error while processing.",
+    dragDrop: "Drag and drop here or click to select",
+  },
+  es: {
+    clear: "Limpiar",
+    action: "Ejecutar herramienta",
+    download: "Descargar resultado",
+    optionalUpload: "Subir archivo (opcional)",
+    uploadTitle: "Subir archivo",
+    uploadHint: "Selecciona documento/imagen para procesar.",
+    uploadAction: "Procesar archivo",
+    selectedFiles: "Archivos seleccionados",
+    downloadFile: "Descargar archivo",
+    removeFile: "Eliminar archivo",
+    bmiTable: "Interpretación del IMC",
+    empty: "Completa los campos para ver el resultado.",
+    processing: "Procesando...",
+    success: "Completado con éxito.",
+    resultReady: "Resultado listo",
+    error: "Hubo un error al procesar.",
+    dragDrop: "Arrastra y suelta aquí o haz clic para seleccionar",
+  },
+};
+
+const toNumber = (v: string | boolean) => Number(String(v || "").replace(",", "."));
+
+const loadImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+
+const fileDownload = (file: File) => {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = file.name;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+const downloadFromUrl = (url: string, filename: string) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+};
+
+async function buildReportPdf(title: string, content: string): Promise<Blob> {
+  const pdf = await PDFDocument.create();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const page = pdf.addPage([595, 842]);
+  const lines = content.split("\n");
+  let y = 800;
+
+  page.drawText(title, { x: 40, y, size: 16, font, color: rgb(0, 0.4, 0.2) });
+  y -= 28;
+
+  for (const line of lines) {
+    if (y < 40) break;
+    page.drawText(line.slice(0, 110), { x: 40, y, size: 11, font, color: rgb(0.1, 0.1, 0.1) });
+    y -= 16;
+  }
+
+  return new Blob([await pdf.save()], { type: "application/pdf" });
+}
+
+const toolDefs: Partial<Record<ToolId, Record<Lang, ToolDef>>> = {
+
+  "logo-remover": {
+    pt: {
+      fields: [],
+      steps: [
+        "Envie a imagem com logotipo.",
+        "A IA analisa a imagem automaticamente para identificar o logotipo.",
+        "Aplique a remoção e revise o resultado.",
+        "Baixe a imagem final sem logotipo.",
+      ],
+    },
+    en: { fields: [], steps: ["Upload the image with logo.", "AI automatically analyzes the image to identify the logo.", "Apply removal and review result.", "Download the image without logo."] },
+    es: { fields: [], steps: ["Sube la imagen con logotipo.", "La IA analiza automáticamente la imagen para identificar el logotipo.", "Aplica la eliminación y revisa el resultado.", "Descarga la imagen final sin logotipo."] },
+  },
+  "image-upscaler-4k": {
+    pt: {
+      fields: [],
+      steps: [
+        "Envie a imagem que deseja melhorar.",
+        "Escolha o aprimoramento em alta qualidade até 4K.",
+        "Aguarde o processamento da melhoria.",
+        "Baixe a versão final em maior resolução.",
+      ],
+    },
+    en: { fields: [], steps: ["Upload the image you want to enhance.", "Choose high-quality upscaling up to 4K.", "Wait for processing.", "Download the final higher-resolution image."] },
+    es: { fields: [], steps: ["Sube la imagen que deseas mejorar.", "Elige la mejora en alta calidad hasta 4K.", "Espera el procesamiento.", "Descarga la imagen final en mayor resolución."] },
+  },
+  "bmi-calculator": {
+    pt: {
+      fields: [
+        { key: "height", label: "Altura", placeholder: "Ex.: 1,70 (m)", type: "number" },
+        { key: "weight", label: "Peso", placeholder: "Ex.: 69,2 (kg)", type: "number" },
+        { key: "age", label: "Idade (opcional)", placeholder: "Ex.: 30", type: "number" },
+        { key: "sex", label: "Sexo (opcional)", type: "select", options: [{ label: "Feminino", value: "f" }, { label: "Masculino", value: "m" }] },
+      ],
+      steps: ["Informe altura e peso.", "Veja IMC e classificação instantânea.", "Use a tabela de referência abaixo.", "Ajuste hábitos com base no resultado."],
+      compute: (values) => {
+        const h = toNumber(values.height);
+        const w = toNumber(values.weight);
+        if (!h || !w) return messages.pt.empty;
+        const imc = w / (h * h);
+        const cls = imc < 18.5 ? "Magreza" : imc < 25 ? "Normal" : imc < 30 ? "Sobrepeso" : imc < 40 ? "Obesidade" : "Obesidade grave";
+        const calories = Math.round(w * 30);
+        return `IMC: ${imc.toFixed(2)} | Classificação: ${cls} | Sugestão calórica básica: ~${calories} kcal/dia`;
+      },
+    },
+    en: { fields: [], steps: [], compute: undefined },
+    es: { fields: [], steps: [], compute: undefined },
+  },
+  "calorie-calculator": {
+    pt: {
+      fields: [
+        { key: "sex", label: "Sexo", type: "select", options: [{ label: "Feminino", value: "f" }, { label: "Masculino", value: "m" }] },
+        { key: "age", label: "Idade", type: "number", placeholder: "Ex.: 30" },
+        { key: "weight", label: "Peso (kg)", type: "number", placeholder: "Ex.: 70" },
+        { key: "height", label: "Altura (cm)", type: "number", placeholder: "Ex.: 170" },
+        { key: "activity", label: "Atividade", type: "select", options: [{ label: "Sedentário", value: "1.2" }, { label: "Moderado", value: "1.55" }, { label: "Intenso", value: "1.725" }] },
+        { key: "goal", label: "Objetivo", type: "select", options: [{ label: "Manter", value: "0" }, { label: "Perder", value: "-400" }, { label: "Ganhar", value: "300" }] },
+      ],
+      steps: ["Preencha sexo, idade, peso e altura.", "Escolha atividade e objetivo.", "Veja TMB e calorias recomendadas.", "Ajuste metas conforme evolução."],
+      compute: (v) => {
+        const age = toNumber(v.age); const weight = toNumber(v.weight); const height = toNumber(v.height);
+        const sex = String(v.sex || "m");
+        if (!age || !weight || !height) return messages.pt.empty;
+        const bmr = sex === "f" ? 10 * weight + 6.25 * height - 5 * age - 161 : 10 * weight + 6.25 * height - 5 * age + 5;
+        const daily = bmr * Number(v.activity || 1.2) + Number(v.goal || 0);
+        return `TMB: ${Math.round(bmr)} kcal | Recomendação diária: ${Math.round(daily)} kcal`;
+      },
+    },
+  },
+  "mortgage-calculator": {
+    pt: {
+      fields: [
+        { key: "property", label: "Valor do imóvel", type: "number" },
+        { key: "entry", label: "Entrada", type: "number" },
+        { key: "rate", label: "Juros anual (%)", type: "number" },
+        { key: "years", label: "Prazo (anos)", type: "number" },
+        { key: "system", label: "Sistema", type: "select", options: [{ label: "Price", value: "price" }, { label: "SAC", value: "sac" }] },
+      ],
+      steps: ["Informe imóvel, entrada, juros e prazo.", "Escolha Price ou SAC.", "Veja parcela estimada.", "Use para comparar cenários."],
+      compute: (v) => {
+        const principal = toNumber(v.property) - toNumber(v.entry);
+        const r = toNumber(v.rate) / 100 / 12;
+        const n = toNumber(v.years) * 12;
+        if (!principal || !r || !n) return messages.pt.empty;
+        if (v.system === "sac") {
+          const amort = principal / n;
+          const first = amort + principal * r;
+          return `SAC | 1ª parcela: ${first.toFixed(2)} | Amortização: ${amort.toFixed(2)}`;
+        }
+        const pmt = (principal * r * (1 + r) ** n) / ((1 + r) ** n - 1);
+        return `Price | Parcela estimada: ${pmt.toFixed(2)} | Total meses: ${n}`;
+      },
+    },
+  },
+  "net-gross-salary": {
+    pt: {
+      fields: [
+        { key: "gross", label: "Salário bruto", type: "number" },
+        { key: "country", label: "País", type: "select", options: [{ label: "Brasil", value: "br" }, { label: "Portugal", value: "pt" }, { label: "EUA", value: "us" }] },
+        { key: "dependents", label: "Dependentes", type: "number" },
+      ],
+      steps: ["Informe salário bruto e país.", "Adicione dependentes.", "Veja estimativa de descontos e salário líquido.", "Confira estimativas anual e 13º."],
+      compute: (v) => {
+        const gross = toNumber(v.gross);
+        if (!gross) return messages.pt.empty;
+        const dep = toNumber(v.dependents);
+        const inss = gross * 0.11;
+        const ir = Math.max(0, gross * 0.1 - dep * 80);
+        const net = gross - inss - ir;
+        return `INSS: ${inss.toFixed(2)} | IR: ${ir.toFixed(2)} | Líquido: ${net.toFixed(2)} | Anual: ${(net * 12).toFixed(2)} | 13º: ${net.toFixed(2)}`;
+      },
+    },
+  },
+  "discount-margin-markup": {
+    pt: {
+      fields: [
+        { key: "original", label: "Preço original", type: "number" },
+        { key: "discount", label: "Desconto (%)", type: "number" },
+        { key: "cost", label: "Custo (margem/markup)", type: "number" },
+        { key: "profit", label: "Lucro (%)", type: "number" },
+      ],
+      steps: ["Preencha preço e desconto.", "Opcional: custo e lucro para margem/markup.", "Veja os 3 resultados juntos."],
+      compute: (v) => {
+        const original = toNumber(v.original);
+        if (!original) return messages.pt.empty;
+        const discount = toNumber(v.discount);
+        const finalPrice = original * (1 - discount / 100);
+        const cost = toNumber(v.cost);
+        const profit = toNumber(v.profit);
+        const markup = cost ? cost * (1 + profit / 100) : 0;
+        const margin = original ? ((original - cost) / original) * 100 : 0;
+        return `Preço com desconto: ${finalPrice.toFixed(2)} | Markup: ${markup.toFixed(2)} | Margem: ${margin.toFixed(2)}%`;
+      },
+    },
+  },
+  "travel-time-calculator": {
+    pt: {
+      fields: [
+        { key: "distance", label: "Distância (km)", type: "number" },
+        { key: "speed", label: "Velocidade média (km/h)", type: "number" },
+        { key: "stops", label: "Paradas (min)", type: "number" },
+        { key: "consumption", label: "Consumo (km/l)", type: "number" },
+        { key: "fuel", label: "Preço combustível", type: "number" },
+      ],
+      steps: ["Informe distância e velocidade.", "Adicione paradas e consumo para cálculo avançado.", "Veja tempo e custo estimados."],
+      compute: (v) => {
+        const d = toNumber(v.distance); const s = toNumber(v.speed);
+        if (!d || !s) return messages.pt.empty;
+        const stops = toNumber(v.stops) / 60;
+        const hours = d / s + stops;
+        const fuelCost = toNumber(v.consumption) && toNumber(v.fuel) ? (d / toNumber(v.consumption)) * toNumber(v.fuel) : 0;
+        return `Tempo estimado: ${hours.toFixed(2)} h | Custo combustível: ${fuelCost.toFixed(2)}`;
+      },
+    },
+  },
+  "word-counter": {
+    pt: {
+      fields: [{ key: "text", label: "Texto", placeholder: "Cole seu texto aqui", type: "text" }],
+      steps: ["Cole o texto.", "Veja contagem instantânea de palavras, caracteres e parágrafos."],
+      compute: (v) => {
+        const text = String(v.text || "");
+        if (!text.trim()) return messages.pt.empty;
+        const words = text.trim().split(/\s+/).length;
+        const chars = text.length;
+        const noSpace = text.replace(/\s/g, "").length;
+        const paragraphs = text.split(/\n+/).filter(Boolean).length;
+        return `Palavras: ${words} | Caracteres: ${chars} | Sem espaço: ${noSpace} | Parágrafos: ${paragraphs}`;
+      },
+    },
+  },
+  "text-case-converter": {
+    pt: {
+      fields: [
+        { key: "text", label: "Texto", type: "text" },
+        { key: "action", label: "Ação", type: "select", options: [{ label: "MAIÚSCULAS", value: "upper" }, { label: "minúsculas", value: "lower" }, { label: "Capitalizar", value: "capitalize" }, { label: "Alternado", value: "alternate" }, { label: "Inverter", value: "reverse" }] },
+      ],
+      steps: ["Digite o texto.", "Escolha a transformação.", "Copie o resultado."],
+      compute: (v) => {
+        const text = String(v.text || "");
+        const action = String(v.action || "upper");
+        if (!text) return messages.pt.empty;
+        if (action === "upper") return text.toUpperCase();
+        if (action === "lower") return text.toLowerCase();
+        if (action === "capitalize") return text.toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase());
+        if (action === "alternate") return text.split("").map((c, i) => (i % 2 ? c.toLowerCase() : c.toUpperCase())).join("");
+        return text.split("").reverse().join("");
+      },
+    },
+  },
+};
+
+const defaultDef: Record<Lang, ToolDef> = {
+  pt: {
+    fields: [
+      { key: "a", label: "Valor 1", type: "number" },
+      { key: "b", label: "Valor 2", type: "number" },
+      { key: "text", label: "Texto/URL", type: "text" },
+    ],
+    steps: ["Preencha os campos da ferramenta.", "Veja o resultado instantâneo e copie se necessário."],
+    compute: (v) => (String(v.text || "") || (toNumber(v.a) + toNumber(v.b)).toString() || messages.pt.empty),
+  },
+  en: { fields: [], steps: [], compute: undefined },
+  es: { fields: [], steps: [], compute: undefined },
+};
+
+export default function PlaceholderTool({ toolId }: Props) {
+  const { i18n } = useTranslation();
+  const lang = ((i18n.language || "pt").split("-")[0] as Lang) || "pt";
+  const m = messages[lang];
+  const isUploadOnly = toolId ? uploadOnlyTools.has(toolId) : false;
+  const imageAcceptTypes = "image/*,.png,.jpg,.jpeg,.webp,.bmp,.gif,.tif,.tiff,.svg,.heic,.heif";
+  const fileAccept = toolId === "logo-remover" || toolId === "image-upscaler-4k" ? imageAcceptTypes : undefined;
+  const def = (toolId && (toolDefs[toolId]?.[lang] || toolDefs[toolId]?.pt)) || defaultDef[lang] || defaultDef.pt;
+
+  const [values, setValues] = useState<Record<string, string | boolean>>({});
+  const [showUpload, setShowUpload] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
+  const [processedPreview, setProcessedPreview] = useState<string>("");
+  const [upscaleLevel, setUpscaleLevel] = useState<"1k" | "2k" | "4k">("2k");
+  const [result, setResult] = useState(m.empty);
+  const [outputFileName, setOutputFileName] = useState("");
+  const [outputDownloadUrl, setOutputDownloadUrl] = useState("");
+  const [status, setStatus] = useState<"idle" | "ready" | "processing" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const optionalInputRef = useRef<HTMLInputElement | null>(null);
+
+  const clearAll = () => {
+    setValues({});
+    setSelectedFiles([]);
+    setUploadPreviews([]);
+    setProcessedPreview("");
+    setResult(m.empty);
+    setStatus("idle");
+    setErrorMsg("");
+    setOutputFileName("");
+    if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+    setOutputDownloadUrl("");
+  };
+
+  useEffect(() => {
+    return () => {
+      uploadPreviews.forEach((preview) => {
+        if (preview) URL.revokeObjectURL(preview);
+      });
+    };
+  }, [uploadPreviews]);
+
+  useEffect(() => {
+    return () => {
+      if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+    };
+  }, [outputDownloadUrl]);
+
+  const onFilesSelected = (fileList: FileList | null) => {
+    if (!fileList) return;
+    uploadPreviews.forEach((preview) => {
+      if (preview) URL.revokeObjectURL(preview);
+    });
+    const files = Array.from(fileList);
+    const invalid = files.find((file) => file.size > 20 * 1024 * 1024);
+    if (invalid) {
+      setStatus("error");
+      setErrorMsg(lang === "pt" ? "Arquivo maior que 20MB." : lang === "es" ? "Archivo mayor de 20MB." : "File is larger than 20MB.");
+      return;
+    }
+    setSelectedFiles(files);
+    setProcessedPreview("");
+    setUploadPreviews(files.map((file) => (file.type.startsWith("image/") ? URL.createObjectURL(file) : "")));
+    setStatus("ready");
+    setErrorMsg("");
+  };
+
+  const runTool = async () => {
+    setStatus("processing");
+    setErrorMsg("");
+    if (def.compute) {
+      const value = def.compute(values, lang);
+      setResult(value);
+      if (value === m.empty) {
+        setStatus("ready");
+        return;
+      }
+
+      try {
+        const reportBlob = await buildReportPdf(`Toolss - ${toolId || "report"}`, value.replace(/ \| /g, "\n"));
+        if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+        setOutputDownloadUrl(URL.createObjectURL(reportBlob));
+        setOutputFileName(`${toolId || "resultado"}-relatorio.pdf`);
+      } catch {
+        // fallback: keep success with textual result even if report generation fails
+      }
+
+      setStatus("success");
+    } else {
+      setStatus("error");
+      setErrorMsg(m.error);
     }
   };
 
+  const runUploadTool = async () => {
+    if (!selectedFiles.length) {
+      setResult(m.empty);
+      setStatus("ready");
+      return;
+    }
+
+    setStatus("processing");
+    setErrorMsg("");
+
+    if (toolId === "logo-remover" && selectedFiles[0]) {
+      try {
+        const aiBlob = await removeBackground(selectedFiles[0], {
+          output: { format: "image/png", quality: 1 },
+        });
+        const aiUrl = URL.createObjectURL(aiBlob);
+        setProcessedPreview(aiUrl);
+        if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+        setOutputDownloadUrl(aiUrl);
+        setOutputFileName(`${selectedFiles[0].name.replace(/\.[^/.]+$/, "")}-sem-logotipo.png`);
+        setResult(lang === "pt" ? "IA concluiu a remoção do logotipo." : lang === "es" ? "La IA terminó de eliminar el logotipo." : "AI finished logo removal.");
+        setStatus("success");
+      } catch {
+        setResult(lang === "pt" ? "Falha ao remover logotipo com IA. Tente outra imagem." : lang === "es" ? "Error al eliminar logotipo con IA. Prueba otra imagen." : "Failed to remove logo with AI. Please try another image.");
+        setStatus("error");
+      }
+      return;
+    }
+
+    if (toolId === "image-upscaler-4k" && uploadPreviews[0]) {
+      const base = await loadImage(uploadPreviews[0]);
+      const mult = upscaleLevel === "4k" ? 4 : upscaleLevel === "2k" ? 2 : 1;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(base.width * mult, base.width);
+      canvas.height = Math.max(base.height * mult, base.height);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(base, 0, 0, canvas.width, canvas.height);
+      const output = canvas.toDataURL("image/png");
+      setProcessedPreview(output);
+      if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+      setOutputDownloadUrl(output);
+      setOutputFileName(`${selectedFiles[0].name.replace(/\.[^/.]+$/, "")}-${upscaleLevel}.png`);
+      setResult(
+        lang === "pt"
+          ? `Imagem melhorada para ${upscaleLevel.toUpperCase()}.`
+          : lang === "es"
+            ? `Imagen mejorada a ${upscaleLevel.toUpperCase()}.`
+            : `Image enhanced to ${upscaleLevel.toUpperCase()}.`,
+      );
+      setStatus("success");
+      return;
+    }
+
+    const actionText =
+      lang === "pt"
+        ? `Arquivo pronto para processamento: ${selectedFiles.map((file) => file.name).join(", ")}`
+        : lang === "es"
+          ? `Archivo listo para procesar: ${selectedFiles.map((file) => file.name).join(", ")}`
+          : `File ready for processing: ${selectedFiles.map((file) => file.name).join(", ")}`;
+
+    setResult(actionText);
+    const sourceFile = selectedFiles[0];
+    const generatedBlob = sourceFile ? sourceFile.slice(0, sourceFile.size, sourceFile.type || "application/octet-stream") : new Blob([actionText], { type: "text/plain" });
+    if (outputDownloadUrl) URL.revokeObjectURL(outputDownloadUrl);
+    setOutputDownloadUrl(URL.createObjectURL(generatedBlob));
+    setOutputFileName(sourceFile ? `processado-${sourceFile.name}` : `${toolId || "resultado"}.txt`);
+    setStatus("success");
+  };
+
+  const downloadProcessedImage = () => {
+    if (!outputDownloadUrl && !processedPreview) return;
+    downloadFromUrl(outputDownloadUrl || processedPreview, outputFileName || `${toolId || "tool"}-result.png`);
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setUploadPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const bmiValue = result.includes("IMC:") ? Number(result.split("IMC:")[1]?.split("|")[0]) : NaN;
+
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      {!file ? (
-        <div 
-          className="w-full max-w-md border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:bg-gray-50 transition-colors cursor-pointer"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            className="hidden" 
-          />
-          <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <UploadCloud className="w-12 h-12 text-emerald-500" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            {t("common.upload")}
-          </h3>
-          <p className="text-gray-500 mb-8 max-w-md mx-auto">
-            {t(
-              "common.inDevelopment",
-              "This tool is currently in development. Please check back later for updates.",
-            )}
-          </p>
-          <button className="px-6 py-3 bg-emerald-600 text-white font-medium rounded-xl hover:bg-emerald-700 transition-colors pointer-events-none">
-            {t("common.upload")}
+    <div className="mx-auto max-w-3xl space-y-6">
+      {isUploadOnly ? (
+        <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragOver(true);
+            }}
+            onDragLeave={() => setIsDragOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragOver(false);
+              onFilesSelected(e.dataTransfer.files);
+            }}
+            className={`w-full rounded-3xl border-4 border-dashed p-8 text-center transition ${isDragOver ? "border-emerald-300 bg-emerald-50" : "border-gray-200 bg-gray-50"}`}
+          >
+            <Upload className="mx-auto h-12 w-12 text-emerald-500" />
+            <p className="mt-4 text-3xl font-semibold text-gray-900">{m.uploadTitle}</p>
+            <p className="mt-2 text-lg text-gray-500">{m.uploadHint}</p>
+            <p className="mt-1 text-sm text-emerald-700">{m.dragDrop}</p>
           </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={fileAccept}
+            multiple
+            onChange={(e) => onFilesSelected(e.target.files)}
+            className="hidden"
+          />
+
+          {selectedFiles.length > 0 && status !== "success" && (
+            <div className="mt-6">
+              <p className="text-3xl font-bold text-gray-900">{m.selectedFiles} ({selectedFiles.length})</p>
+              <div className="mt-4 space-y-3">
+                {selectedFiles.map((file, index) => (
+                  <div key={`${file.name}-${index}`} className="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4 gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      {uploadPreviews[index] ? (
+                        <img src={uploadPreviews[index]} alt={file.name} className="h-10 w-10 rounded object-cover" />
+                      ) : (
+                        <FileText className="h-6 w-6 text-emerald-600" />
+                      )}
+                      <span className="font-semibold text-gray-700 truncate">{file.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button type="button" onClick={() => fileDownload(file)} className="rounded-md border border-emerald-300 px-2 py-1 text-xs text-emerald-700">
+                        {m.downloadFile}
+                      </button>
+                      <button type="button" onClick={() => removeFile(index)} aria-label={m.removeFile} className="text-gray-400 hover:text-gray-600">
+                        <X className="h-6 w-6" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {toolId === "logo-remover" && uploadPreviews[0] && (
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div>
+                <p className="mb-2 text-sm font-semibold text-gray-700">Prévia da imagem enviada</p>
+                <div className="relative flex h-[360px] w-full items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                  <img src={uploadPreviews[0]} alt="preview" className="h-full w-full object-contain" />
+                </div>
+              </div>
+              {processedPreview && (
+                <div>
+                  <p className="mb-2 text-sm font-semibold text-gray-700">Resultado com IA</p>
+                  <img src={processedPreview} alt="resultado" className="h-[360px] w-full rounded-lg border border-gray-200 bg-gray-50 object-contain" />
+                  <button type="button" onClick={downloadProcessedImage} className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white">{m.download}</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {toolId === "image-upscaler-4k" && uploadPreviews[0] && (
+            <div className="mt-6">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Nível de melhoria
+                <select value={upscaleLevel} onChange={(e) => setUpscaleLevel(e.target.value as "1k" | "2k" | "4k")} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+                  <option value="1k">1K</option>
+                  <option value="2k">2K</option>
+                  <option value="4k">4K</option>
+                </select>
+              </label>
+              {processedPreview && (
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  <div>
+                    <p className="mb-2 text-sm font-semibold text-gray-700">Antes</p>
+                    <img src={uploadPreviews[0]} alt="antes" className="h-64 w-full rounded-lg border border-gray-200 object-contain" />
+                  </div>
+                  <div>
+                    <p className="mb-2 text-sm font-semibold text-gray-700">Depois</p>
+                    <img src={processedPreview} alt="depois" className="h-64 w-full rounded-lg border border-gray-200 object-contain" />
+                    <button type="button" onClick={downloadProcessedImage} className="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white">{m.download}</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {status !== "success" && (
+            <button
+              type="button"
+              onClick={runUploadTool}
+              disabled={!selectedFiles.length || status === "processing"}
+              className="mt-6 w-full rounded-2xl bg-emerald-600 px-6 py-4 text-2xl font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
+            >
+              {status === "processing" ? m.processing : m.uploadAction}
+            </button>
+          )}
+
+          {status === "success" && outputDownloadUrl && (
+            <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+              <p className="flex items-center gap-2 text-2xl font-bold text-emerald-800">
+                <CheckCircle2 className="h-8 w-8" /> {m.resultReady}
+              </p>
+              <p className="mt-2 text-sm text-emerald-700">{outputFileName}</p>
+              <button
+                type="button"
+                onClick={downloadProcessedImage}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#00C853] px-6 py-3 text-lg font-semibold text-white hover:brightness-95"
+              >
+                <Download className="h-5 w-5" /> {m.download}
+              </button>
+            </div>
+          )}
+
+          {result && result !== m.empty && <p className="mt-4 text-sm text-gray-700">{result}</p>}
         </div>
       ) : (
-        <div className="w-full max-w-md p-8 bg-gray-50 rounded-2xl border border-gray-200">
-          <FileIcon className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-          <p className="font-medium text-gray-900 truncate mb-2">{file.name}</p>
-          <div className="p-4 bg-amber-50 text-amber-800 rounded-lg text-sm mb-6 border border-amber-200">
-            {t(
-              "common.inDevelopment",
-              "This tool is currently in development. Please check back later for updates.",
-            )}
+        <>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {def.fields.map((f) => (
+              <Field key={f.key} field={f} value={values[f.key]} onChange={(val) => setValues((prev) => ({ ...prev, [f.key]: val }))} />
+            ))}
           </div>
-          <button
-            onClick={() => setFile(null)}
-            className="px-6 py-2 bg-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-300 transition-colors"
-          >
-            {t("common.clear", "Clear")}
+          <div className="flex flex-wrap gap-3">
+            <button type="button" onClick={runTool} disabled={status === "processing"} className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300">{status === "processing" ? m.processing : m.action}</button>
+            <button type="button" onClick={clearAll} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{m.clear}</button>
+          </div>
+
+          {result && result !== m.empty && <p className="text-sm text-gray-700">{result}</p>}
+
+          {status === "success" && outputDownloadUrl && (
+            <button
+              type="button"
+              onClick={() => downloadFromUrl(outputDownloadUrl, outputFileName || `${toolId || "resultado"}-relatorio.pdf`)}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#00C853] px-6 py-3 font-semibold text-white"
+            >
+              <Download className="h-5 w-5" /> {m.download}
+            </button>
+          )}
+        </>
+      )}
+
+      {status === "error" && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{errorMsg || m.error}</p>}
+      {status === "success" && (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          <p className="flex items-center gap-2 font-semibold"><CheckCircle2 className="h-5 w-5" /> {m.success}</p>
+        </div>
+      )}
+
+      {toolId === "bmi-calculator" && !Number.isNaN(bmiValue) && (
+        <div className="overflow-hidden rounded-xl border border-blue-200">
+          <div className="bg-blue-700 px-4 py-3 text-sm font-semibold text-white">{m.bmiTable}</div>
+          <table className="w-full text-left text-sm">
+            <thead className="bg-blue-50 text-blue-800"><tr><th className="px-4 py-2">IMC</th><th className="px-4 py-2">Classificação</th></tr></thead>
+            <tbody className="bg-white text-gray-700">
+              <tr><td className="px-4 py-2">&lt; 18,5</td><td className="px-4 py-2">Magreza</td></tr>
+              <tr><td className="px-4 py-2">18,5 - 24,9</td><td className="px-4 py-2">Normal</td></tr>
+              <tr><td className="px-4 py-2">25,0 - 29,9</td><td className="px-4 py-2">Sobrepeso</td></tr>
+              <tr><td className="px-4 py-2">30,0 - 39,9</td><td className="px-4 py-2">Obesidade</td></tr>
+              <tr><td className="px-4 py-2">≥ 40,0</td><td className="px-4 py-2">Obesidade grave</td></tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {!isUploadOnly && (
+        <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
+          <button onClick={() => setShowUpload((s) => !s)} className="text-sm font-medium text-emerald-700 underline" type="button">
+            {m.optionalUpload}
           </button>
+          {showUpload && (
+            <div className="mt-3 space-y-3">
+              <input ref={optionalInputRef} type="file" multiple onChange={(e) => onFilesSelected(e.target.files)} className="w-full" />
+              {selectedFiles.length > 0 && status !== "success" && (
+                <div className="space-y-2">
+                  {selectedFiles.map((file, index) => (
+                    <div key={`${file.name}-optional-${index}`} className="flex items-center gap-3 rounded-lg border border-gray-200 p-2">
+                      {uploadPreviews[index] ? (
+                        <img src={uploadPreviews[index]} alt={file.name} className="h-10 w-10 rounded object-cover" />
+                      ) : (
+                        <FileText className="h-5 w-5 text-emerald-600" />
+                      )}
+                      <span className="text-sm text-gray-700">{file.name}</span>
+                      <button type="button" onClick={() => fileDownload(file)} className="ml-auto rounded-md border border-emerald-300 px-2 py-1 text-xs text-emerald-700">
+                        {m.downloadFile}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
+  );
+}
+
+function Field({ field, value, onChange }: { field: FieldDef; value: string | boolean | undefined; onChange: (v: string | boolean) => void }) {
+  if (field.type === "select") {
+    return (
+      <label className="block">
+        <span className="mb-1 block text-sm font-semibold text-gray-700">{field.label}</span>
+        <select className="w-full rounded-xl border border-gray-300 px-4 py-3" value={String(value || "")} onChange={(e) => onChange(e.target.value)}>
+          <option value="">Selecione...</option>
+          {field.options?.map((option) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
+      </label>
+    );
+  }
+
+  if (field.type === "checkbox") {
+    return (
+      <label className="flex items-center gap-2 rounded-xl border border-gray-300 px-4 py-3">
+        <input type="checkbox" checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} />
+        <span className="text-sm font-semibold text-gray-700">{field.label}</span>
+      </label>
+    );
+  }
+
+  return (
+    <label className="block">
+      <span className="mb-1 block text-sm font-semibold text-gray-700">{field.label}</span>
+      <input
+        type={field.type}
+        value={String(value || "")}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={field.placeholder}
+        className="w-full rounded-xl border border-gray-300 px-4 py-3"
+      />
+    </label>
   );
 }

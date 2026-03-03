@@ -72,7 +72,7 @@ export default function UnitConverter() {
         >
           {Object.keys(units).map((cat) => (
             <option key={cat} value={cat}>
-              {cat}
+              {t(`tools.unit-converter.categories.${cat}`)}
             </option>
           ))}
         </select>
@@ -93,7 +93,7 @@ export default function UnitConverter() {
           >
             {Object.keys(units[category]).map((u) => (
               <option key={u} value={u}>
-                {u}
+                {t(`tools.unit-converter.units.${u}`)}
               </option>
             ))}
           </select>
@@ -107,9 +107,7 @@ export default function UnitConverter() {
 
         <div className="space-y-4">
           <div className="w-full h-[58px] px-4 py-3 text-2xl font-bold text-center bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center text-emerald-600 overflow-hidden">
-            {result !== null
-              ? result.toLocaleString(undefined, { maximumFractionDigits: 4 })
-              : "-"}
+            {result !== null ? result.toLocaleString(undefined, { maximumFractionDigits: 4 }) : "-"}
           </div>
           <select
             value={toUnit}
@@ -118,7 +116,7 @@ export default function UnitConverter() {
           >
             {Object.keys(units[category]).map((u) => (
               <option key={u} value={u}>
-                {u}
+                {t(`tools.unit-converter.units.${u}`)}
               </option>
             ))}
           </select>

@@ -8,36 +8,351 @@
       "finance": "Finanças",
       "social": "Redes Sociais",
       "utilities": "Utilidades"
+    },
+    "seoTitle": "Toolss – Ferramentas Online Grátis para PDF, Imagem, Finanças e Mais",
+    "seoDesc": "Use as ferramentas da Toolss para converter PDF, editar imagens, criar QR Code, calcular juros e muito mais. 100% online, sem instalação e sem cadastro.",
+    "marketing": {
+      "eyebrow": "Plataforma completa e prática",
+      "aboutTitle": "O que é a Toolss e qual o objetivo do site?",
+      "aboutText": "A Toolss é uma plataforma de ferramentas online criada para resolver tarefas do dia a dia com rapidez, simplicidade e segurança. Nosso objetivo é economizar seu tempo com soluções diretas para PDF, imagem, finanças, redes sociais e utilidades.",
+      "benefitsTitle": "Por que usar a Toolss?",
+      "benefit1Title": "Tudo em um só lugar",
+      "benefit1Text": "Acesse várias ferramentas em um único site, sem precisar instalar programas no computador.",
+      "benefit2Title": "Uso simples e rápido",
+      "benefit2Text": "A interface foi pensada para ser clara: escolha a ferramenta, envie os dados e obtenha o resultado em poucos passos.",
+      "benefit3Title": "Funciona em qualquer dispositivo",
+      "benefit3Text": "Use no celular, tablet ou computador, com a mesma praticidade e organização visual.",
+      "howTitle": "Como usar as ferramentas da Toolss (passo a passo)",
+      "how1": "Escolha uma categoria e clique na ferramenta desejada.",
+      "how2": "Leia o objetivo da ferramenta e confira as instruções de uso.",
+      "how3": "Preencha os campos ou envie seu arquivo com segurança.",
+      "how4": "Clique em executar (converter, compactar, calcular ou gerar).",
+      "how5": "Revise o resultado e faça download/copiar quando disponível."
     }
   },
   "tools": {
-    "pdf-to-word": { "title": "PDF para Word", "desc": "Converta documentos PDF para o formato Word." },
-    "word-to-pdf": { "title": "Word para PDF", "desc": "Converta documentos Word para o formato PDF." },
-    "compress-pdf": { "title": "Compactar PDF", "desc": "Reduza o tamanho do seu arquivo PDF." },
-    "merge-pdf": { "title": "Unir PDF", "desc": "Combine vários PDFs em um só.", "instruction": "Selecione 2 ou mais PDFs para unir", "selected": "Arquivos Selecionados", "success": "PDFs unidos com sucesso!" },
-    "split-pdf": { "title": "Dividir PDF", "desc": "Extraia páginas do seu PDF.", "instruction": "Selecione um PDF para dividir", "success": "PDF dividido com sucesso!", "select-range": "Selecionar Intervalo de Páginas", "from-page": "Da Página", "to-page": "Até a Página", "pages": "páginas", "extracted": "Páginas {{start}} a {{end}}" },
-    "compress-image": { "title": "Compressor de Imagem", "desc": "Comprima JPG, PNG, SVG e GIFs.", "level": "Nível de Compressão", "original-size": "Tamanho Original", "compressed-size": "Tamanho Compactado", "saved": "Economia" },
-    "resize-image": { "title": "Redimensionar Imagem", "desc": "Altere as dimensões das suas imagens.", "predefined-sizes": "Formatos Rápidos", "width": "Largura (px)", "height": "Altura (px)", "maintain-ratio": "Manter proporção", "custom": "Personalizado" },
-    "convert-image": { "title": "Converter JPG/PNG", "desc": "Converta imagens entre formatos.", "format": "Converter para o formato" },
-    "remove-background": { "title": "Removedor de Fundo", "desc": "Remova o fundo de qualquer imagem.", "bg-color": "Cor de Fundo", "mode-ai": "Remoção Automática com IA", "mode-color": "Remover Cor Específica", "color-to-remove": "Cor para Remover", "tolerance": "Tolerância" },
-    "adjust-image": { "title": "Ajustar Imagem", "desc": "Ajuste brilho, contraste, saturação e desfoque.", "brightness": "Brilho", "contrast": "Contraste", "saturation": "Saturação", "blur": "Desfoque", "hue": "Matiz", "sepia": "Sépia", "invert": "Inverter" },
-    "compound-interest": { "title": "Calculadora de Juros Compostos", "desc": "Calcule o crescimento do seu investimento ao longo do tempo." },
-    "loan-simulator": { "title": "Simulador de Empréstimo", "desc": "Simule pagamentos de empréstimos e juros." },
-    "percentage-calculator": { "title": "Calculadora de Porcentagem", "desc": "Calcule porcentagens facilmente." },
-    "bio-generator": { "title": "Gerador de Bio", "desc": "Crie a bio perfeita para suas redes sociais." },
-    "hashtag-generator": { "title": "Gerador de Hashtags", "desc": "Gere hashtags relevantes para suas postagens." },
-    "character-counter": { "title": "Contador de Caracteres", "desc": "Conte caracteres, palavras e linhas." },
-    "qr-generator": { "title": "Gerador de QR Code", "desc": "Crie QR codes personalizados instantaneamente." },
-    "password-generator": { "title": "Gerador de Senha", "desc": "Gere senhas fortes e seguras." },
-    "age-calculator": { "title": "Calculadora de Idade", "desc": "Calcule sua idade exata em anos, meses e dias." },
-    "unit-converter": { "title": "Conversor de Medidas", "desc": "Converta entre diferentes unidades de medida." }
-  },
-  "footer": {
-    "privacy": "Política de Privacidade",
-    "terms": "Termos de Uso",
-    "cookies": "Política de Cookies",
-    "contact": "Contato",
-    "rights": "Todos os direitos reservados."
+    "pdf-to-word": {
+      "title": "PDF para Word",
+      "desc": "Converta arquivos PDF em documentos Word editáveis com manutenção de estrutura, facilitando revisões, ajustes de texto e reaproveitamento de conteúdo."
+    },
+    "word-to-pdf": {
+      "title": "Word para PDF",
+      "desc": "Transforme documentos Word em PDF com layout estável para compartilhar, imprimir ou arquivar sem perder formatação."
+    },
+    "compress-pdf": {
+      "title": "Compactar PDF",
+      "desc": "Reduza o tamanho de arquivos PDF para enviar por e-mail, WhatsApp ou plataformas online, mantendo boa qualidade de leitura."
+    },
+    "merge-pdf": {
+      "title": "Unir PDF",
+      "desc": "Una dois ou mais arquivos PDF em um único documento organizado, ideal para contratos, relatórios e materiais de estudo.",
+      "instruction": "Selecione 2 ou mais PDFs para unir",
+      "selected": "Arquivos Selecionados",
+      "success": "PDFs unidos com sucesso!"
+    },
+    "split-pdf": {
+      "title": "Dividir PDF",
+      "desc": "Separe páginas específicas de um PDF para criar novos arquivos menores e mais fáceis de compartilhar.",
+      "instruction": "Selecione um PDF para dividir",
+      "success": "PDF dividido com sucesso!",
+      "select-range": "Selecionar Intervalo de Páginas",
+      "from-page": "Da Página",
+      "to-page": "Até a Página",
+      "pages": "páginas",
+      "extracted": "Páginas {{start}} a {{end}}"
+    },
+    "compress-image": {
+      "title": "Compressor de Imagem",
+      "desc": "Comprima imagens JPG, PNG, SVG e GIF para diminuir o peso do arquivo e acelerar upload em sites e redes sociais.",
+      "level": "Nível de Compressão",
+      "original-size": "Tamanho Original",
+      "compressed-size": "Tamanho Compactado",
+      "saved": "Economia"
+    },
+    "resize-image": {
+      "title": "Redimensionar Imagem",
+      "desc": "Redimensione imagens para tamanhos exatos de perfil, post, miniatura ou documento sem complicação.",
+      "predefined-sizes": "Formatos Rápidos",
+      "width": "Largura (px)",
+      "height": "Altura (px)",
+      "maintain-ratio": "Manter proporção",
+      "custom": "Personalizado"
+    },
+    "convert-image": {
+      "title": "Converter JPG/PNG",
+      "desc": "Converta imagens entre formatos populares para garantir compatibilidade com sistemas, apps e plataformas.",
+      "format": "Converter para o formato"
+    },
+    "remove-background": {
+      "title": "Removedor de Fundo",
+      "desc": "Remova o fundo de imagens com rapidez para criar artes, catálogos e fotos de produto com aparência profissional.",
+      "bg-color": "Cor de Fundo",
+      "mode-ai": "Remoção Automática com IA",
+      "mode-color": "Remover Cor Específica",
+      "color-to-remove": "Cor para Remover",
+      "tolerance": "Tolerância",
+      "previewAlt": "Pré-visualização",
+      "processedAlt": "Imagem processada",
+      "transparent": "Transparente",
+      "customColor": "Cor personalizada"
+    },
+    "adjust-image": {
+      "title": "Ajustar Imagem",
+      "desc": "Ajuste brilho, contraste, saturação e outros parâmetros para melhorar a aparência da imagem antes de publicar ou compartilhar.",
+      "brightness": "Brilho",
+      "contrast": "Contraste",
+      "saturation": "Saturação",
+      "blur": "Desfoque",
+      "hue": "Matiz",
+      "sepia": "Sépia",
+      "invert": "Inverter"
+    },
+    "compound-interest": {
+      "title": "Calculadora de Juros Compostos",
+      "desc": "Calcule projeções de investimento com juros compostos para entender evolução de capital e retorno no longo prazo.",
+      "fields": {
+        "initialInvestment": "Investimento inicial",
+        "annualRate": "Taxa de juros anual (%)",
+        "years": "Período (anos)"
+      },
+      "totalInterest": "Total de juros ganhos"
+    },
+    "loan-simulator": {
+      "title": "Simulador de Empréstimo",
+      "desc": "Simule parcelas, juros e custo total de empréstimos para comparar cenários e tomar decisões financeiras melhores.",
+      "fields": {
+        "amount": "Valor do empréstimo",
+        "annualRate": "Taxa de juros anual (%)",
+        "termMonths": "Prazo (meses)"
+      },
+      "results": {
+        "monthlyPayment": "Parcela mensal",
+        "totalInterest": "Total de juros",
+        "totalPayment": "Pagamento total"
+      }
+    },
+    "percentage-calculator": {
+      "title": "Calculadora de Porcentagem",
+      "desc": "Resolva cálculos de porcentagem de forma prática para descontos, acréscimos, margens e comparações do dia a dia.",
+      "fields": {
+        "whatIs": "Quanto é",
+        "of": "de",
+        "number": "Número"
+      }
+    },
+    "bio-generator": {
+      "title": "Gerador de Bio",
+      "desc": "Crie bios personalizadas para Instagram, TikTok, LinkedIn e outras redes, com tom profissional, criativo ou descontraído.",
+      "profession": "Profissão / Função",
+      "professionPlaceholder": "ex.: Engenheiro de Software",
+      "hobbies": "Hobbies / Interesses",
+      "hobbiesPlaceholder": "ex.: fotografia, café",
+      "vibe": "Estilo",
+      "vibeOptions": {
+        "professional": "Profissional",
+        "creative": "Criativo",
+        "funny": "Divertido"
+      },
+      "templates": {
+        "professional": "Ajudo negócios a crescer por meio de {{profession}}. Apaixonado(a) por {{hobbies}}. Vamos nos conectar! 🚀",
+        "creative": "✨ {{profession}} durante o dia e fã de {{hobbies}} à noite. Criando ideias incríveis todos os dias. ✨",
+        "funny": "{{profession}} profissional. Movido(a) a café e {{hobbies}}. Provavelmente pensando em comida agora. 🍕"
+      }
+    },
+    "hashtag-generator": {
+      "title": "Gerador de Hashtags",
+      "desc": "Gere hashtags relevantes para ampliar alcance, melhorar descoberta de conteúdo e fortalecer seu posicionamento nas redes.",
+      "keyword": "Digite uma palavra-chave ou tema",
+      "keywordPlaceholder": "ex.: viagem, fitness, programação"
+    },
+    "character-counter": {
+      "title": "Contador de Caracteres",
+      "desc": "Conte caracteres, palavras, linhas e parágrafos para atender limites de plataformas, textos e formulários.",
+      "placeholder": "Digite ou cole seu texto aqui...",
+      "labels": {
+        "characters": "Caracteres",
+        "words": "Palavras",
+        "lines": "Linhas",
+        "paragraphs": "Parágrafos",
+        "noSpaces": "Sem espaços"
+      }
+    },
+    "qr-generator": {
+      "title": "Gerador de QR Code",
+      "desc": "Crie QR Codes personalizados para links, mensagens e conteúdos digitais, prontos para download e uso imediato.",
+      "urlOrText": "URL ou Texto",
+      "urlPlaceholder": "Insira URL ou texto aqui...",
+      "size": "Tamanho (px)",
+      "foreground": "Cor principal",
+      "background": "Cor de fundo"
+    },
+    "password-generator": {
+      "title": "Gerador de Senha",
+      "desc": "Gere senhas fortes e seguras para proteger suas contas com combinações mais difíceis de adivinhar.",
+      "strength": "Força da senha:",
+      "length": "Tamanho da senha",
+      "regenerate": "Gerar novamente",
+      "levels": {
+        "strong": "Forte",
+        "medium": "Média",
+        "weak": "Fraca"
+      },
+      "options": {
+        "uppercase": "Letras maiúsculas (A-Z)",
+        "lowercase": "Letras minúsculas (a-z)",
+        "numbers": "Números (0-9)",
+        "symbols": "Símbolos (!@#$)"
+      }
+    },
+    "age-calculator": {
+      "title": "Calculadora de Idade",
+      "desc": "Calcule idade exata em anos, meses e dias com rapidez para uso pessoal, escolar, profissional ou documental.",
+      "dateOfBirth": "Data de nascimento",
+      "labels": {
+        "years": "Anos",
+        "months": "Meses",
+        "days": "Dias"
+      }
+    },
+    "unit-converter": {
+      "title": "Conversor de Medidas",
+      "desc": "Converta unidades de medida entre diferentes sistemas para facilitar estudos, cálculos técnicos e tarefas cotidianas.",
+      "categories": {
+        "length": "Comprimento",
+        "weight": "Peso",
+        "temperature": "Temperatura"
+      },
+      "units": {
+        "meters": "metros",
+        "kilometers": "quilômetros",
+        "centimeters": "centímetros",
+        "millimeters": "milímetros",
+        "miles": "milhas",
+        "yards": "jardas",
+        "feet": "pés",
+        "inches": "polegadas",
+        "kilograms": "quilogramas",
+        "grams": "gramas",
+        "milligrams": "miligramas",
+        "pounds": "libras",
+        "ounces": "onças",
+        "celsius": "celsius",
+        "fahrenheit": "fahrenheit",
+        "kelvin": "kelvin"
+      }
+    },
+    "social-resizer": {
+      "title": "Redimensionar para Redes Sociais",
+      "desc": "Ajuste imagens para formatos ideais de Instagram, TikTok e outras redes com proporções corretas e melhor qualidade visual."
+    },
+    "meme-generator": {
+      "title": "Gerador de Memes",
+      "desc": "Crie memes rapidamente com texto superior e inferior, estilos simples e exportação pronta para compartilhar."
+    },
+    "banner-thumbnail-creator": {
+      "title": "Criador de Banners e Miniaturas",
+      "desc": "Monte banners e miniaturas para YouTube, anúncios e redes sociais com tamanho e layout otimizados."
+    },
+    "logo-remover": {
+      "title": "Removedor de Logotipo",
+      "desc": "Remova logotipos automaticamente com IA e baixe a imagem final pronta em segundos."
+    },
+    "image-upscaler-4k": {
+      "title": "Melhorador de Imagem até 4K",
+      "desc": "Aumente a qualidade da imagem e faça upscale em alta definição até 4K com poucos cliques."
+    },
+    "bmi-calculator": {
+      "title": "Calculadora de IMC",
+      "desc": "Calcule o Índice de Massa Corporal (IMC) e obtenha uma referência rápida da sua faixa corporal com base em altura e peso."
+    },
+    "calorie-calculator": {
+      "title": "Calculadora de Calorias",
+      "desc": "Estime gasto calórico diário e necessidades de calorias para manutenção, perda ou ganho de peso."
+    },
+    "mortgage-calculator": {
+      "title": "Calculadora de Hipoteca",
+      "desc": "Simule parcelas de financiamento imobiliário com valor, taxa, prazo e custo total."
+    },
+    "net-gross-salary": {
+      "title": "Salário Líquido / Bruto",
+      "desc": "Converta salário bruto para líquido e compare descontos estimados de forma prática."
+    },
+    "discount-margin-markup": {
+      "title": "Calculadora de Desconto, Margem e Markup",
+      "desc": "Calcule desconto, margem e markup para definir preços com mais controle e lucro."
+    },
+    "travel-time-calculator": {
+      "title": "Calculadora de Tempo de Viagem",
+      "desc": "Descubra o tempo estimado de deslocamento com base em distância e velocidade média."
+    },
+    "apr-monthly-converter": {
+      "title": "Conversor de Juros APR ↔ Mensal",
+      "desc": "Converta taxas anuais (APR) para mensal e mensal para anual com precisão."
+    },
+    "stock-simulator": {
+      "title": "Simulador de Bolsa / Ações",
+      "desc": "Simule cenários de compra e venda de ações para analisar ganhos e riscos."
+    },
+    "investment-simulator": {
+      "title": "Simulador de Investimentos",
+      "desc": "Projete aportes mensais, rentabilidade e patrimônio acumulado ao longo do tempo."
+    },
+    "word-counter": {
+      "title": "Contador de Palavras",
+      "desc": "Conte palavras, caracteres e estrutura de texto para artigos, posts e documentos."
+    },
+    "text-case-converter": {
+      "title": "Conversor de Texto",
+      "desc": "Converta texto para minúsculas, maiúsculas ou formato capitalizado em um clique."
+    },
+    "password-strength-checker": {
+      "title": "Verificador de Força de Senha",
+      "desc": "Analise a força da senha e receba recomendações para melhorar segurança."
+    },
+    "encrypt-decrypt": {
+      "title": "Criptografia / Descriptografia Online",
+      "desc": "Proteja mensagens com criptografia e faça descriptografia de texto com praticidade."
+    },
+    "base-converter": {
+      "title": "Conversor de Base Numérica",
+      "desc": "Converta números entre binário, decimal e hexadecimal para estudos e programação."
+    },
+    "scientific-calculator": {
+      "title": "Calculadora Científica Online",
+      "desc": "Realize operações científicas para estudos, engenharia e cálculos avançados."
+    },
+    "currency-converter": {
+      "title": "Conversor de Moedas",
+      "desc": "Converta moedas como USD, EUR e BRL para planejamento de compras e viagens."
+    },
+    "cm-inch-converter": {
+      "title": "Conversor cm ↔ inches",
+      "desc": "Converta centímetros para polegadas e polegadas para centímetros com rapidez."
+    },
+    "kg-lbs-converter": {
+      "title": "Conversor kg ↔ lbs",
+      "desc": "Converta quilogramas para libras e libras para quilogramas em segundos."
+    },
+    "sqm-sqft-converter": {
+      "title": "Conversor m² ↔ ft²",
+      "desc": "Converta área entre metros quadrados e pés quadrados para projetos e imóveis."
+    },
+    "backlink-counter": {
+      "title": "Contador de Backlinks",
+      "desc": "Analise quantidade e distribuição de backlinks para acompanhamento básico de SEO."
+    },
+    "rank-checker": {
+      "title": "Verificador de Rank do Site",
+      "desc": "Verifique posição média de termos e monitore desempenho orgânico de páginas."
+    },
+    "meta-tags-checker": {
+      "title": "Verificador de Meta Tags",
+      "desc": "Revise título, descrição e meta tags para otimização de SEO on-page."
+    },
+    "html-css-validator": {
+      "title": "Validador de HTML / CSS",
+      "desc": "Valide estrutura de HTML e CSS para encontrar erros e melhorar compatibilidade."
+    }
   },
   "common": {
     "language": "Idioma",
@@ -54,20 +369,30 @@
     "processing": "Processando...",
     "reset": "Redefinir",
     "supported-images": "JPG, PNG, WebP até 10MB",
-    "supported-pdfs": "PDF até 50MB"
+    "supported-pdfs": "PDF até 50MB",
+    "objectiveTitle": "Objetivo da ferramenta",
+    "howToUseTitle": "Como usar (passo a passo)",
+    "guide": {
+      "step1": "Preencha os campos necessários ou envie o arquivo solicitado.",
+      "step2": "Ajuste as opções conforme a sua necessidade.",
+      "step3": "Clique em \"{{action}}\" para executar a ferramenta.",
+      "step4": "Confira o resultado e, se disponível, baixe ou copie o conteúdo."
+    },
+    "adSpace": "Espaço para anúncio",
+    "slot": "Posição"
   },
   "legal": {
     "privacy": {
       "title": "Política de Privacidade",
-      "text": "Na AllTools, acessível a partir do nosso site, uma de nossas principais prioridades é a privacidade dos nossos visitantes. Este documento de Política de Privacidade contém tipos de informações que são coletadas e registradas pela AllTools e como as usamos.\n\nSe você tiver dúvidas adicionais ou precisar de mais informações sobre nossa Política de Privacidade, não hesite em nos contatar.\n\nEsta Política de Privacidade aplica-se apenas às nossas atividades online e é válida para os visitantes do nosso site no que diz respeito às informações que eles compartilharam e/ou coletaram na AllTools. Esta política não é aplicável a quaisquer informações coletadas offline ou através de canais que não sejam este site."
+      "text": "Na Toolss, acessível a partir do nosso site, uma de nossas principais prioridades é a privacidade dos nossos visitantes. Este documento de Política de Privacidade contém tipos de informações que são coletadas e registradas pela Toolss e como as usamos.\n\nSe você tiver dúvidas adicionais ou precisar de mais informações sobre nossa Política de Privacidade, não hesite em nos contatar.\n\nEsta Política de Privacidade aplica-se apenas às nossas atividades online e é válida para os visitantes do nosso site no que diz respeito às informações que eles compartilharam e/ou coletaram na Toolss. Esta política não é aplicável a quaisquer informações coletadas offline ou através de canais que não sejam este site."
     },
     "terms": {
       "title": "Termos de Uso",
-      "text": "Bem-vindo à AllTools!\n\nEstes termos e condições descrevem as regras e regulamentos para o uso do site da AllTools.\n\nAo acessar este site, assumimos que você aceita estes termos e condições. Não continue a usar a AllTools se você não concordar em aceitar todos os termos e condições declarados nesta página.\n\nA terminologia a seguir aplica-se a estes Termos e Condições, Declaração de Privacidade e Aviso de Isenção de Responsabilidade e a todos os Acordos: \"Cliente\", \"Você\" e \"Seu\" refere-se a você, a pessoa que faz login neste site e está em conformidade com os termos e condições da Empresa."
+      "text": "Bem-vindo à Toolss!\n\nEstes termos e condições descrevem as regras e regulamentos para o uso do site da Toolss.\n\nAo acessar este site, assumimos que você aceita estes termos e condições. Não continue a usar a Toolss se você não concordar em aceitar todos os termos e condições declarados nesta página.\n\nA terminologia a seguir aplica-se a estes Termos e Condições, Declaração de Privacidade e Aviso de Isenção de Responsabilidade e a todos os Acordos: \"Cliente\", \"Você\" e \"Seu\" refere-se a você, a pessoa que faz login neste site e está em conformidade com os termos e condições da Empresa."
     },
     "cookies": {
       "title": "Política de Cookies",
-      "text": "Esta é a Política de Cookies da AllTools.\n\nO que são cookies\nComo é prática comum em quase todos os sites profissionais, este site usa cookies, que são pequenos arquivos baixados no seu computador, para melhorar sua experiência. Esta página descreve quais informações eles coletam, como as usamos e por que às vezes precisamos armazenar esses cookies. Também compartilharemos como você pode evitar que esses cookies sejam armazenados, no entanto, isso pode degradar ou 'quebrar' certos elementos da funcionalidade do site.\n\nComo usamos os cookies\nUsamos cookies por vários motivos detalhados abaixo. Infelizmente, na maioria dos casos, não há opções padrão do setor para desativar os cookies sem desativar completamente a funcionalidade e os recursos que eles adicionam a este site."
+      "text": "Esta é a Política de Cookies da Toolss.\n\nO que são cookies\nComo é prática comum em quase todos os sites profissionais, este site usa cookies, que são pequenos arquivos baixados no seu computador, para melhorar sua experiência. Esta página descreve quais informações eles coletam, como as usamos e por que às vezes precisamos armazenar esses cookies. Também compartilharemos como você pode evitar que esses cookies sejam armazenados, no entanto, isso pode degradar ou 'quebrar' certos elementos da funcionalidade do site.\n\nComo usamos os cookies\nUsamos cookies por vários motivos detalhados abaixo. Infelizmente, na maioria dos casos, não há opções padrão do setor para desativar os cookies sem desativar completamente a funcionalidade e os recursos que eles adicionam a este site."
     },
     "contact": {
       "title": "Contato",
