@@ -43,7 +43,6 @@ const messages = {
     selectedFiles: "Arquivos selecionados",
     downloadFile: "Baixar arquivo",
     removeFile: "Remover arquivo",
-    howTo: "Passo a passo",
     bmiTable: "Veja a interpretação do IMC",
     empty: "Preencha os campos para ver o resultado.",
     processing: "Processando...",
@@ -62,7 +61,6 @@ const messages = {
     selectedFiles: "Selected files",
     downloadFile: "Download file",
     removeFile: "Remove file",
-    howTo: "Step by step",
     bmiTable: "BMI interpretation",
     empty: "Fill the fields to see the result.",
     processing: "Processing...",
@@ -81,7 +79,6 @@ const messages = {
     selectedFiles: "Archivos seleccionados",
     downloadFile: "Descargar archivo",
     removeFile: "Eliminar archivo",
-    howTo: "Paso a paso",
     bmiTable: "Interpretación del IMC",
     empty: "Completa los campos para ver el resultado.",
     processing: "Procesando...",
@@ -468,10 +465,6 @@ export default function PlaceholderTool({ toolId }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="rounded-3xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-        {isUploadOnly ? "1) Envie seu arquivo. 2) Clique no botão de ação. 3) Baixe o resultado." : "1) Preencha os campos. 2) Clique no botão de ação. 3) Confira o resultado abaixo."}
-      </div>
-
       {isUploadOnly ? (
         <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
           <button
@@ -620,15 +613,6 @@ export default function PlaceholderTool({ toolId }: Props) {
           </table>
         </div>
       )}
-
-      <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
-        <h3 className="text-base font-semibold text-gray-900">{m.howTo}</h3>
-        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
-          {def.steps.map((step) => (
-            <li key={step}>{step}</li>
-          ))}
-        </ol>
-      </div>
 
       {!isUploadOnly && (
         <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm">
