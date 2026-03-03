@@ -1,8 +1,8 @@
 import React from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
-import { toolPaths, ToolId } from "../config/tools";
+import { toolPaths, ToolId, categories } from "../config/tools";
 import AdBanner from "../components/AdBanner";
 
 // Tool Components
@@ -111,6 +111,9 @@ export default function ToolWrapper() {
 
   const ToolComponent = toolComponents[currentToolId];
   const primaryAction = t(getPrimaryActionKey(currentToolId));
+  const currentLang = (lang && ["en", "pt", "es"].includes(lang) ? lang : "pt") as "en" | "pt" | "es";
+  const group = categories.find((category) => category.tools.includes(currentToolId));
+  const relatedTools = (group?.tools || []).filter((tool) => tool !== currentToolId).slice(0, 4);
 
   return (
     <div className="w-full max-w-5xl mx-auto py-8">
@@ -120,6 +123,12 @@ export default function ToolWrapper() {
       </Helmet>
 
       <div className="mb-8 rounded-3xl border border-gray-200 bg-white p-6 text-center shadow-sm">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-gray-500">Home / {t(`home.categories.${group?.id || "utilities"}`)} / {t(`tools.${currentToolId}.title`)}</p>
+          <Link to={`/${currentLang}`} className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+            ← {currentLang === "pt" ? "Voltar" : currentLang === "es" ? "Volver" : "Back"}
+          </Link>
+        </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           {t(`tools.${currentToolId}.title`)}
         </h1>
@@ -148,6 +157,18 @@ export default function ToolWrapper() {
           <li>{t("common.guide.step3", { action: primaryAction })}</li>
           <li>{t("common.guide.step4")}</li>
         </ol>
+      </section>
+
+      <section className="mt-8 rounded-3xl border border-gray-200 bg-white p-6 md:p-8">
+        <h3 className="text-xl font-semibold text-gray-900">{currentLang === "pt" ? "Ferramentas relacionadas" : currentLang === "es" ? "Herramientas relacionadas" : "Related tools"}</h3>
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {relatedTools.map((id) => (
+            <Link key={id} to={`/${currentLang}/${toolPaths[id][currentLang]}`} className="rounded-xl border border-gray-200 px-4 py-3 transition hover:border-emerald-200 hover:bg-emerald-50">
+              <p className="font-semibold text-emerald-700">{t(`tools.${id}.title`)}</p>
+              <p className="text-sm text-gray-600">{t(`tools.${id}.desc`)}</p>
+            </Link>
+          ))}
+        </div>
       </section>
 
 

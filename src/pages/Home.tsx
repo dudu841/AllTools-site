@@ -9,6 +9,7 @@ export default function Home() {
   const { lang = "pt" } = useParams<{ lang: string }>();
   const currentLang = ["pt", "en", "es"].includes(lang) ? (lang as "pt" | "en" | "es") : "pt";
   const [search, setSearch] = useState("");
+  const popularTools = categories.flatMap((category) => category.tools).slice(0, 6) as ToolId[];
 
   const filteredCategories = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -52,6 +53,7 @@ export default function Home() {
               placeholder={t("home.searchPlaceholder", { defaultValue: "Qual ferramenta precisa?" })}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none ring-emerald-300 focus:ring-2 sm:text-base"
             />
+            <p className="mt-2 text-left text-xs text-gray-500">{currentLang === "pt" ? "Exemplo: PDF, IMC, senha, logo" : currentLang === "es" ? "Ejemplo: PDF, IMC, contraseña, logo" : "Example: PDF, BMI, password, logo"}</p>
           </div>
 
           <div className="grid grid-cols-1 justify-items-center gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
@@ -76,6 +78,18 @@ export default function Home() {
                   })}
                 </ul>
               </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
+          <h2 className="text-2xl font-bold text-gray-900">{currentLang === "pt" ? "Ferramentas populares" : currentLang === "es" ? "Herramientas populares" : "Popular tools"}</h2>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {popularTools.map((id) => (
+              <Link key={id} to={`/${currentLang}/${toolPaths[id][currentLang]}`} className="rounded-2xl border border-gray-200 px-4 py-3 text-left transition hover:border-emerald-200 hover:bg-emerald-50">
+                <p className="font-semibold text-emerald-700">{t(`tools.${id}.title`)}</p>
+                <p className="text-sm text-gray-600">{t(`tools.${id}.desc`)}</p>
+              </Link>
             ))}
           </div>
         </section>

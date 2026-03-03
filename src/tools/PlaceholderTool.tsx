@@ -46,6 +46,10 @@ const messages = {
     howTo: "Passo a passo",
     bmiTable: "Veja a interpretação do IMC",
     empty: "Preencha os campos para ver o resultado.",
+    processing: "Processando...",
+    success: "Concluído com sucesso.",
+    error: "Ocorreu um erro ao processar.",
+    dragDrop: "Arraste e solte aqui ou clique para selecionar",
   },
   en: {
     clear: "Clear",
@@ -61,6 +65,10 @@ const messages = {
     howTo: "Step by step",
     bmiTable: "BMI interpretation",
     empty: "Fill the fields to see the result.",
+    processing: "Processing...",
+    success: "Completed successfully.",
+    error: "There was an error while processing.",
+    dragDrop: "Drag and drop here or click to select",
   },
   es: {
     clear: "Limpiar",
@@ -76,6 +84,10 @@ const messages = {
     howTo: "Paso a paso",
     bmiTable: "Interpretación del IMC",
     empty: "Completa los campos para ver el resultado.",
+    processing: "Procesando...",
+    success: "Completado con éxito.",
+    error: "Hubo un error al procesar.",
+    dragDrop: "Arrastra y suelta aquí o haz clic para seleccionar",
   },
 };
 
@@ -322,6 +334,9 @@ export default function PlaceholderTool({ toolId }: Props) {
   const [processedPreview, setProcessedPreview] = useState<string>("");
   const [upscaleLevel, setUpscaleLevel] = useState<"1k" | "2k" | "4k">("2k");
   const [result, setResult] = useState(m.empty);
+  const [status, setStatus] = useState<"idle" | "ready" | "processing" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const optionalInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -331,6 +346,8 @@ export default function PlaceholderTool({ toolId }: Props) {
     setUploadPreviews([]);
     setProcessedPreview("");
     setResult(m.empty);
+    setStatus("idle");
+    setErrorMsg("");
   };
 
   useEffect(() => {
@@ -347,22 +364,41 @@ export default function PlaceholderTool({ toolId }: Props) {
       if (preview) URL.revokeObjectURL(preview);
     });
     const files = Array.from(fileList);
+    const invalid = files.find((file) => file.size > 20 * 1024 * 1024);
+    if (invalid) {
+      setStatus("error");
+      setErrorMsg(lang === "pt" ? "Arquivo maior que 20MB." : lang === "es" ? "Archivo mayor de 20MB." : "File is larger than 20MB.");
+      return;
+    }
     setSelectedFiles(files);
     setProcessedPreview("");
     setUploadPreviews(files.map((file) => (file.type.startsWith("image/") ? URL.createObjectURL(file) : "")));
+    setStatus("ready");
+    setErrorMsg("");
   };
 
   const runTool = () => {
+    setStatus("processing");
+    setErrorMsg("");
     if (def.compute) {
-      setResult(def.compute(values, lang));
+      const value = def.compute(values, lang);
+      setResult(value);
+      setStatus(value === m.empty ? "ready" : "success");
+    } else {
+      setStatus("error");
+      setErrorMsg(m.error);
     }
   };
 
   const runUploadTool = async () => {
     if (!selectedFiles.length) {
       setResult(m.empty);
+      setStatus("ready");
       return;
     }
+
+    setStatus("processing");
+    setErrorMsg("");
 
     if (toolId === "logo-remover" && selectedFiles[0]) {
       try {
@@ -372,8 +408,10 @@ export default function PlaceholderTool({ toolId }: Props) {
         const aiUrl = URL.createObjectURL(aiBlob);
         setProcessedPreview(aiUrl);
         setResult(lang === "pt" ? "IA concluiu a remoção do logotipo." : lang === "es" ? "La IA terminó de eliminar el logotipo." : "AI finished logo removal.");
+        setStatus("success");
       } catch {
         setResult(lang === "pt" ? "Falha ao remover logotipo com IA. Tente outra imagem." : lang === "es" ? "Error al eliminar logotipo con IA. Prueba otra imagen." : "Failed to remove logo with AI. Please try another image.");
+        setStatus("error");
       }
       return;
     }
@@ -398,6 +436,7 @@ export default function PlaceholderTool({ toolId }: Props) {
             ? `Imagen mejorada a ${upscaleLevel.toUpperCase()}.`
             : `Image enhanced to ${upscaleLevel.toUpperCase()}.`,
       );
+      setStatus("success");
       return;
     }
 
@@ -409,6 +448,7 @@ export default function PlaceholderTool({ toolId }: Props) {
           : `File ready for processing: ${selectedFiles.map((file) => file.name).join(", ")}`;
 
     setResult(actionText);
+    setStatus("success");
   };
 
   const downloadProcessedImage = () => {
@@ -437,11 +477,22 @@ export default function PlaceholderTool({ toolId }: Props) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="w-full rounded-3xl border-4 border-dashed border-gray-200 bg-gray-50 p-8 text-center"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragOver(true);
+            }}
+            onDragLeave={() => setIsDragOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragOver(false);
+              onFilesSelected(e.dataTransfer.files);
+            }}
+            className={`w-full rounded-3xl border-4 border-dashed p-8 text-center transition ${isDragOver ? "border-emerald-300 bg-emerald-50" : "border-gray-200 bg-gray-50"}`}
           >
             <Upload className="mx-auto h-12 w-12 text-emerald-500" />
             <p className="mt-4 text-3xl font-semibold text-gray-900">{m.uploadTitle}</p>
             <p className="mt-2 text-lg text-gray-500">{m.uploadHint}</p>
+            <p className="mt-1 text-sm text-emerald-700">{m.dragDrop}</p>
           </button>
           <input
             ref={fileInputRef}
@@ -527,10 +578,10 @@ export default function PlaceholderTool({ toolId }: Props) {
           <button
             type="button"
             onClick={runUploadTool}
-            disabled={!selectedFiles.length}
+            disabled={!selectedFiles.length || status === "processing"}
             className="mt-6 w-full rounded-2xl bg-emerald-600 px-6 py-4 text-2xl font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
           >
-            {m.uploadAction}
+            {status === "processing" ? m.processing : m.uploadAction}
           </button>
 
           {result && result !== m.empty && <p className="mt-4 text-sm text-gray-700">{result}</p>}
@@ -543,13 +594,16 @@ export default function PlaceholderTool({ toolId }: Props) {
             ))}
           </div>
           <div className="flex flex-wrap gap-3">
-            <button type="button" onClick={runTool} className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700">{m.action}</button>
+            <button type="button" onClick={runTool} disabled={status === "processing"} className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300">{status === "processing" ? m.processing : m.action}</button>
             <button type="button" onClick={clearAll} className="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">{m.clear}</button>
           </div>
 
           {result && result !== m.empty && <p className="text-sm text-gray-700">{result}</p>}
         </>
       )}
+
+      {status === "error" && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{errorMsg || m.error}</p>}
+      {status === "success" && <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{m.success}</p>}
 
       {toolId === "bmi-calculator" && !Number.isNaN(bmiValue) && (
         <div className="overflow-hidden rounded-xl border border-blue-200">
