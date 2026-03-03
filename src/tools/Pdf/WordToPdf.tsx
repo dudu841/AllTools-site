@@ -109,7 +109,7 @@ async function createPdfFromText(rawText: string): Promise<Uint8Array> {
     y -= 4;
   }
 
-  return pdf.save();
+  return pdf.save({ useObjectStreams: false, addDefaultPage: false });
 }
 
 export default function WordToPdf() {

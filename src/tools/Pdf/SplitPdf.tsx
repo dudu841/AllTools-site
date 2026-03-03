@@ -80,7 +80,7 @@ export default function SplitPdf() {
       const copiedPages = await newPdf.copyPages(pdf, pageIndices);
       copiedPages.forEach((page) => newPdf.addPage(page));
 
-      const splitPdfBytes = await newPdf.save({ useObjectStreams: true, addDefaultPage: false });
+      const splitPdfBytes = await newPdf.save({ useObjectStreams: false, addDefaultPage: false });
       const blob = new Blob([splitPdfBytes], { type: "application/pdf" });
       clearOutput();
       setSplitPdfUrl(URL.createObjectURL(blob));

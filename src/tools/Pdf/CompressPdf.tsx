@@ -71,7 +71,7 @@ export default function CompressPdf() {
       const doc = await PDFDocument.load(sourceBytes, { ignoreEncryption: true });
 
       const compressedBytes = await doc.save({
-        useObjectStreams: true,
+        useObjectStreams: false,
         addDefaultPage: false,
         objectsPerTick: 100,
         updateFieldAppearances: false,

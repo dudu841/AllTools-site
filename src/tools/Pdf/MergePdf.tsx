@@ -59,7 +59,7 @@ export default function MergePdf() {
         copiedPages.forEach((page) => mergedPdf.addPage(page));
       }
 
-      const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: true, addDefaultPage: false });
+      const mergedPdfBytes = await mergedPdf.save({ useObjectStreams: false, addDefaultPage: false });
       const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
       clearOutput();
       setMergedPdfUrl(URL.createObjectURL(blob));

@@ -10,20 +10,63 @@ function decodeEscapedPdfString(value: string): string {
     .replace(/\\n/g, "\n")
     .replace(/\\r/g, "\n")
     .replace(/\\t/g, " ")
+    .replace(/\\b/g, "")
+    .replace(/\\f/g, "")
     .replace(/\\([0-7]{1,3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8)));
+}
+
+function extractTextBlocks(pdfSource: string): string[] {
+  const btBlocks = Array.from(pdfSource.matchAll(/BT([\s\S]*?)ET/gm));
+  const lines: string[] = [];
+
+  for (const block of btBlocks) {
+    const content = block[1];
+    let current = "";
+
+    const tokens = Array.from(
+      content.matchAll(/\[(?:\\.|[^\]])*\]\s*TJ|\((?:\\.|[^\)])*\)\s*Tj|T\*|Td|TD/gm),
+    );
+
+    for (const token of tokens) {
+      const raw = token[0];
+
+      if (raw === "T*" || raw === "Td" || raw === "TD") {
+        if (current.trim()) lines.push(current.trim());
+        current = "";
+        continue;
+      }
+
+      if (raw.endsWith("Tj")) {
+        const m = raw.match(/\((.*)\)\s*Tj$/s);
+        if (m) current += decodeEscapedPdfString(m[1]);
+        continue;
+      }
+
+      if (raw.endsWith("TJ")) {
+        const arr = raw.match(/^\[(.*)\]\s*TJ$/s)?.[1] || "";
+        const parts = Array.from(arr.matchAll(/\((.*?)\)|-?\d+(?:\.\d+)?/g));
+        for (const part of parts) {
+          if (part[1] !== undefined) {
+            current += decodeEscapedPdfString(part[1]);
+          } else {
+            const kern = Number(part[0]);
+            if (Number.isFinite(kern) && kern < -120) current += " ";
+          }
+        }
+      }
+    }
+
+    if (current.trim()) lines.push(current.trim());
+  }
+
+  return lines;
 }
 
 async function extractPdfText(file: File): Promise<string> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const decoded = new TextDecoder("latin1").decode(bytes);
-
-  const streamText = Array.from(decoded.matchAll(/\(([^()]*)\)\s*Tj/gm)).map((m) => decodeEscapedPdfString(m[1]));
-  const arrayText = Array.from(decoded.matchAll(/\[((?:.|\n)*?)\]\s*TJ/gm))
-    .map((m) => m[1])
-    .flatMap((chunk) => Array.from(chunk.matchAll(/\(([^()]*)\)/g)).map((m) => decodeEscapedPdfString(m[1])));
-
-  const text = [...streamText, ...arrayText].join("\n").replace(/\n{3,}/g, "\n\n").trim();
-  return text;
+  const lines = extractTextBlocks(decoded);
+  return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 function buildWordHtml(title: string, body: string): string {
@@ -64,10 +107,10 @@ export default function PdfToWord() {
             : "Error converting PDF to Word.",
       empty:
         lang === "pt"
-          ? "Este PDF não possui texto extraível no navegador."
+          ? "Este PDF parece conter texto vetorial/imagem e não pôde ser convertido com fidelidade no navegador."
           : lang === "es"
-            ? "Este PDF no tiene texto extraíble en el navegador."
-            : "This PDF has no browser-extractable text.",
+            ? "Este PDF parece contener texto vectorial/imagen y no pudo convertirse con fidelidad en el navegador."
+            : "This PDF appears image/vector-based and could not be faithfully converted in-browser.",
       done:
         lang === "pt" ? "Conversão concluída." : lang === "es" ? "Conversión finalizada." : "Conversion completed.",
     }),
