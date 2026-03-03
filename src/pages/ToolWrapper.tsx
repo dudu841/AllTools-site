@@ -25,12 +25,14 @@ import RemoveBackground from "../tools/Image/RemoveBackground";
 import AdjustImage from "../tools/Image/AdjustImage";
 import MergePdf from "../tools/Pdf/MergePdf";
 import SplitPdf from "../tools/Pdf/SplitPdf";
+import PdfToWord from "../tools/Pdf/PdfToWord";
+import WordToPdf from "../tools/Pdf/WordToPdf";
 
 const placeholder = (toolId: ToolId): React.FC => () => <PlaceholderTool toolId={toolId} />;
 
 const toolComponents: Record<ToolId, React.FC> = {
-  "pdf-to-word": placeholder("pdf-to-word"),
-  "word-to-pdf": placeholder("word-to-pdf"),
+  "pdf-to-word": PdfToWord,
+  "word-to-pdf": WordToPdf,
   "compress-pdf": placeholder("compress-pdf"),
   "merge-pdf": MergePdf,
   "split-pdf": SplitPdf,
@@ -140,9 +142,6 @@ export default function ToolWrapper() {
       <AdBanner slotId="tool-top" className="mb-8" />
 
       <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-6 md:p-8">
-        <p className="mb-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-          {t("common.guide.step1")} {t("common.guide.step2")}
-        </p>
         <ToolComponent />
       </div>
 
